@@ -60,6 +60,8 @@ mediaUrls
 ```
 
 Example:
+
+![NPG-S_NPG_2002_184_943](https://github.com/user-attachments/assets/12a35e55-8893-4943-a662-a88b4f95cb90)
 https://ids.si.edu/ids/deliveryService?id=NPG-S_NPG_2002_184_943
 
 Artist biography: https://npg.si.edu/bache/biography
