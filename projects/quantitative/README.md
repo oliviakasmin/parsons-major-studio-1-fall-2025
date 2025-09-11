@@ -15,6 +15,11 @@ ocrText
 
 Sketch:
 
+![widows_timeline](https://github.com/user-attachments/assets/96e1d977-4062-4a56-9280-ab20b744971f)
+
+
+
+
 ## Proof of Service for Revolutionary War Pension Applications
 
 Dataset: https://huggingface.co/datasets/RevolutionCrossroads/nara_revolutionary_war_pension_files
@@ -31,6 +36,11 @@ ocrText
 ```
 
 Sketch:
+
+![pension_timelines](https://github.com/user-attachments/assets/fe6fcb3b-3ebf-4c82-9a1a-b0bb5ac1d2d0)
+
+
+
 
 ## William Bache - Silhouettes 1803-1810
 
@@ -55,3 +65,6 @@ https://ids.si.edu/ids/deliveryService?id=NPG-S_NPG_2002_184_943
 Artist biography: https://npg.si.edu/bache/biography
 
 Sketch:
+
+![william_bache_silhouettes](https://github.com/user-attachments/assets/5c7e1fcb-7a5a-4635-aaed-c57b33880f2f)
+
