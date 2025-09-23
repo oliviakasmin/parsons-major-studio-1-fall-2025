@@ -1,0 +1,10 @@
+node_modules
+.dist
+/dist
+.netlify
+.DS_Store
+.venv
+venv/
+__pycache__/
+*.ipynb_checkpoints
+secrets*
