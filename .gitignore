@@ -8,4 +8,7 @@ venv/
 __pycache__/
 *.ipynb_checkpoints
 secrets*
+
+# large data files - can be regerated from python code based on hugging face dataset as needed
 *.parquet
+df_grouped_NAID_sorted_title_categories.csv
