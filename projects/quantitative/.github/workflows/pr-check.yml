@@ -7,34 +7,41 @@ on:
 jobs:
   build-check:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'projects/quantitative/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd projects/quantitative
+          npm ci
+
+      - name: Type check
+        run: |
+          cd projects/quantitative
+          npm run type-check
+
+      - name: Lint
+        run: |
+          cd projects/quantitative
+          npm run lint
+
+    - name: Build for PR Preview
+      run: |
+        cd projects/quantitative
+        BASE_PATH=/parsons-major-studio-1-fall-2025/projects/quantitative-pr-${{ github.event.number }}/ npm run build:staging
+        
+    - name: Deploy PR Preview
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: 'projects/quantitative/package-lock.json'
-        
-    - name: Install dependencies
-      run: |
-        cd projects/quantitative
-        npm ci
-        
-    - name: Type check
-      run: |
-        cd projects/quantitative
-        npm run type-check
-        
-    - name: Lint
-      run: |
-        cd projects/quantitative
-        npm run lint
-        
-    - name: Build
-      run: |
-        cd projects/quantitative
-        npm run build
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./projects/quantitative/dist
+        destination_dir: projects/quantitative-pr-${{ github.event.number }}

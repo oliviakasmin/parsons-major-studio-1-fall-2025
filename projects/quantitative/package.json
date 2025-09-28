@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:staging": "node scripts/build-with-base.js",
+    "build:pr": "BASE_PATH=/parsons-major-studio-1-fall-2025/projects/quantitative-pr-$PR_NUMBER/ node scripts/build-with-base.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "preview": "vite preview",

@@ -1,0 +1,37 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  build-and-deploy-staging:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'projects/quantitative/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd projects/quantitative
+        npm ci
+        
+    - name: Build for staging
+      run: |
+        cd projects/quantitative
+        BASE_PATH=/parsons-major-studio-1-fall-2025/projects/quantitative-staging/ npm run build:staging
+        
+    - name: Deploy to GitHub Pages Staging
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./projects/quantitative/dist
+        destination_dir: projects/quantitative-staging
