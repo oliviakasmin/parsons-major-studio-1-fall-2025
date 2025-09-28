@@ -1,27 +1,43 @@
 import { FunctionComponent, useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import './index.css';
+import categoryData from '../../data/viz_data/category_count_dict.json';
 
-// Type definition for chart data
-interface CategoryData {
+interface ImportedCategoryData {
+  count: number;
+  NAIDs: string; // Pipe-separated string ("||") of NAIDs for application that contain a file in this category
+  page_count: string; // Pipe-separated string ("||") of page counts for each file in the category
+  avg_page_count: number;
+}
+
+interface CategoryChartData {
   category: string;
   count: number;
   averagePageCount: number;
 }
 
-// Sample data - replace with actual data later
-const data: CategoryData[] = [
-  { category: 'Soldier', count: 34957, averagePageCount: 21.90193854959771 },
-  { category: 'Widow', count: 24252, averagePageCount: 39.97608178235593 },
-  { category: 'Rejected', count: 10745, averagePageCount: 24.568652849740932 },
-  {
-    category: 'Bounty Land Warrant',
-    count: 3060,
-    averagePageCount: 8.805217906907798,
-  },
-  { category: 'Unknown', count: 2179, averagePageCount: 38.64983937586049 },
-  { category: 'Old War', count: 17, averagePageCount: 0 }, // No data available
+// Only plot these categories from the imported data (the others are admin files, etc.)
+const appCategories = [
+  'soldier',
+  'rejected',
+  'widow',
+  'bounty land warrant',
+  'old war',
+  'N A Acc',
+  'unknown',
 ];
+
+// Transform imported data - filter for allowed categories only
+const data: CategoryChartData[] = Object.entries(
+  categoryData as Record<string, ImportedCategoryData>
+)
+  .filter(([category]) => appCategories.includes(category))
+  .map(([category, values]) => ({
+    category: category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
+    count: values.count,
+    averagePageCount: values.avg_page_count,
+  }))
+  .sort((a, b) => b.count - a.count); // Sort by count descending for total applications
 
 export const CategoriesBarChart: FunctionComponent = () => {
   const [useCountData, setUseCountData] = useState(true);
@@ -32,9 +48,9 @@ export const CategoriesBarChart: FunctionComponent = () => {
     if (!svgRef.current) return;
 
     // Set dimensions
-    const margin = { top: 100, right: 50, bottom: 100, left: 80 };
-    const width = 800;
-    const height = 600;
+    const margin = { top: 60, right: 50, bottom: 120, left: 120 };
+    const width = 900;
+    const height = 650;
 
     // Create or update SVG
     const svg = d3
@@ -62,6 +78,13 @@ export const CategoriesBarChart: FunctionComponent = () => {
         .attr('transform', () => {
           return 'rotate(-45)';
         });
+
+      // Add x-axis label
+      svg
+        .append('text')
+        .attr('class', 'x-axis-label text-center')
+        .attr('transform', `translate(${width / 2}, ${height - 20})`)
+        .text('Application Category');
     }
 
     // Create y-scale (changes based on data)
@@ -75,7 +98,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
 
     // Create bars with transitions using d3.join()
     svg
-      .selectAll<SVGRectElement, CategoryData>('rect')
+      .selectAll<SVGRectElement, CategoryChartData>('rect')
       .data(data)
       .join(
         // Enter: create new bars
@@ -123,17 +146,16 @@ export const CategoriesBarChart: FunctionComponent = () => {
 
     // Add labels on bars with transitions using d3.join()
     svg
-      .selectAll<SVGTextElement, CategoryData>('.bar-label')
+      .selectAll<SVGTextElement, CategoryChartData>('.bar-label')
       .data(data)
       .join(
         // Enter: create new labels
         enter =>
           enter
             .append('text')
-            .attr('class', 'bar-label entering')
+            .attr('class', 'bar-label entering text-center')
             .attr('x', d => (xScale(d.category) || 0) + xScale.bandwidth() / 2)
             .attr('y', height - margin.bottom)
-            .attr('text-anchor', 'middle')
             .transition()
             .duration(500)
             .attr(
@@ -169,17 +191,31 @@ export const CategoriesBarChart: FunctionComponent = () => {
             .remove()
       );
 
-    // Update y-axis (only this changes with data)
+    // Update y-axis (changes with data)
     const yAxis = d3.axisLeft(yScale).ticks(5);
 
-    // Remove existing y-axis and create new one
-    svg.selectAll('.y-axis').remove();
+    // Remove existing y-axis and y-axis label, then create new ones
+    svg.selectAll('.y-axis, .y-axis-label').remove();
 
     svg
       .append('g')
       .attr('class', 'axis y-axis')
       .attr('transform', `translate(${margin.left},0)`)
       .call(yAxis);
+
+    // Add y-axis label (conditional based on data view)
+    svg
+      .append('text')
+      .attr('class', 'y-axis-label text-center')
+      .attr(
+        'transform',
+        `rotate(-90) translate(${-height / 2}, ${margin.left / 2})`
+      )
+      .text(
+        useCountData
+          ? 'Number of Applications'
+          : 'Average Pages per Application'
+      );
   }, [useCountData]);
 
   return (

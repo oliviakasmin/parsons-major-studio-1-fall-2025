@@ -2,14 +2,25 @@
    BAR CHART STYLES
    ============================================================================= */
 
-/* Chart container */
+/* =============================================================================
+   LAYOUT
+   ============================================================================= */
+
 .chart-container {
   padding: 20px;
   margin: 20px;
   width: 100%;
 }
 
-/* Chart controls */
+.chart-container svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* =============================================================================
+   CONTROLS
+   ============================================================================= */
+
 .chart-controls {
   display: flex;
   justify-content: center;
@@ -38,10 +49,9 @@
   color: white;
 }
 
-.chart-container svg {
-  display: block;
-  margin: 0 auto;
-}
+/* =============================================================================
+   CHART ELEMENTS
+   ============================================================================= */
 
 /* Bars */
 .bar {
@@ -68,7 +78,10 @@
   opacity: 1;
 }
 
-/* Axes */
+/* =============================================================================
+   AXES
+   ============================================================================= */
+
 .axis text {
   font-size: 12px;
   fill: #6b7280;
@@ -87,12 +100,32 @@
   stroke: #e5e7eb;
 }
 
-/* X-axis specific styles */
 .x-axis text {
   text-anchor: end;
 }
 
-/* Responsive design */
+/* Axis labels */
+.y-axis-label,
+.x-axis-label {
+  font-size: 12px;
+  font-weight: 500;
+  fill: #374151;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* =============================================================================
+   UTILITIES
+   ============================================================================= */
+
+.text-center {
+  text-anchor: middle;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+
 @media (max-width: 768px) {
   .chart-container {
     margin: 10px;
@@ -105,5 +138,10 @@
 
   .bar-label {
     font-size: 10px;
+  }
+
+  .y-axis-label,
+  .x-axis-label {
+    font-size: 11px;
   }
 }

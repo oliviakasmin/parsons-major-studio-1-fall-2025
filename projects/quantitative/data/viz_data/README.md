@@ -20,6 +20,26 @@ This directory contains processed data files and analysis results for frontend v
   - Page counts for each category (pipe-separated strings)
   - Average page counts per category
 
+These categories will be plotted when analyzing the application types (the others are admin files, etc.):
+['soldier',
+'rejected',
+'widow',
+'bounty land warrant',
+'old war',
+'N A Acc',
+'unknown']
+
+These are all of the categories included in the category column:
+['soldier',
+'rejected',
+'widow',
+'bounty land warrant',
+'old war',
+'N A Acc',
+'nara archival administrative sheets',
+'unknown',
+'non_application']
+
 - **`category_analysis_summary.json`** - High-level analysis and statistics; use tbd
   - Overview of single vs. multiple category applications
   - Category count distribution with percentages
