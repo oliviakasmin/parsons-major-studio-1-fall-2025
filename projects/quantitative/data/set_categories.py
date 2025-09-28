@@ -14,14 +14,12 @@ category_dict = {
     "widow": ['w', 'wid'], # widow
     "bounty land warrant": ['b', 'bl', 'wt', 'b l wt', 'bounty land', 'blwt'], # bounty land warrant
     "old war": ['old act', 'old war', 'o w', 'ow'], # old war
-    "nara archival administrative sheets": ["nara archival administrative sheets"]
+    "N A Acc": ["n a acc no", "acc no"], # National Archives Accession [number]
+    "nara archival administrative sheets": ["nara archival administrative sheets"], # not one of the important categories, but a common file type
 }
 
 # application categories - if no other category is found and one of these is found, set 'file_cat' to unknown
-nara_accession = ['n a acc no', 'acc no', 'no']  
 unknown_group = ["blank", "illegible", "ctf"]  # (ctf = certificate)
-
-
 
 def run_categories(df):
     df = set_categories(df)
@@ -56,12 +54,6 @@ def clean_title(df):
         .str.replace(application_prefix + 's', application_prefix, case=False, regex=False)
         .str.replace(application_prefix, '', regex=True)
     )
-
-    # filter by title starts with application_prefix
-    # df = df[df['title_modified'].str.startswith(application_prefix.lower())]
-
-    # remove application_prefix from title
-    # df['title_modified'] = df['title'].str.lower()
     
     # Remove common words
     words = ["for", "file", "see"]
@@ -89,11 +81,13 @@ def set_application_categories(df):
     if (df['file_type'] != application_prefix).any():
         df.loc[df['file_type'] != application_prefix, 'file_cat'] = 'non_application'
 
-    # Set file_cat to "unknown" for empty or whitespace-only title_modified if non_application
-    # mask = df['title_modified'].str.strip() == '' and df['file_cat'] != 'non_application'
-    # df.loc[mask, 'file_cat'] = 'unknown'
-
+    # we only want to apply the category dictionary to application files
     mask_non_app = df['file_cat'] != 'non_application'
+
+    # Handle "nara archival administrative sheets" separately first since it doesn't follow the space pattern
+    nara_admin_pattern = category_dict['nara archival administrative sheets'][0]
+    mask_nara_admin = df['title_modified'].str.contains(nara_admin_pattern, case=False, na=False)
+    df.loc[mask_nara_admin & mask_non_app, 'file_cat'] = 'nara archival administrative sheets'
 
     # Multiple category method - append categories (allowing duplicates during iteration)
     for key, values in category_dict.items():
@@ -102,25 +96,24 @@ def set_application_categories(df):
                 pattern = f' {value} '
                 mask = df['title_modified'].str.contains(pattern, na=False) 
                 # Append category to existing file_cat (allowing duplicates) as long as file_cat is not non_application
-                # df.loc[mask, 'file_cat'] = df.loc[mask, 'file_cat'] + f'{key}||'
                 df.loc[mask & mask_non_app, 'file_cat'] = df.loc[mask & mask_non_app, 'file_cat'] + f'{key}||'
-                # df.loc[mask, 'file_cat'] = df.loc[mask, 'file_cat'] + f'{key}||'
 
     # Clean up trailing separators, remove duplicates, and sort alphabetically
     df['file_cat'] = df['file_cat'].str.rstrip('||').apply(
         lambda x: '||'.join(sorted(list(set(x.split('||'))))) if x else x
     )
 
-    # If df['file_cat'] is empty and contains one of the defined unknown values, set to unknown
-    all_unknown_values = unknown_group + nara_accession 
+    mask_empty = df['file_cat'] == ''
 
-    mask_empty = df['file_cat'] == '' 
-    for value in all_unknown_values:
+    # If df['file_cat'] is empty and contains one of the defined unknown values, set to unknown
+    for value in unknown_group:
         value_mask = df['title_modified'].str.contains(value, case=False, na=False, regex=False)
-        df.loc[mask_empty & value_mask & mask_non_app, 'file_cat'] = 'unknown'
-        # df.loc[mask & value_mask, 'file_cat'] = 'unknown' 
+        df.loc[mask_empty & value_mask & mask_non_app, 'file_cat'] = 'unknown'   
 
     # and if file_cat is still empty (the rest appear to be names and empty), then also set to unknown
     df.loc[mask_empty & mask_non_app, 'file_cat'] = 'unknown'
+
+    # drop title_modified column
+    df = df.drop(columns=['title_modified'])
 
     return df

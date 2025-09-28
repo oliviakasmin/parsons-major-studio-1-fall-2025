@@ -1,0 +1,210 @@
+{
+  "overview": {
+    "total_applications_analyzed": 78604,
+    "single_category_applications": {
+      "count": 75219,
+      "percentage": 95.69
+    },
+    "multi_category_applications": {
+      "count": 3082,
+      "percentage": 3.92
+    }
+  },
+  "category_count_distribution": {
+    "1": {
+      "count": 75219,
+      "percentage": 95.69,
+      "avg_pages": 27.7,
+      "std_pages": 23.6
+    },
+    "2": {
+      "count": 3049,
+      "percentage": 3.88,
+      "avg_pages": 30.3,
+      "std_pages": 25.2
+    },
+    "3": {
+      "count": 29,
+      "percentage": 0.04,
+      "avg_pages": 24.7,
+      "std_pages": 20.6
+    },
+    "4": {
+      "count": 4,
+      "percentage": 0.01,
+      "avg_pages": 13.2,
+      "std_pages": 13.1
+    }
+  },
+  "correlation_analysis": {
+    "correlation_coefficient": 0.019,
+    "interpretation": "Very weak positive correlation - almost no relationship between number of categories and page count"
+  },
+  "top_single_categories": [
+    {
+      "category": "soldier",
+      "count": 34957,
+      "percentage": 44.47
+    },
+    {
+      "category": "widow",
+      "count": 24252,
+      "percentage": 30.85
+    },
+    {
+      "category": "rejected",
+      "count": 10745,
+      "percentage": 13.67
+    },
+    {
+      "category": "bounty land warrant",
+      "count": 3060,
+      "percentage": 3.89
+    },
+    {
+      "category": "unknown",
+      "count": 2179,
+      "percentage": 2.77
+    },
+    {
+      "category": "old war",
+      "count": 17,
+      "percentage": 0.02
+    },
+    {
+      "category": "N A Acc",
+      "count": 9,
+      "percentage": 0.01
+    }
+  ],
+  "top_category_combinations": [
+    {
+      "combination": "rejected + soldier",
+      "count": 1411,
+      "percentage": 1.8
+    },
+    {
+      "combination": "rejected + widow",
+      "count": 830,
+      "percentage": 1.06
+    },
+    {
+      "combination": "soldier + widow",
+      "count": 475,
+      "percentage": 0.6
+    },
+    {
+      "combination": "bounty land warrant + soldier",
+      "count": 166,
+      "percentage": 0.21
+    },
+    {
+      "combination": "bounty land warrant + rejected",
+      "count": 105,
+      "percentage": 0.13
+    },
+    {
+      "combination": "bounty land warrant + widow",
+      "count": 34,
+      "percentage": 0.04
+    },
+    {
+      "combination": "old war + widow",
+      "count": 12,
+      "percentage": 0.02
+    },
+    {
+      "combination": "old war + rejected + widow",
+      "count": 12,
+      "percentage": 0.02
+    },
+    {
+      "combination": "old war + soldier",
+      "count": 7,
+      "percentage": 0.01
+    },
+    {
+      "combination": "old war + rejected",
+      "count": 5,
+      "percentage": 0.01
+    },
+    {
+      "combination": "rejected + soldier + widow",
+      "count": 5,
+      "percentage": 0.01
+    },
+    {
+      "combination": "old war + rejected + soldier",
+      "count": 4,
+      "percentage": 0.01
+    },
+    {
+      "combination": "N A Acc + soldier",
+      "count": 3,
+      "percentage": 0.0
+    },
+    {
+      "combination": "bounty land warrant + soldier + widow",
+      "count": 2,
+      "percentage": 0.0
+    },
+    {
+      "combination": "bounty land warrant + rejected + soldier",
+      "count": 2,
+      "percentage": 0.0
+    },
+    {
+      "combination": "old war + rejected + soldier + widow",
+      "count": 2,
+      "percentage": 0.0
+    },
+    {
+      "combination": "old war + soldier + widow",
+      "count": 2,
+      "percentage": 0.0
+    },
+    {
+      "combination": "N A Acc + widow",
+      "count": 1,
+      "percentage": 0.0
+    },
+    {
+      "combination": "bounty land warrant + old war + rejected + soldier",
+      "count": 1,
+      "percentage": 0.0
+    },
+    {
+      "combination": "bounty land warrant + old war + rejected + widow",
+      "count": 1,
+      "percentage": 0.0
+    }
+  ],
+  "page_count_analysis": {
+    "by_category_count": {
+      "1": {
+        "count": 75219,
+        "percentage": 95.69,
+        "avg_pages": 27.7,
+        "std_pages": 23.6
+      },
+      "2": {
+        "count": 3049,
+        "percentage": 3.88,
+        "avg_pages": 30.3,
+        "std_pages": 25.2
+      },
+      "3": {
+        "count": 29,
+        "percentage": 0.04,
+        "avg_pages": 24.7,
+        "std_pages": 20.6
+      },
+      "4": {
+        "count": 4,
+        "percentage": 0.01,
+        "avg_pages": 13.2,
+        "std_pages": 13.1
+      }
+    }
+  }
+}
