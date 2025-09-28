@@ -15,14 +15,12 @@ This directory contains processed data files and analysis results for frontend v
 ### JSON Output Files
 
 - **`category_count_dict.json`** - Detailed category data; primary data for frontend viz
-
   - Count of applications per category
   - NAIDs for each category (pipe-separated strings)
   - Page counts for each category (pipe-separated strings)
   - Average page counts per category
 
 - **`category_analysis_summary.json`** - High-level analysis and statistics; use tbd
-
   - Overview of single vs. multiple category applications
   - Category count distribution with percentages
   - Correlation analysis between categories and page counts

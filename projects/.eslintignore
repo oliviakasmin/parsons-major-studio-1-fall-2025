@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+quantitative/dist
+quantitative/build
+quantitative/node_modules
+*.config.js
+*.config.ts
+vite.config.ts

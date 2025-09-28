@@ -1,0 +1,67 @@
+/* =============================================================================
+   BAR CHART STYLES
+   ============================================================================= */
+
+/* Chart container */
+.chart-container {
+  padding: 20px;
+  margin: 20px;
+  width: 100%;
+}
+
+.chart-container svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Bars */
+.bar {
+  fill: #4f46e5;
+}
+
+.bar:hover {
+  fill: #3730a3;
+}
+
+/* Bar labels */
+.bar-label {
+  font-size: 12px;
+  fill: #374151;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Axes */
+.axis text {
+  font-size: 12px;
+  fill: #6b7280;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #d1d5db;
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke: #e5e7eb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chart-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .axis text {
+    font-size: 10px;
+  }
+
+  .bar-label {
+    font-size: 10px;
+  }
+}

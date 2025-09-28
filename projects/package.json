@@ -1,0 +1,12 @@
+{
+	"name": "parsons-major-studio-1-projects",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Parent package for managing Git hooks and other configurations across all projects",
+	"scripts": {
+		"prepare": "husky install"
+	},
+	"devDependencies": {
+		"husky": "^9.1.7"
+	}
+}

@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+
+# Exit on any error
+set -e
+
+echo "🔍 Running pre-commit checks for all projects..."
+
+# Find all projects with package.json files
+for project_dir in */; do
+  if [ -f "${project_dir}package.json" ]; then
+    echo "📁 Checking project: ${project_dir%/}"
+    cd "${project_dir}"
+    
+    # Check if this is a TypeScript project
+    if [ -f "tsconfig.json" ]; then
+      echo "  🔍 Running TypeScript type check..."
+      npm run type-check
+    fi
+    
+    # Check if lint-staged is configured
+    if grep -q "lint-staged" package.json; then
+      echo "  🔍 Running ESLint on staged files..."
+      npx lint-staged
+    else
+      echo "  ⚠️  No lint-staged configuration found, skipping..."
+    fi
+    
+    cd ..
+  fi
+done
+
+# If we get here, all checks passed
+echo "✅ All pre-commit checks passed!"
