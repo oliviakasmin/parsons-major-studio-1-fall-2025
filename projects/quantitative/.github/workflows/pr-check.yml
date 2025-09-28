@@ -1,0 +1,40 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'projects/quantitative/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd projects/quantitative
+        npm ci
+        
+    - name: Type check
+      run: |
+        cd projects/quantitative
+        npm run type-check
+        
+    - name: Lint
+      run: |
+        cd projects/quantitative
+        npm run lint
+        
+    - name: Build
+      run: |
+        cd projects/quantitative
+        npm run build
