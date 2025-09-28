@@ -9,6 +9,35 @@
   width: 100%;
 }
 
+/* Chart controls */
+.chart-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chart-controls button {
+  padding: 8px 16px;
+  border: 2px solid #4f46e5;
+  background-color: white;
+  color: #4f46e5;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.chart-controls button:hover {
+  background-color: #f3f4f6;
+}
+
+.chart-controls button.active {
+  background-color: #4f46e5;
+  color: white;
+}
+
 .chart-container svg {
   display: block;
   margin: 0 auto;
@@ -31,6 +60,14 @@
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
+.bar-label.entering {
+  opacity: 0;
+}
+
+.bar-label.entered {
+  opacity: 1;
+}
+
 /* Axes */
 .axis text {
   font-size: 12px;
@@ -48,6 +85,11 @@
 
 .axis line {
   stroke: #e5e7eb;
+}
+
+/* X-axis specific styles */
+.x-axis text {
+  text-anchor: end;
 }
 
 /* Responsive design */
