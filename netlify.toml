@@ -1,7 +1,7 @@
 [build]
   base = "projects/quantitative"
   command = "npm run build"
-  publish = "projects/quantitative/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
