@@ -3,7 +3,6 @@
 }
 
 body {
-  margin: 0;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -11,6 +10,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
 #root {
   min-height: 100vh;
+}
+
+.categories-chart-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#chart-explanation {
+  margin: 20px;
+  width: 100%;
 }

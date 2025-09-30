@@ -1,4 +1,4 @@
-import { FunctionComponent, useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, forwardRef } from 'react';
 import * as d3 from 'd3';
 import './index.css';
 import categoryData from '../../data/viz_data/category_count_dict.json';
@@ -39,18 +39,22 @@ const data: CategoryChartData[] = Object.entries(
   }))
   .sort((a, b) => b.count - a.count); // Sort by count descending for total applications
 
-export const CategoriesBarChart: FunctionComponent = () => {
-  const [useCountData, setUseCountData] = useState(true);
-
+export const CategoriesBarChart = forwardRef<
+  HTMLDivElement,
+  {
+    useCountData: boolean;
+    setUseCountData: (useCountData: boolean) => void;
+  }
+>(({ useCountData, setUseCountData }, ref) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!svgRef.current) return;
 
     // Set dimensions
-    const margin = { top: 60, right: 50, bottom: 120, left: 120 };
-    const width = 900;
-    const height = 650;
+    const margin = { top: 40, right: 30, bottom: 120, left: 80 };
+    const width = 600;
+    const height = 400;
 
     // Create or update SVG
     const svg = d3
@@ -62,7 +66,8 @@ export const CategoriesBarChart: FunctionComponent = () => {
     const xScale = d3
       .scaleBand()
       .domain(data.map(d => d.category))
-      .range([margin.left, width - margin.right]);
+      .range([margin.left, width - margin.right])
+      .padding(0.1);
 
     // Create x-axis only if it doesn't exist
     if (svg.selectAll('.x-axis').empty()) {
@@ -73,8 +78,9 @@ export const CategoriesBarChart: FunctionComponent = () => {
         .attr('transform', `translate(0, ${height - margin.bottom})`)
         .call(xAxis)
         .selectAll('text')
-        .attr('dx', '-.6em')
-        .attr('dy', '-0.1em')
+        .attr('dx', '0')
+        .attr('dy', '0.5em')
+        .attr('text-anchor', 'middle')
         .attr('transform', () => {
           return 'rotate(-45)';
         });
@@ -83,7 +89,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
       svg
         .append('text')
         .attr('class', 'x-axis-label text-center')
-        .attr('transform', `translate(${width / 2}, ${height - 20})`)
+        .attr('transform', `translate(${width / 2}, ${height - 5})`)
         .text('Application Category');
     }
 
@@ -155,6 +161,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
             .append('text')
             .attr('class', 'bar-label entering text-center')
             .attr('x', d => (xScale(d.category) || 0) + xScale.bandwidth() / 2)
+            .attr('text-anchor', 'middle')
             .attr('y', height - margin.bottom)
             .transition()
             .duration(500)
@@ -177,6 +184,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
               'y',
               d => yScale(useCountData ? d.count : d.averagePageCount) - 5
             )
+            .attr('text-anchor', 'middle')
             .text(d =>
               useCountData
                 ? d.count.toLocaleString()
@@ -209,7 +217,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
       .attr('class', 'y-axis-label text-center')
       .attr(
         'transform',
-        `rotate(-90) translate(${-height / 2}, ${margin.left / 2})`
+        `rotate(-90) translate(${-height / 2}, ${margin.left / 8})`
       )
       .text(
         useCountData
@@ -219,7 +227,7 @@ export const CategoriesBarChart: FunctionComponent = () => {
   }, [useCountData]);
 
   return (
-    <div className="chart-container">
+    <div ref={ref}>
       <div className="chart-controls">
         <button
           onClick={() => setUseCountData(true)}
@@ -237,4 +245,4 @@ export const CategoriesBarChart: FunctionComponent = () => {
       <svg ref={svgRef}></svg>
     </div>
   );
-};
+});
