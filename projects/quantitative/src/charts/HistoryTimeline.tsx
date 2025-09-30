@@ -89,7 +89,7 @@ export const HistoryTimeline: FunctionComponent = () => {
                 .attr('fill', '#10b981') // Green color on hover
                 .attr('stroke', '#059669');
             })
-            .on('mouseleave', function (event, d) {
+            .on('mouseleave', function (_, d) {
               setTooltip(null);
               // Restore original color
               d3.select(this)
