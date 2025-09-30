@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react';
 import { CategoriesChart } from './CategoriesChart';
 import { History } from './History';
 import { Title } from './Title';
+import { Intro } from './Intro';
 import { CategoriesIntro } from './CategoriesIntro';
 import { NavDownButton } from './components';
 import './App.css';
@@ -9,6 +10,7 @@ import './App.css';
 const App: FunctionComponent = () => {
   const sectionIds = [
     'title',
+    'intro',
     'history',
     'categories-intro',
     'categories-chart',
@@ -41,27 +43,35 @@ const App: FunctionComponent = () => {
         <NavDownButton onClick={() => scrollToNext(0)} forceDown={true} />
       </section>
 
-      <section className="component-section" id="history">
-        <History />
+      <section className="component-section" id="intro">
+        <Intro />
         <NavDownButton
           onClick={() => scrollToNext(1)}
           onReverseClick={() => scrollToPrevious(1)}
         />
       </section>
 
-      <section className="component-section" id="categories-intro">
-        <CategoriesIntro />
+      <section className="component-section" id="history">
+        <History />
         <NavDownButton
           onClick={() => scrollToNext(2)}
           onReverseClick={() => scrollToPrevious(2)}
         />
       </section>
 
-      <section className="component-section" id="categories-chart">
-        <CategoriesChart />
+      <section className="component-section" id="categories-intro">
+        <CategoriesIntro />
         <NavDownButton
           onClick={() => scrollToNext(3)}
           onReverseClick={() => scrollToPrevious(3)}
+        />
+      </section>
+
+      <section className="component-section" id="categories-chart">
+        <CategoriesChart />
+        <NavDownButton
+          onClick={() => scrollToNext(4)}
+          onReverseClick={() => scrollToPrevious(4)}
           forceUp={true}
         />
       </section>

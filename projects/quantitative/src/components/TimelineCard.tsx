@@ -48,7 +48,7 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
         <div className="modal-section">
           <strong className="modal-section-label">Relevant Categories:</strong>
           <p className="modal-section-text">
-            {timelineData.relevant_categories}
+            {timelineData.relevant_categories.split('||').join(' • ')}
           </p>
         </div>
         {timelineData.relevant_quotes && (

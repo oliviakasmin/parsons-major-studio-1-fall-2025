@@ -1,37 +1,7 @@
 import { FunctionComponent, useState } from 'react';
 import { CategoryCard } from './components';
 
-// placeholder data for now
-const categoryCards = [
-  {
-    category: 'soldier',
-    description: 'Description of soldier category',
-  },
-  {
-    category: 'widow',
-    description: 'Description of widow category',
-  },
-  {
-    category: 'rejected',
-    description: 'Description of rejected category',
-  },
-  {
-    category: 'bounty land warrant',
-    description: 'Description of bounty land warrant category',
-  },
-  {
-    category: 'old war',
-    description: 'Description of old war category',
-  },
-  {
-    category: 'N A Acc',
-    description: 'Description of N A Acc category',
-  },
-  {
-    category: 'unknown',
-    description: 'Description of unknown category',
-  },
-];
+import categoryDefinitions from '../historical_research/category_definitions.json';
 
 export const CategoriesIntro: FunctionComponent = () => {
   const [openCard, setOpenCard] = useState<string | null>(null);
@@ -47,18 +17,23 @@ export const CategoriesIntro: FunctionComponent = () => {
   const handleNextCard = () => {
     if (!openCard) return;
 
-    const currentIndex = categoryCards.findIndex(
+    const currentIndex = categoryDefinitions.findIndex(
       card => card.category === openCard
     );
-    const nextIndex = (currentIndex + 1) % categoryCards.length;
-    setOpenCard(categoryCards[nextIndex].category);
+    const nextIndex = (currentIndex + 1) % categoryDefinitions.length;
+    setOpenCard(categoryDefinitions[nextIndex].category);
   };
 
   return (
     <div className="categories-intro">
-      <h2 className="categories-title">Application Categories</h2>
+      <h2 className="categories-title" style={{ marginBottom: '28px' }}>
+        Application Categories
+      </h2>
+      <p style={{ marginBottom: '28px' }}>
+        Click to learn more about each category
+      </p>
       <div className="category-cards-container">
-        {categoryCards.map(card => {
+        {categoryDefinitions.map(card => {
           const isOpen = openCard === card.category;
           return (
             <p
@@ -74,7 +49,9 @@ export const CategoriesIntro: FunctionComponent = () => {
 
       {openCard && (
         <CategoryCard
-          categoryInfo={categoryCards.find(card => card.category === openCard)!}
+          categoryInfo={
+            categoryDefinitions.find(card => card.category === openCard)!
+          }
           onClose={handleCloseModal}
           onNext={handleNextCard}
           isOpen={true}
