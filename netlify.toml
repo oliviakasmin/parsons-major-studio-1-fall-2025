@@ -1,7 +1,7 @@
 [build]
-  base = "parsons-major-studio-1-fall-2025/projects/quantitative"
+  base = "projects/quantitative"
   command = "npm run build"
-  publish = "dist"
+  publish = "projects/quantitative/dist"
 
 [build.environment]
   NODE_VERSION = "18"
