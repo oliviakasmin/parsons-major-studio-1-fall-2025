@@ -24,80 +24,37 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div // Modal overlay
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 2000,
-      }}
-      onClick={onClose} // Close modal when clicking outside
-    >
-      <div // Modal content
-        style={{
-          background: 'white',
-          padding: '30px',
-          borderRadius: '12px',
-          maxWidth: '600px',
-          width: '90%',
-          maxHeight: '80vh',
-          overflow: 'auto',
-          position: 'relative',
-        }}
-        onClick={e => e.stopPropagation()} // Prevent closing when clicking inside modal
+    <div className="modal-overlay modal-overlay-high" onClick={onClose}>
+      <div
+        className="modal-content modal-content-large"
+        onClick={e => e.stopPropagation()}
       >
-        <button // Close button (X)
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '15px',
-            right: '15px',
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            cursor: 'pointer',
-            color: '#6b7280',
-          }}
-        >
+        <button className="modal-close-button" onClick={onClose}>
           ×
         </button>
-        <h2 style={{ marginTop: 0, color: '#1f2937' }}>
+        <h2 className="modal-heading">
           {new Date(timelineData.date).toLocaleDateString()}
         </h2>
-        <div style={{ marginBottom: '15px' }}>
-          <strong>Historical Context:</strong>
-          <p style={{ margin: '5px 0', lineHeight: '1.6' }}>
+        <div className="modal-section">
+          <strong className="modal-section-label">Historical Context:</strong>
+          <p className="modal-section-text">
             {timelineData.historical_context}
           </p>
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <strong>Main Takeaway:</strong>
-          <p style={{ margin: '5px 0', lineHeight: '1.6' }}>
-            {timelineData.main_takeaway}
-          </p>
+        <div className="modal-section">
+          <strong className="modal-section-label">Main Takeaway:</strong>
+          <p className="modal-section-text">{timelineData.main_takeaway}</p>
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <strong>Relevant Categories:</strong>
-          <p style={{ margin: '5px 0', lineHeight: '1.6' }}>
+        <div className="modal-section">
+          <strong className="modal-section-label">Relevant Categories:</strong>
+          <p className="modal-section-text">
             {timelineData.relevant_categories}
           </p>
         </div>
         {timelineData.relevant_quotes && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>Relevant Quotes:</strong>
-            <p
-              style={{
-                margin: '5px 0',
-                lineHeight: '1.6',
-                fontStyle: 'italic',
-              }}
-            >
+          <div className="modal-section">
+            <strong className="modal-section-label">Relevant Quotes:</strong>
+            <p className="modal-section-text modal-section-text-italic">
               {timelineData.relevant_quotes}
             </p>
           </div>

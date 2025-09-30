@@ -77,8 +77,8 @@ export const HistoryTimeline: FunctionComponent = () => {
             .attr('cx', d => xScale(new Date(d.date)))
             .attr('cy', height / 2)
             .attr('r', 6)
-            .attr('fill', d => (d.highlight ? '#4f46e5' : '#9ca3af'))
-            .attr('stroke', d => (d.highlight ? '#3730a3' : '#6b7280'))
+            .attr('fill', d => (d.highlight ? '#000000' : '#9ca3af'))
+            .attr('stroke', d => (d.highlight ? '#333333' : '#6b7280'))
             .attr('stroke-width', 2)
             .style('cursor', 'pointer')
             .on('mouseenter', function (event, d) {
@@ -93,8 +93,8 @@ export const HistoryTimeline: FunctionComponent = () => {
               setTooltip(null);
               // Restore original color
               d3.select(this)
-                .attr('fill', d.highlight ? '#4f46e5' : '#9ca3af')
-                .attr('stroke', d.highlight ? '#3730a3' : '#6b7280');
+                .attr('fill', d.highlight ? '#000000' : '#9ca3af')
+                .attr('stroke', d.highlight ? '#333333' : '#6b7280');
             })
             .on('click', (_, d) => {
               setSelectedItem(d);
@@ -104,8 +104,8 @@ export const HistoryTimeline: FunctionComponent = () => {
           update
             .attr('cx', d => xScale(new Date(d.date)))
             .attr('cy', height / 2)
-            .attr('fill', d => (d.highlight ? '#4f46e5' : '#9ca3af'))
-            .attr('stroke', d => (d.highlight ? '#3730a3' : '#6b7280')),
+            .attr('fill', d => (d.highlight ? '#000000' : '#9ca3af'))
+            .attr('stroke', d => (d.highlight ? '#333333' : '#6b7280')),
         // Exit: remove circles that no longer have data
         exit => exit.remove()
       );
@@ -118,27 +118,16 @@ export const HistoryTimeline: FunctionComponent = () => {
       {/* Tooltip */}
       {tooltip && (
         <div
+          className="tooltip"
           style={{
-            position: 'absolute',
             left: tooltip.x + 10,
             top: tooltip.y - 100,
-            background: 'rgba(0, 0, 0, 0.9)',
-            color: 'white',
-            padding: '10px',
-            borderRadius: '6px',
-            fontSize: '12px',
-            maxWidth: '360px',
-            overflow: 'auto',
-            zIndex: 1000,
-            pointerEvents: 'none',
           }}
         >
-          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+          <div className="tooltip-date">
             {new Date(tooltip.data.date).toLocaleDateString()}
           </div>
-          <div style={{ marginBottom: '5px' }}>
-            {tooltip.data.main_takeaway}
-          </div>
+          <div className="tooltip-content">{tooltip.data.main_takeaway}</div>
         </div>
       )}
 

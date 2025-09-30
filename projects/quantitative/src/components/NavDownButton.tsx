@@ -52,35 +52,7 @@ export const NavDownButton: React.FC<NavDownButtonProps> = ({
         : '↓';
 
   return (
-    <button
-      onClick={handleClick}
-      style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        background: 'rgba(79, 70, 229, 0.8)',
-        color: 'white',
-        border: 'none',
-        borderRadius: '50%',
-        width: '50px',
-        height: '50px',
-        cursor: 'pointer',
-        fontSize: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        transition: 'all 0.3s ease',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.background = 'rgba(79, 70, 229, 1)';
-        e.currentTarget.style.transform = 'translateX(-50%) scale(1.1)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.background = 'rgba(79, 70, 229, 0.8)';
-        e.currentTarget.style.transform = 'translateX(-50%) scale(1)';
-      }}
-    >
+    <button className="nav-button" onClick={handleClick}>
       {buttonText}
     </button>
   );

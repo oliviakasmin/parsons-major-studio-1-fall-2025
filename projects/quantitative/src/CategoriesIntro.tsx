@@ -55,46 +55,19 @@ export const CategoriesIntro: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      <h2>Application Categories</h2>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '20px',
-          justifyContent: 'center',
-        }}
-      >
+    <div className="categories-intro">
+      <h2 className="categories-title">Application Categories</h2>
+      <div className="category-cards-container">
         {categoryCards.map(card => {
           const isOpen = openCard === card.category;
           return (
-            <div
+            <p
               key={card.category}
               onClick={() => handleCardClick(card.category)}
-              style={{
-                padding: '15px 25px',
-                border: '2px solid #4f46e5',
-                borderRadius: '8px',
-                backgroundColor: isOpen ? '#4f46e5' : 'white',
-                color: isOpen ? 'white' : '#4f46e5',
-                cursor: 'pointer',
-                fontSize: '16px',
-                fontWeight: '500',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                if (!isOpen) {
-                  e.currentTarget.style.backgroundColor = '#f3f4f6';
-                }
-              }}
-              onMouseLeave={e => {
-                if (!isOpen) {
-                  e.currentTarget.style.backgroundColor = 'white';
-                }
-              }}
+              className={`category-card ${isOpen ? 'active' : ''}`}
             >
               {card.category.charAt(0).toUpperCase() + card.category.slice(1)}
-            </div>
+            </p>
           );
         })}
       </div>
