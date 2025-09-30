@@ -33,7 +33,10 @@ const data: CategoryChartData[] = Object.entries(
 )
   .filter(([category]) => appCategories.includes(category))
   .map(([category, values]) => ({
-    category: category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
+    category:
+      category === 'soldier'
+        ? 'Survived (soldier)'
+        : category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
     count: values.count,
     averagePageCount: values.avg_page_count,
   }))

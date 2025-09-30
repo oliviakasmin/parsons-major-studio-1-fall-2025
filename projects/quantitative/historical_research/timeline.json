@@ -163,9 +163,9 @@
   },
   {
     "date": "archival-category",
-    "historical_context": "“N A Acc” represents a National Archives accession placeholder card used when no file survives.",
+    "historical_context": "\"N A Acc (National Archives Accession [number])\" represents a National Archives accession placeholder card used when no file survives.",
     "relevant_quotes": "\"In lieu of a file, a 10- by 14-inch card, containing cross-reference or abstract information from congressional reports or other sources, was substituted. (M804 pamphlet, p. 4)\" || \"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records. (M804 pamphlet, p. 1)\"",
-    "relevant_categories": "N A Acc",
+    "relevant_categories": "N A Acc (National Archives Accession [number])",
     "main_takeaway": "Signals that no pension file was found; a card with references was created instead.",
     "category_applicability_note": "\"From 1910 to 1912 the files were flat-filed and arranged alphabetically by the veteran’s surname. (M804 pamphlet, p. 4)\"",
     "highlight": false

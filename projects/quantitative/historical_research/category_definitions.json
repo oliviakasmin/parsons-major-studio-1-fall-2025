@@ -1,6 +1,6 @@
 [
   {
-    "category": "Soldier",
+    "category": "Survived (soldier)",
     "definition": "Files created for surviving Revolutionary War veterans who applied for pensions under the various acts, particularly service and invalid pensions.",
     "source_support": "\"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected.\" (M804 pamphlet, p. 4)",
     "notes": "Represents veterans’ own claims for pensions; later consolidated into the alphabetical arrangement by veteran.",
@@ -40,7 +40,7 @@
     "proof_quote": "\"On August 26, 1776, Congress resolved that every commissioned officer, noncommissioned officer, and private soldier or sailor disabled in the line of duty should receive half pay during his disability.\" (M804 pamphlet, p. 1–2)"
   },
   {
-    "category": "N A Acc",
+    "category": "N A Acc (National Archives Accession [number])",
     "definition": "National Archives accession placeholder cards created when no original pension file survives, often due to the 1800 War Department fire.",
     "source_support": "\"In lieu of a file, a 10- by 14-inch card, containing cross-reference or abstract information from congressional reports or other sources, was substituted.\" (M804 pamphlet, p. 4) || \"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records.\" (M804 pamphlet, p. 1)",
     "notes": "Serves as a record that an application once existed or was reported, but the file is no longer available.",

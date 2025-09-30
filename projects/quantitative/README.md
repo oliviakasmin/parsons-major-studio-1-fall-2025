@@ -1,5 +1,7 @@
 # Quantitative Data Visualization
 
+Deployed link: https://okasmin-parsons-major-studio-1.netlify.app/
+
 A React + TypeScript + D3.js application for data visualization and analysis.
 
 ## 🛠️ Tech Stack

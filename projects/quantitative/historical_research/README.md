@@ -11,7 +11,7 @@ This dataset is a structured JSON timeline of Revolutionary War pension and boun
 - **date** – the act or archival marker date (or `"archival-category"` where no specific law applies)
 - **historical_context** – concise background on the act or filing system
 - **relevant_quotes** – direct excerpts from the primary sources, with page references
-- **relevant_categories** – which filing categories (“Soldier,” “Widow,” “Rejected,” “Bounty land warrant,” “Old War,” “N A Acc”) the act relates to
+- **relevant_categories** – which filing categories ("Soldier," "Widow," "Rejected," "Bounty land warrant," "Old War," "N A Acc (National Archives Accession [number])") the act relates to
 - **main_takeaway** – the historical significance of the act or category
 - **category_applicability_note** – notes on how the archival filing system applied
 - **highlight** – whether this is a major turning point (`true` / `false`)

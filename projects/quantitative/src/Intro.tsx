@@ -52,6 +52,14 @@ export const Intro = () => {
             National Archives Microfilm Publication M804
           </a>
         </div>
+        <div>
+          <a
+            target="_blank"
+            href="https://huggingface.co/datasets/RevolutionCrossroads/nara_revolutionary_war_pension_files"
+          >
+            Data
+          </a>
+        </div>
       </h5>
     </div>
   );

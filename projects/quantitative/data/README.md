@@ -58,5 +58,5 @@ The project categorizes files into:
 - **bounty land warrant** - Bounty land warrant applications (identified by 'b', 'bl', 'wt', 'b l wt', 'bounty land', 'blwt')
 - **old war** - Old war applications (identified by 'old act', 'old war', 'o w', 'ow')
 - **nara archival administrative sheets** - NARA archival administrative sheets
-- **unknown** - Applications with unclear or missing categorization, including files with N A Acc (National Archives Accession number) - usually appears when the pension file is not found and is a placeholder with a note such as "No pension file found for this veteran"
+- **unknown** - Applications with unclear or missing categorization, including files with N A Acc (National Archives Accession [number]) - usually appears when the pension file is not found and is a placeholder with a note such as "No pension file found for this veteran"
 - **non_application** - Non-pension application file types
