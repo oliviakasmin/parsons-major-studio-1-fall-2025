@@ -1,0 +1,12 @@
+[build]
+  base = "parsons-major-studio-1-fall-2025/projects/quantitative"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
