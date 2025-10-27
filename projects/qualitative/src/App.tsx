@@ -41,7 +41,7 @@ const App: FunctionComponent = () => {
 
   return (
     <main>
-      <section className="component-section" id="pension-amount">
+      <section id="pension-amount">
         <PensionAmount />
         {/* <NavDownButton onClick={() => {}} /> */}
       </section>

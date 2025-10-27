@@ -2,65 +2,63 @@ import { FunctionComponent } from 'react';
 import { Button } from '@mui/material';
 
 interface CurlyBraceButtonProps {
-  text: string;
-  onClick?: () => void;
+  line1: string;
+  line2?: string;
+  onClick: () => void;
 }
 
 export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
-  text,
+  line1,
+  line2 = undefined,
   onClick,
 }) => {
+  const lineCount = 1 + (line2 ? 1 : 0);
+
+  const braceFontSize = `${lineCount * 1.5}em`;
   return (
     <Button
       onClick={onClick}
       sx={{
-        background: 'none',
-        border: 'none',
-        padding: '0',
-        minWidth: 'auto',
-        maxWidth: '200px',
         textTransform: 'none',
         display: 'flex',
-        alignItems: 'stretch',
-        gap: '4px',
         '&:hover': {
-          background: 'none',
+          background: 'lightgray',
         },
       }}
     >
       <span
         style={{
-          fontSize: '1.2em',
-          lineHeight: '1',
-          color: '#333',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          alignSelf: 'stretch',
+          fontSize: braceFontSize,
+          color: 'black',
+          fontWeight: '100',
+          fontFamily: 'Times New Roman',
+          marginTop: `-${lineCount * 2}px`,
         }}
       >
         {'{'}
       </span>
       <span
         style={{
-          flex: 1,
-          lineHeight: '1.4',
-          color: '#333',
-          wordWrap: 'break-word',
-          overflowWrap: 'break-word',
+          color: 'black',
+          display: 'flex',
+          flexDirection: 'column',
+          fontFamily: 'Georgia',
+          marginLeft: '16px',
+          marginRight: '16px',
+          marginTop: `${lineCount * 2}px`,
+          lineHeight: '1.2',
         }}
       >
-        {text}
+        <span>{line1}</span>
+        {line2 && <span>{line2}</span>}
       </span>
       <span
         style={{
-          fontSize: '1.2em',
-          lineHeight: '1',
-          color: '#333',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          alignSelf: 'stretch',
+          fontSize: braceFontSize,
+          color: 'black',
+          fontWeight: '100',
+          fontFamily: 'Times New Roman',
+          marginTop: `-${lineCount * 2}px`,
         }}
       >
         {'}'}
