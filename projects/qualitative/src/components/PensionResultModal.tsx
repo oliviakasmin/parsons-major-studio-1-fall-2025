@@ -30,14 +30,14 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '90%',
-          maxWidth: '1200px',
+          // maxWidth: '1200px',
           height: '90%',
           overflow: 'auto',
-          padding: 5,
+          padding: 8,
           backgroundColor: designUtils.backgroundColor,
         }}
       >
-        <div style={{ position: 'absolute', right: 8, top: 8 }}>
+        <div style={{ position: 'absolute', right: 12, top: 12 }}>
           <CurlyBraceButton onClick={onClose} line1="back" />
         </div>
         <Box
@@ -49,10 +49,17 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
         >
           {/* Left side */}
           <Box
-            sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3,
+              maxWidth: '40%',
+              paddingRight: '5%',
+            }}
           >
             <UnderlinedHeader text="Pension Allowance" />
-            <div>Inscribed on the roll of {state} at the rate of</div>
+            <div>Inscribed on the Roll of {state} at the rate of</div>
             <div>
               <div style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
                 ${amount} per annum
@@ -65,7 +72,7 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
                 (approximately ${convertDollarsToToday(amount)} today)
               </div>
             </div>
-            <div>Per the Act of {formatActDate(actDate)}</div>
+            <div>Act {formatActDate(actDate)}</div>
             <Box
               sx={{
                 border: '2px dashed #ccc',
@@ -91,7 +98,7 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
               sx={{
                 width: '100%',
                 height: 'auto',
-                maxHeight: '600px',
+                maxHeight: '800px',
                 overflow: 'hidden',
                 borderRadius: 1,
               }}

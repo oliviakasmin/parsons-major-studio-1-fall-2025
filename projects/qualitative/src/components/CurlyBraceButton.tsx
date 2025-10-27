@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react';
 import { Button } from '@mui/material';
+import { designUtils } from '../design_utils';
 
 interface CurlyBraceButtonProps {
   line1: string;
@@ -22,7 +23,11 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
         textTransform: 'none',
         display: 'flex',
         '&:hover': {
-          background: 'lightgray',
+          background: 'none',
+          '& span[class*="text-content"]': {
+            textDecoration: 'underline',
+            textDecorationColor: designUtils.iconButtonColor,
+          },
         },
       }}
     >
@@ -38,8 +43,9 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
         {'{'}
       </span>
       <span
+        className="text-content"
         style={{
-          color: 'black',
+          color: designUtils.textColor,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Georgia',

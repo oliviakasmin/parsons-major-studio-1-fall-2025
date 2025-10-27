@@ -1,14 +1,12 @@
 import { FunctionComponent } from 'react';
 import { Select, MenuItem } from '@mui/material';
-
+import { designUtils } from '../design_utils';
 interface StyledSelectProps {
   value: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
   options: string[];
   placeholder?: string;
 }
-
-const iconButtonColor = '#737271';
 
 export const StyledSelect: FunctionComponent<StyledSelectProps> = ({
   value,
@@ -31,7 +29,7 @@ export const StyledSelect: FunctionComponent<StyledSelectProps> = ({
         lineHeight: 'inherit',
         '&:hover': {
           textDecoration: 'underline',
-          textDecorationColor: iconButtonColor,
+          textDecorationColor: designUtils.iconButtonColor,
         },
         '& .MuiSelect-select': {
           fontFamily: 'inherit',
