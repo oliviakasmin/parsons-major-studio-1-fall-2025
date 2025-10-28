@@ -1,10 +1,5 @@
 import { FunctionComponent } from 'react';
 import { Title } from './Title';
-// import { CategoriesChart } from './CategoriesChart';
-// import { History } from './History';
-// import { Intro } from './Intro';
-// import { CategoriesIntro } from './CategoriesIntro';
-// import { NavDownButton } from './components';
 import './App.css';
 import { PensionAmount } from './PensionAmount';
 import {
@@ -95,19 +90,18 @@ const App: FunctionComponent = () => {
       >
         <CategoriesChart />
         <NavDownButton
-          onClick={() => scrollToNext(5)}
+          onClick={() => scrollToNext(4)}
           onReverseClick={() => scrollToPrevious(4)}
-          forceUp={false}
         />
       </section>
 
       <section id="pension-amount" className="component-section">
         <PensionAmount />
-        <NavDownButton
+        {/* <NavDownButton
           onClick={() => scrollToNext(5)}
           onReverseClick={() => scrollToPrevious(5)}
           forceUp={true}
-        />
+        /> */}
       </section>
     </main>
   );
