@@ -3,7 +3,9 @@ import { Modal, Box, Paper, Link } from '@mui/material';
 import { designUtils } from '../design_utils';
 import { UnderlinedHeader } from './UnderlinedHeader';
 import { CurlyBraceButton } from './CurlyBraceButton';
+import { AverageAmountByDate } from './average_amount_by_date';
 import { formatActDate, convertDollarsToToday } from '../utils';
+import { averageAmountByDateChartUtils } from '../design_utils';
 interface PensionResultModalProps {
   open: boolean;
   onClose: () => void;
@@ -11,6 +13,7 @@ interface PensionResultModalProps {
   amount: number;
   actDate: string;
   imageUrl: string;
+  naraURL: string;
 }
 
 export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
@@ -20,7 +23,12 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
   amount,
   actDate,
   imageUrl,
+  naraURL,
 }) => {
+  console.log('state:', state);
+  console.log('amount:', amount);
+  console.log('actDate:', actDate);
+  console.log('imageUrl:', imageUrl);
   return (
     <Modal open={open} onClose={onClose}>
       <Paper
@@ -55,7 +63,8 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
               flexDirection: 'column',
               gap: 3,
               maxWidth: '40%',
-              paddingRight: '5%',
+              minWidth: `${averageAmountByDateChartUtils.width + averageAmountByDateChartUtils.padding.left + averageAmountByDateChartUtils.padding.right}px`,
+              paddingRight: '10%',
             }}
           >
             <UnderlinedHeader text="Pension Allowance" />
@@ -69,24 +78,34 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
                   fontSize: '0.8em',
                 }}
               >
-                (approximately ${convertDollarsToToday(amount)} today)
+                (approximately $
+                {convertDollarsToToday(amount, actDate.split('-')[0])} today)
               </div>
             </div>
             <div>Act {formatActDate(actDate)}</div>
             <Box
               sx={{
-                border: '2px dashed #ccc',
-                borderRadius: 1,
-                padding: 3,
+                marginLeft: `-${averageAmountByDateChartUtils.padding.left}px`,
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '300px',
-                backgroundColor: '#f5f5f5',
+                minHeight: `${averageAmountByDateChartUtils.height}px`,
+                minWidth: `${averageAmountByDateChartUtils.width}px`,
+                marginTop: '40px',
               }}
             >
-              <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>chart</div>
+              <AverageAmountByDate
+                extraPoint={{ year: actDate.split('-')[0], amount }}
+              />
             </Box>
+            <div
+              style={{
+                fontSize: '0.7em',
+                // textAlign: 'center',
+                color: designUtils.textColor,
+                // textDecoration: 'underline',
+              }}
+            >
+              {`{ average allowance per year with your allowance highlighted }`}
+            </div>
           </Box>
 
           {/* Right side */}
@@ -115,18 +134,32 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
             </Box>
 
             {/* Caption */}
-            <Link href={imageUrl} target="_blank">
-              <div
-                style={{
-                  fontSize: '0.8em',
-                  textAlign: 'center',
-                  color: designUtils.textColor,
-                  textDecoration: 'underline',
-                }}
-              >
-                source
-              </div>
-            </Link>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <Link href={imageUrl} target="_blank">
+                <div
+                  style={{
+                    fontSize: '0.8em',
+                    textAlign: 'center',
+                    color: designUtils.textColor,
+                    textDecoration: 'underline',
+                  }}
+                >
+                  source
+                </div>
+              </Link>
+              <Link href={naraURL} target="_blank">
+                <div
+                  style={{
+                    fontSize: '0.8em',
+                    textAlign: 'center',
+                    color: designUtils.textColor,
+                    textDecoration: 'underline',
+                  }}
+                >
+                  full NAID file
+                </div>
+              </Link>
+            </div>
           </Box>
         </Box>
       </Paper>

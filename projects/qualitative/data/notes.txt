@@ -1,0 +1,15 @@
+TODO
+- need sample 10,000
+- already ran sample 1000, resuling in 559
+
+- fetch random 15,000
+- make sure don't overlap with original 1000
+
+- pre-process data, export to parquet
+
+- run LLM 1000 at a time
+- each 1000 save new version of parquet with number of how many processed
+
+- eventually join finished parquet with original 1000 sample
+
+- instead of saving null for no dollar amount, save LLM processed object and add a column pension_amount_dollars that is True/False
