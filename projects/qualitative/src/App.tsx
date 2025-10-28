@@ -8,7 +8,7 @@ import {
   CategoriesIntro,
   CategoriesChart,
   NavDownButton,
-} from '../../quantitative/src';
+} from './';
 
 const App: FunctionComponent = () => {
   // ordered list of section ids

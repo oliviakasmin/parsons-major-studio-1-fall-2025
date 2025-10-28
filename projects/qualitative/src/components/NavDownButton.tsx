@@ -1,3 +1,5 @@
+// TODO - copied directly from quantitative project, needs to be refactored
+
 import React, { useState, useEffect } from 'react';
 
 type NavDownButtonProps = {
@@ -6,8 +8,6 @@ type NavDownButtonProps = {
   forceDown?: boolean; // Force button to always show down arrow
   forceUp?: boolean; // Force button to always show up arrow
 };
-
-// TODO - refacto to use MUI Button / IconButton
 
 export const NavDownButton: React.FC<NavDownButtonProps> = ({
   onClick,
