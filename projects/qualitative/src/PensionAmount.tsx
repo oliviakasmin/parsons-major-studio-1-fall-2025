@@ -1,3 +1,18 @@
+/**
+ * data needed:
+ * act date
+ * pension amount dollars
+ * place of residence
+ * type of applicant
+ */
+
+/**
+ * mapping function needed:
+ * input: act date, applicant type, place of residence
+ * output: pension amount dollars
+ */
+
+// import { getPensionAmountData } from './pension_amount_data';
 import { FunctionComponent, useState } from 'react';
 import { PensionResultModal } from './components/PensionResultModal';
 import {
@@ -6,18 +21,30 @@ import {
   CurlyBraceButton,
 } from './components';
 import './PensionAmount.css';
+import { placeholderData } from './placeholder_data';
+
 export const PensionAmount: FunctionComponent = () => {
   const [open, setOpen] = useState(false);
+  // const [data, setData] = useState<d3.DSVRowArray<string> | null>(null);
+
   const handleOpen = () => {
     setOpen(true);
-    // open modal and submit form data
   };
   const handleClose = () => {
     setOpen(false);
   };
 
-  // TODO: get this from form submission
-  const state = 'New York';
+  const { defaultDate, defaultApplicantType, defaultPlaceOfResidence } =
+    placeholderData;
+
+  const [date, setDate] = useState<string>(defaultDate);
+  const [applicantType, setApplicantType] =
+    useState<string>(defaultApplicantType);
+  const [placeOfResidence, setPlaceOfResidence] = useState<string>(
+    defaultPlaceOfResidence
+  );
+
+  // TODO: get this from form submission / real data
   const amount = 100;
   const actDate = '1818-01-01';
   const imageUrl =
@@ -27,10 +54,17 @@ export const PensionAmount: FunctionComponent = () => {
     <>
       <div>
         <div className="pension-amount-header">
-          <UnderlinedHeader text="Seeking a Pension" />{' '}
+          <UnderlinedHeader text="Seeking a Pension" />
         </div>
         <div className="pension-amount-form">
-          <PensionAmountForm />
+          <PensionAmountForm
+            date={date}
+            applicantType={applicantType}
+            placeOfResidence={placeOfResidence}
+            setDate={setDate}
+            setApplicantType={setApplicantType}
+            setPlaceOfResidence={setPlaceOfResidence}
+          />
         </div>
         <div className="pension-amount-button">
           <CurlyBraceButton
@@ -43,7 +77,7 @@ export const PensionAmount: FunctionComponent = () => {
       <PensionResultModal
         open={open}
         onClose={handleClose}
-        state={state}
+        state={placeOfResidence}
         amount={amount}
         actDate={actDate}
         imageUrl={imageUrl}
