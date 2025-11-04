@@ -1,0 +1,151 @@
+/* =============================================================================
+   BAR CHART STYLES
+   ============================================================================= */
+
+/* =============================================================================
+   LAYOUT
+   ============================================================================= */
+
+.chart-container {
+  padding: 20px;
+  margin: 20px;
+  width: 100%;
+}
+
+.chart-container svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* =============================================================================
+   CONTROLS
+   ============================================================================= */
+
+.chart-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chart-controls button {
+  padding: 8px 16px;
+  border: 1px solid #000000;
+  background-color: white;
+  color: #000000;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Georgia, 'Times New Roman', 'Times', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.chart-controls button:hover {
+  background-color: #f3f4f6;
+}
+
+.chart-controls button.active {
+  background-color: #000000;
+  color: white;
+}
+
+/* =============================================================================
+   CHART ELEMENTS
+   ============================================================================= */
+
+/* Bars */
+.bar {
+  fill: #000000;
+}
+
+.bar:hover {
+  fill: #333333;
+}
+
+/* Bar labels */
+.bar-label {
+  font-size: 12px;
+  fill: #333333;
+  font-family: Georgia, 'Times New Roman', 'Times', serif;
+  font-weight: 500;
+}
+
+.bar-label.entering {
+  opacity: 0;
+}
+
+.bar-label.entered {
+  opacity: 1;
+}
+
+/* =============================================================================
+   AXES
+   ============================================================================= */
+
+.axis text {
+  font-size: 12px;
+  fill: #666666;
+  font-family: Georgia, 'Times New Roman', 'Times', serif;
+  font-weight: 400;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #d1d5db;
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke: #e5e7eb;
+}
+
+.x-axis text {
+  text-anchor: end;
+}
+
+/* Axis labels */
+.y-axis-label,
+.x-axis-label {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #000000;
+  font-family: 'Times New Roman', 'Times', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   UTILITIES
+   ============================================================================= */
+
+.text-center {
+  text-anchor: middle;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .chart-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .axis text {
+    font-size: 10px;
+  }
+
+  .bar-label {
+    font-size: 10px;
+  }
+
+  .y-axis-label,
+  .x-axis-label {
+    font-size: 11px;
+  }
+}
