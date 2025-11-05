@@ -25,10 +25,6 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
   imageUrl,
   naraURL,
 }) => {
-  console.log('state:', state);
-  console.log('amount:', amount);
-  console.log('actDate:', actDate);
-  console.log('imageUrl:', imageUrl);
   return (
     <Modal open={open} onClose={onClose}>
       <Paper
@@ -37,12 +33,14 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '90%',
-          // maxWidth: '1200px',
-          height: '90%',
-          overflow: 'auto',
-          padding: 8,
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          paddingTop: 6,
+          paddingBottom: 6,
           backgroundColor: designUtils.backgroundColor,
+          paddingLeft: 12,
+          paddingRight: 12,
         }}
       >
         <div style={{ position: 'absolute', right: 12, top: 12 }}>
@@ -58,13 +56,14 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
           {/* Left side */}
           <Box
             sx={{
-              flex: 1,
+              // flex: 1,
               display: 'flex',
               flexDirection: 'column',
               gap: 3,
-              maxWidth: '40%',
-              minWidth: `${averageAmountByDateChartUtils.width + averageAmountByDateChartUtils.padding.left + averageAmountByDateChartUtils.padding.right}px`,
-              paddingRight: '10%',
+              // maxWidth: '40%',
+              // minWidth: `${averageAmountByDateChartUtils.width + averageAmountByDateChartUtils.padding.left + averageAmountByDateChartUtils.padding.right}px`,
+              padding: '0 2%',
+              width: '50%',
             }}
           >
             <UnderlinedHeader text="Pension Allowance" />
@@ -82,7 +81,7 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
                 {convertDollarsToToday(amount, actDate.split('-')[0])} today)
               </div>
             </div>
-            <div>Act {formatActDate(actDate)}</div>
+            <div>{formatActDate(actDate)}</div>
             <Box
               sx={{
                 marginLeft: `-${averageAmountByDateChartUtils.padding.left}px`,
@@ -99,9 +98,7 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
             <div
               style={{
                 fontSize: '0.7em',
-                // textAlign: 'center',
                 color: designUtils.textColor,
-                // textDecoration: 'underline',
               }}
             >
               {`{ average allowance per year with your allowance highlighted }`}
@@ -110,16 +107,17 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
 
           {/* Right side */}
           <Box
-            sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1 }}
+            sx={{
+              width: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
+            }}
           >
             {/* Image */}
             <Box
               sx={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '800px',
-                overflow: 'hidden',
-                borderRadius: 1,
+                height: '80vh',
               }}
             >
               <img

@@ -1,7 +1,9 @@
-// TODO - copied directly from quantitative project, needs to be refactored
-
 import React from 'react';
-
+import { Popover, Box } from '@mui/material';
+import { UnderlinedHeader } from './UnderlinedHeader';
+import { formatActDate } from '../utils';
+import { FormatProofQuote } from './FormatProofQuote';
+import { designUtils } from '../design_utils';
 type TimelineData = {
   date: string;
   historical_context: string;
@@ -13,55 +15,92 @@ type TimelineData = {
 };
 
 type TimelineCardProps = {
-  timelineData: TimelineData;
+  timelineData: TimelineData | null;
+  anchorEl: HTMLElement | null;
   onClose: () => void;
-  isOpen: boolean;
+  open: boolean;
 };
 
 export const TimelineCard: React.FC<TimelineCardProps> = ({
   timelineData,
+  anchorEl,
   onClose,
-  isOpen,
+  open,
 }) => {
-  if (!isOpen) return null;
+  if (!timelineData) return null;
 
   return (
-    <div className="modal-overlay modal-overlay-high" onClick={onClose}>
-      <div
-        className="modal-content modal-content-large"
-        onClick={e => e.stopPropagation()}
-      >
-        <button className="modal-close-button" onClick={onClose}>
-          ×
-        </button>
-        <h2 className="modal-heading">
-          {new Date(timelineData.date).toLocaleDateString()}
-        </h2>
-        <div className="modal-section">
-          <strong className="modal-section-label">Historical Context:</strong>
-          <p className="modal-section-text">
-            {timelineData.historical_context}
-          </p>
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      disableRestoreFocus
+      sx={{
+        pointerEvents: 'none',
+        '& .MuiPopover-paper': {
+          pointerEvents: 'auto',
+          maxWidth: 500,
+          maxHeight: 500,
+          overflow: 'auto',
+          mt: 1,
+          backgroundColor: designUtils.backgroundColor,
+        },
+      }}
+      slotProps={{
+        paper: {
+          onMouseLeave: onClose,
+        },
+      }}
+    >
+      <Box sx={{ p: 2 }}>
+        <div style={{ textAlign: 'center' }}>
+          <UnderlinedHeader
+            size="small"
+            text={formatActDate(timelineData.date)}
+          />
         </div>
-        <div className="modal-section">
-          <strong className="modal-section-label">Main Takeaway:</strong>
-          <p className="modal-section-text">{timelineData.main_takeaway}</p>
+        <div style={{ marginBottom: '16px' }}>
+          <strong style={{ display: 'block', marginBottom: '4px' }}>
+            Historical Context:
+          </strong>
+          <p style={{ margin: '8px 0' }}>{timelineData.historical_context}</p>
         </div>
-        <div className="modal-section">
-          <strong className="modal-section-label">Relevant Categories:</strong>
-          <p className="modal-section-text">
-            {timelineData.relevant_categories.split('||').join(' • ')}
-          </p>
+
+        <div style={{ marginBottom: '16px' }}>
+          <strong style={{ display: 'block', marginBottom: '4px' }}>
+            Main Takeaway:
+          </strong>
+          <p style={{ margin: '8px 0' }}>{timelineData.main_takeaway}</p>
         </div>
+
         {timelineData.relevant_quotes && (
-          <div className="modal-section">
-            <strong className="modal-section-label">Relevant Quotes:</strong>
-            <p className="modal-section-text modal-section-text-italic">
-              {timelineData.relevant_quotes}
+          <div style={{ marginBottom: '16px' }}>
+            <strong style={{ display: 'block', marginBottom: '4px' }}>
+              Relevant Quotes:
+            </strong>
+            <p style={{ margin: '8px 0', fontStyle: 'italic' }}>
+              {FormatProofQuote(timelineData.relevant_quotes)}
             </p>
           </div>
         )}
-      </div>
-    </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <strong style={{ display: 'block', marginBottom: '4px' }}>
+            Relevant Categories:
+          </strong>
+          <p style={{ margin: 0 }}>
+            {timelineData.relevant_categories.split('||').join(' • ')}
+          </p>
+        </div>
+      </Box>
+    </Popover>
   );
 };

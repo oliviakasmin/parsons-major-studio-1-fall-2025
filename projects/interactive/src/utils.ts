@@ -31,15 +31,8 @@ export const formatActDate = (dateString: string) => {
             ? 'rd'
             : 'th';
 
-  return `${day}${ord} ${months[month - 1]}, ${y}`;
+  return `Act ${day}${ord} ${months[month - 1]}, ${y}`;
 };
-
-// TODO: convert dollars to today
-// export const convertDollarsToToday = (dollars: number) => {
-//   // input ex: 100
-//   // output ex: 200
-//   return `TODO: convert amount ${dollars}`;
-// };
 
 // From ChatGPT: https://chatgpt.com/c/68ebf5ec-5ca8-8333-a3f1-83c78b28889b
 

@@ -1,15 +1,11 @@
-// TODO - copied directly from quantitative project, needs to be refactored
-
-// very simple d3 timeline with dates on x-axis
-// most simple implementation possible with no extra frills or bells and whistles
-
-// data that is highlight: false is a small dot along the x-axis with a tooltip hover that shows the date
-// data that is highlight: true has a text label above the x-axis with the year and the main takeaway
-// for the highlight: true data the y-axis is staggered for every 3 entries to avoid overlap
-
-// typography should be extremely simple and inherit the font from the rest of the project
-
-import { FunctionComponent, useMemo, useEffect, useRef, useState } from 'react';
+import {
+  FunctionComponent,
+  useMemo,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import * as d3 from 'd3';
 import timelineData from '../../historical_research/timeline.json';
 import { TimelineCard } from '../components';
@@ -25,8 +21,15 @@ interface TimelineData {
 }
 
 export const HistoryTimeline2: FunctionComponent = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const anchorRef = useRef<HTMLDivElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<TimelineData | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+  const [height, setHeight] = useState(600);
 
   const processedData = useMemo(() => {
     // Filter out entries with "archival-category" dates and convert dates
@@ -45,54 +48,87 @@ export const HistoryTimeline2: FunctionComponent = () => {
   const highlightedData = processedData.filter(item => item.highlight);
   const regularData = processedData.filter(item => !item.highlight);
 
-  // Extract and process categories
-  const categoryData = useMemo(() => {
-    const categoryMap = new Map<
-      string,
-      { firstDate: Date; lastDate: Date; firstIndex: number }
-    >();
+  const handleHoverLeave = useCallback(() => {
+    setSelectedItem(null);
+    setAnchorEl(null);
+  }, []);
 
-    processedData.forEach((item, index) => {
-      const categories = item.relevant_categories
-        .split('||')
-        .map(cat => cat.trim());
-      categories.forEach(category => {
-        if (category && category !== '') {
-          if (!categoryMap.has(category)) {
-            categoryMap.set(category, {
-              firstDate: item.parsedDate,
-              lastDate: item.parsedDate,
-              firstIndex: index,
-            });
-          } else {
-            const existing = categoryMap.get(category)!;
-            if (item.parsedDate < existing.firstDate) {
-              existing.firstDate = item.parsedDate;
-              existing.firstIndex = index;
-            }
-            if (item.parsedDate > existing.lastDate) {
-              existing.lastDate = item.parsedDate;
-            }
-          }
-        }
-      });
+  const handleHover = useCallback((event: MouseEvent, item: TimelineData) => {
+    setSelectedItem(item);
+    // Create a temporary anchor element at the mouse position
+    if (!anchorRef.current && containerRef.current) {
+      const anchor = document.createElement('div');
+      anchor.style.position = 'absolute';
+      anchor.style.pointerEvents = 'none';
+      anchor.style.width = '1px';
+      anchor.style.height = '1px';
+      containerRef.current.appendChild(anchor);
+      anchorRef.current = anchor;
+    }
+    if (anchorRef.current && containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      anchorRef.current.style.left = `${event.clientX - containerRect.left}px`;
+      anchorRef.current.style.top = `${event.clientY - containerRect.top}px`;
+      setAnchorEl(anchorRef.current);
+    }
+  }, []);
+
+  // ResizeObserver to track container dimensions
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Set initial dimensions immediately
+    const updateDimensions = () => {
+      if (container) {
+        const containerWidth = container.offsetWidth || window.innerWidth;
+        const containerHeight = Math.max(container.offsetHeight || 600, 600);
+        setWidth(containerWidth);
+        setHeight(containerHeight);
+      }
+    };
+
+    // Set initial dimensions
+    updateDimensions();
+
+    const observer = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const newWidth =
+          entry.contentRect?.width ||
+          entry.target.clientWidth ||
+          container.offsetWidth ||
+          window.innerWidth;
+        const newHeight = Math.max(
+          entry.contentRect?.height ||
+            entry.target.clientHeight ||
+            container.offsetHeight ||
+            600,
+          600
+        );
+        setWidth(newWidth);
+        setHeight(newHeight);
+      }
     });
+    observer.observe(container);
 
-    // Sort categories by first appearance (earliest first)
-    return Array.from(categoryMap.entries())
-      .map(([category, data]) => ({ category, ...data }))
-      .sort((a, b) => a.firstIndex - b.firstIndex);
-  }, [processedData]);
+    // Also listen to window resize as fallback
+    window.addEventListener('resize', updateDimensions);
+
+    // Cleanup
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
 
   useEffect(() => {
-    if (!svgRef.current || processedData.length === 0) return;
+    if (!svgRef.current || processedData.length === 0 || width === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const margin = { top: 200, right: 100, bottom: 200, left: 100 };
-    const containerWidth = window.innerWidth;
-    const height = 600;
+    const margin = { top: 200, right: 120, bottom: 200, left: 120 };
+    const containerWidth = width;
     const innerWidth = containerWidth - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -119,45 +155,6 @@ export const HistoryTimeline2: FunctionComponent = () => {
       .attr('transform', `translate(0,${innerHeight})`)
       .call(xAxis as any);
 
-    // Add category lines below x-axis
-    const categoryLineSpacing = 25; // Space between category lines
-    const categoryStartY = innerHeight + 40; // Start 40px below x-axis
-
-    categoryData.forEach((categoryInfo, index) => {
-      const yPosition = categoryStartY + index * categoryLineSpacing;
-      const startX = xScale(categoryInfo.firstDate);
-
-      // For "Rejected" category, extend to the end of the timeline
-      const endX =
-        categoryInfo.category === 'Rejected'
-          ? xScale(d3.max(processedData, d => d.parsedDate) as Date)
-          : xScale(categoryInfo.lastDate);
-
-      // Draw horizontal line of dots
-      const dotSpacing = 8; // Space between dots
-      const numDots = Math.floor((endX - startX) / dotSpacing);
-
-      for (let i = 0; i <= numDots; i++) {
-        const dotX = startX + i * dotSpacing;
-        g.append('circle')
-          .attr('cx', dotX)
-          .attr('cy', yPosition)
-          .attr('r', 1.5)
-          .attr('fill', '#999')
-          .attr('opacity', 0.7);
-      }
-
-      // Add category label at the start of the line
-      g.append('text')
-        .attr('x', startX - 5)
-        .attr('y', yPosition + 4)
-        .attr('text-anchor', 'end')
-        .attr('font-size', '12px')
-        .attr('font-family', 'inherit')
-        .attr('fill', '#666')
-        .text(categoryInfo.category);
-    });
-
     // Add regular data points (small dots)
     g.selectAll('.regular-dot')
       .data(regularData)
@@ -169,7 +166,8 @@ export const HistoryTimeline2: FunctionComponent = () => {
       .attr('r', 6)
       .attr('fill', '#666')
       .style('cursor', 'pointer')
-      .on('click', (_, d) => setSelectedItem(d));
+      .on('mouseenter', (event, d) => handleHover(event as MouseEvent, d))
+      .on('mouseleave', handleHoverLeave);
 
     // First, draw all lines for highlighted data points
     highlightedData.forEach((d, i) => {
@@ -209,7 +207,10 @@ export const HistoryTimeline2: FunctionComponent = () => {
         .attr('y2', lineEndY)
         .attr('stroke', '#333')
         .attr('stroke-width', 1)
-        .attr('opacity', 0.3);
+        .attr('opacity', 0.3)
+        .style('cursor', 'pointer')
+        .on('mouseenter', event => handleHover(event as MouseEvent, d))
+        .on('mouseleave', handleHoverLeave);
     });
 
     // Then, draw all text labels for highlighted data points
@@ -225,10 +226,10 @@ export const HistoryTimeline2: FunctionComponent = () => {
           `translate(${xScale(d.parsedDate)}, ${innerHeight + yOffset - 8})`
         )
         .style('cursor', 'pointer')
-        .on('click', () => setSelectedItem(d));
+        .on('mouseenter', event => handleHover(event as MouseEvent, d))
+        .on('mouseleave', handleHoverLeave);
 
       // Calculate text dimensions for background
-      //   const yearText = d.year;
       const takeawayText = d.historical_context;
       const maxWidth = 200;
       const lineHeight = 16;
@@ -280,20 +281,40 @@ export const HistoryTimeline2: FunctionComponent = () => {
           .text(lineText);
       });
     });
-  }, [processedData, highlightedData, regularData, categoryData]);
+  }, [
+    processedData,
+    highlightedData,
+    regularData,
+    width,
+    height,
+    handleHover,
+    handleHoverLeave,
+  ]);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <svg ref={svgRef} />
+    <div
+      ref={containerRef}
+      style={{
+        position: 'relative',
+        width: '100%',
+        minHeight: '600px',
+        display: 'block',
+      }}
+    >
+      <svg
+        ref={svgRef}
+        width={width || '100%'}
+        height={height}
+        style={{ display: 'block' }}
+      />
 
-      {/* Modal */}
-      {selectedItem && (
-        <TimelineCard
-          timelineData={selectedItem}
-          onClose={() => setSelectedItem(null)}
-          isOpen={true}
-        />
-      )}
+      {/* Tooltip */}
+      <TimelineCard
+        timelineData={selectedItem}
+        anchorEl={anchorEl}
+        onClose={handleHoverLeave}
+        open={!!selectedItem && !!anchorEl}
+      />
     </div>
   );
 };

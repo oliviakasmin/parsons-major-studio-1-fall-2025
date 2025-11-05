@@ -3,7 +3,21 @@
   display: inline-block;
 }
 
-.underlined-header::before {
+/* Size variants */
+.underlined-header.small {
+  font-size: 1.25rem;
+}
+
+.underlined-header.medium {
+  font-size: 1.75rem;
+}
+
+.underlined-header.large {
+  font-size: 2.25rem;
+}
+
+/* Underline effect - only when .underlined class is present */
+.underlined-header.underlined::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -13,7 +27,7 @@
   background-color: #666;
 }
 
-.underlined-header::after {
+.underlined-header.underlined::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -21,4 +35,10 @@
   right: -2px;
   height: 1px;
   background-color: #666;
+}
+
+/* No underline when .no-underline class is present */
+.underlined-header.no-underline::before,
+.underlined-header.no-underline::after {
+  display: none;
 }

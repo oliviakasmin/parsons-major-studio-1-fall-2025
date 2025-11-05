@@ -15,6 +15,8 @@ body {
 main {
   margin-left: 40px;
   margin-right: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 #root {
@@ -29,7 +31,7 @@ h3 {
   font-weight: 700;
   line-height: 1.2;
   margin: 0 0 0.6rem;
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.05em;
   font-family: 'Times New Roman', 'Times', serif;
 }
@@ -308,6 +310,7 @@ body {
 .nav-button:hover {
   color: #000;
   transform: translateX(-50%) scale(1.2);
+  background: none;
 }
 
 /* Tooltip */
