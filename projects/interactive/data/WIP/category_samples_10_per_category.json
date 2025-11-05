@@ -1,0 +1,285 @@
+{
+  "single_category_samples": {
+    "soldier": [
+      {
+        "NAID": "144143658",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File S. 8997, for Samuel Marshall, Virginia",
+        "file_cat": "soldier",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/144143658",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0002/export_M804-RevolutionaryWarPensionAppFiles_1635_7594/images/4160812_00894.jpg"
+      },
+      {
+        "NAID": "54334471",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File S. 16091, William Critchfield, Penn.",
+        "file_cat": "soldier",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54334471",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/71/3344/54334471/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0692/images/4156497_00174.jpg"
+      },
+      {
+        "NAID": "144085088",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File S. 13554, for Samuel Jones, Virginia",
+        "file_cat": "soldier",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/144085088",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0002/export_M804-RevolutionaryWarPensionAppFiles_1444_7860/images/4159969_00895.jpg"
+      }
+    ],
+    "rejected": [
+      {
+        "NAID": "54266410",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R 2155, Charles Coleman, S.C",
+        "file_cat": "rejected||soldier",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54266410",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/10/2664/54266410/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0607/images/4156174_00301.jpg"
+      },
+      {
+        "NAID": "196106764",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R. 15594, for James Kennedy, Virginia",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196106764",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1472_8758/images/4160084_00388.jpg"
+      },
+      {
+        "NAID": "144192946",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R. 6,775, for Joshua Mc Lain, Maryland",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/144192946",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0002/export_M804-RevolutionaryWarPensionAppFiles_1693_7941/images/4160914_00289.jpg"
+      },
+      {
+        "NAID": "196418510",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R. 8,347, for Charles Porter, Maryland",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196418510",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1953_9161/images/4161899_00020.jpg"
+      },
+      {
+        "NAID": "54233431",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R 2012, Richard Clark, Mass.",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54233431",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/31/2334/54233431/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0564/images/4156075_00755.jpg"
+      },
+      {
+        "NAID": "196296681",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R. 7,522, for Mark Murray, Virginia",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196296681",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1796_8284/images/4161088_00096.jpg"
+      },
+      {
+        "NAID": "54074098",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File R. 1315, John Brown, N.C.",
+        "file_cat": "rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54074098",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/98/740/54074098/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0370/images/4154197_00352.jpg"
+      }
+    ],
+    "widow": [
+      {
+        "NAID": "54879996",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 7735, Ebenezer Hills, Conn. New York (Rev. & 1786)",
+        "file_cat": "widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54879996",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/96/8799/54879996/content/23_b/M804-RevolutionaryWarPensionAppFiles_b/M804_1281/images/4159468_00125.jpg"
+      },
+      {
+        "NAID": "54485719",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 7065, Samuel Earle, Va.",
+        "file_cat": "widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54485719",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/19/4857/54485719/content/23_b/M804-RevolutionaryWarPensionAppFiles_b/M804_0885/images/4157984_00565.jpg"
+      },
+      {
+        "NAID": "196357765",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 26293, for William Patten, Connecticut",
+        "file_cat": "widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196357765",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1886_9176/images/4161597_00588.jpg"
+      },
+      {
+        "NAID": "54257829",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 22841, Christopher Coggshall, R.I.",
+        "file_cat": "rejected||widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54257829",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/29/2578/54257829/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0596/images/4156149_00171.jpg"
+      },
+      {
+        "NAID": "53881676",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 23506, Frederick Banker, New York",
+        "file_cat": "widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/53881676",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/76/8816/53881676/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0133/images/4153878_00490.jpg"
+      },
+      {
+        "NAID": "111715914",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W. 18454, Stephen Willcox, Conn. R.I.",
+        "file_cat": "rejected||widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/111715914",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0001/25/M804_2583/images/4176910_00893.jpg"
+      },
+      {
+        "NAID": "53857073",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File W 1127, Josiah Bachelder, Continental (N.H.)",
+        "file_cat": "widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/53857073",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/73/8570/53857073/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0102/images/4153698_00430.jpg"
+      }
+    ],
+    "bounty land warrant": [
+      {
+        "NAID": "196440138",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File B. L. Wt. 1732-200, for Thomas Price, Maryland",
+        "file_cat": "bounty land warrant",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196440138",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1975_9138/images/4161948_00654.jpg"
+      },
+      {
+        "NAID": "196228359",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File B.L.Wt. 8375-160-55, for John Mc Caffrey, Massachusetts",
+        "file_cat": "bounty land warrant",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196228359",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1663_8745/images/4160845_00710.jpg"
+      },
+      {
+        "NAID": "111668781",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File B.L.Wt. 36525-160-55, Micah Wethern, Mass.",
+        "file_cat": "bounty land warrant",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/111668781",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0001/25/M804_2540/images/4175242_00692.jpg"
+      },
+      {
+        "NAID": "111524577",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File B.L.Wt. 88-300, Richard Weare, N.H.",
+        "file_cat": "bounty land warrant",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/111524577",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0001/25/M804_2511/images/4173479_00311.jpg"
+      }
+    ],
+    "old war": [
+      {
+        "NAID": "196187193",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File O. W. Inv. Rej. 15880, for Elijah Lincoln, [Blank]",
+        "file_cat": "old war||rejected||widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196187193",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1564_9144/images/4160663_00321.jpg"
+      },
+      {
+        "NAID": "144295623",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File Old War Ind. File 26432, for John Symmonds, Other",
+        "file_cat": "old war",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/144295623",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0002/export_M804-RevolutionaryWarPensionAppFiles_2334_6030/images/4170826_00565.jpg"
+      },
+      {
+        "NAID": "196279762",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File Old War Wid. File 10531, for Raleigh Morgan, Virginia",
+        "file_cat": "old war||widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196279762",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1766_9150/images/4161042_00747.jpg"
+      },
+      {
+        "NAID": "196393362",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File Old War Inv Rej. 8194, for Isaac Philips, [Blank]",
+        "file_cat": "old war||rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/196393362",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0003/export_M804-RevolutionaryWarPensionAppFiles_1926_9159/images/4161817_00401.jpg"
+      },
+      {
+        "NAID": "53976336",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File Old Act Navy Ind. Rej. 170, Frederick Bistories, Mot Rev. War",
+        "file_cat": "old war||rejected",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/53976336",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/36/9763/53976336/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0249/images/4153994_00073.jpg"
+      }
+    ],
+    "N A Acc": [
+      {
+        "NAID": "53972882",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File N.A. Acc. No 874050014 Not Half Pay, Benjamin Bishop, N.J.",
+        "file_cat": "N A Acc",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/53972882",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/82/9728/53972882/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0245/images/4153990_00099.jpg"
+      },
+      {
+        "NAID": "54508399",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File Acc. No. 874 No. 050058, Abner S Ellis, Va.",
+        "file_cat": "N A Acc||soldier",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54508399",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/99/5083/54508399/content/23_b/M804-RevolutionaryWarPensionAppFiles_b/M804_0915/images/4158159_00041.jpg"
+      },
+
+      {
+        "NAID": "53982721",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File N.A. Acc. No. 874, John Blair, [BLANK]",
+        "file_cat": "N A Acc",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/53982721",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/21/9827/53982721/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0257/images/4154002_00488.jpg"
+      },
+      {
+        "NAID": "144171806",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File N.A. Acc No. 874 050115, for James Mc Clurg, Virginia",
+        "file_cat": "N A Acc",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/144171806",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/lz/microfilm-publications/M804-RevolutionaryWarPensionAppFiles/0002/export_M804-RevolutionaryWarPensionAppFiles_1669_7892/images/4160851_00931.jpg"
+      },
+      {
+        "NAID": "54506848",
+        "title": "Revolutionary War Pension and Bounty Land Warrant Application File N. A. Acc. No. 874, Bradford W Elliott, Organization Not Show (Utah Reisdence)",
+        "file_cat": "N A Acc||widow",
+        "file_type": "revolutionary war pension and bounty land warrant application file",
+        "naraURL": "https://catalog.archives.gov/id/54506848",
+        "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/48/5068/54506848/content/23_b/M804-RevolutionaryWarPensionAppFiles_b/M804_0913/images/4158157_00199.jpg"
+      }
+    ]
+  },
+  "multi_category_samples": [
+    {
+      "NAID": "53963221",
+      "title": "Revolutionary War Pension and Bounty Land Warrant Application File W 25232 B.L. Wt. 28658-160-55, Matthew Beveridge, Mass.",
+      "file_cat": "bounty land warrant||widow",
+      "file_type": "revolutionary war pension and bounty land warrant application file",
+      "categories": ["bounty land warrant", "widow"],
+      "naraURL": "https://catalog.archives.gov/id/53963221",
+      "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/21/9632/53963221/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0232/images/4153977_00259.jpg"
+    },
+    {
+      "NAID": "54269575",
+      "title": "Revolutionary War Pension and Bounty Land Warrant Application File B.L.Wt. 1646-100, Daniel Collins, R.I.",
+      "file_cat": "bounty land warrant||rejected",
+      "file_type": "revolutionary war pension and bounty land warrant application file",
+      "categories": ["bounty land warrant", "rejected"],
+      "naraURL": "https://catalog.archives.gov/id/54269575",
+      "pageURL": "https://s3.amazonaws.com/NARAprodstorage/opastorage/live/75/2695/54269575/content/23/M804-RevolutionaryWarPensionAppFiles/M804_0612/images/4156402_00642.jpg"
+    }
+  ]
+}

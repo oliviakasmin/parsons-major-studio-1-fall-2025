@@ -1,25 +1,46 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { Title } from './Title';
 import './App.css';
 import { PensionAmount } from './PensionAmount';
-import {
-  Intro,
-  History,
-  CategoriesIntro,
-  CategoriesChart,
-  NavDownButton,
-} from './';
+import { Intro, History, ApplicationCategories, NavDownButton } from './';
 
 const App: FunctionComponent = () => {
+  const [showNavButtons, setShowNavButtons] = useState(false);
+  const mouseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // ordered list of section ids
   const sectionIds = [
     'title',
     'intro',
     'history',
-    'categories-intro',
-    'categories-chart',
+    'application-categories',
     'pension-amount',
   ];
+
+  useEffect(() => {
+    const handleMouseMove = () => {
+      setShowNavButtons(true);
+
+      // Clear existing timeout
+      if (mouseTimeoutRef.current) {
+        clearTimeout(mouseTimeoutRef.current);
+      }
+
+      // Hide buttons after 2 seconds of no mouse movement
+      mouseTimeoutRef.current = setTimeout(() => {
+        setShowNavButtons(false);
+      }, 500);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (mouseTimeoutRef.current) {
+        clearTimeout(mouseTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const scrollToNext = (currentIndex: number) => {
     const nextIndex = currentIndex + 1;
@@ -48,7 +69,9 @@ const App: FunctionComponent = () => {
         id="title"
       >
         <Title />
-        <NavDownButton onClick={() => scrollToNext(0)} forceDown={true} />
+        {showNavButtons && (
+          <NavDownButton onClick={() => scrollToNext(0)} forceDown={true} />
+        )}
       </section>
 
       <section
@@ -56,10 +79,12 @@ const App: FunctionComponent = () => {
         id="intro"
       >
         <Intro />
-        <NavDownButton
-          onClick={() => scrollToNext(1)}
-          onReverseClick={() => scrollToPrevious(1)}
-        />
+        {showNavButtons && (
+          <NavDownButton
+            onClick={() => scrollToNext(1)}
+            onReverseClick={() => scrollToPrevious(1)}
+          />
+        )}
       </section>
 
       <section
@@ -67,41 +92,36 @@ const App: FunctionComponent = () => {
         id="history"
       >
         <History />
-        <NavDownButton
-          onClick={() => scrollToNext(2)}
-          onReverseClick={() => scrollToPrevious(2)}
-        />
+        {showNavButtons && (
+          <NavDownButton
+            onClick={() => scrollToNext(2)}
+            onReverseClick={() => scrollToPrevious(2)}
+          />
+        )}
       </section>
 
       <section
         className="component-section component-section-centered"
-        id="categories-intro"
+        id="application-categories"
       >
-        <CategoriesIntro />
-        <NavDownButton
-          onClick={() => scrollToNext(3)}
-          onReverseClick={() => scrollToPrevious(3)}
-        />
-      </section>
-
-      <section
-        className="component-section component-section-centered"
-        id="categories-chart"
-      >
-        <CategoriesChart />
-        <NavDownButton
-          onClick={() => scrollToNext(4)}
-          onReverseClick={() => scrollToPrevious(4)}
-        />
+        <ApplicationCategories />
+        {showNavButtons && (
+          <NavDownButton
+            onClick={() => scrollToNext(3)}
+            onReverseClick={() => scrollToPrevious(3)}
+          />
+        )}
       </section>
 
       <section id="pension-amount" className="component-section">
         <PensionAmount />
-        {/* <NavDownButton
-          onClick={() => scrollToNext(5)}
-          onReverseClick={() => scrollToPrevious(5)}
-          forceUp={true}
-        /> */}
+        {showNavButtons && (
+          <NavDownButton
+            onClick={() => scrollToNext(4)}
+            onReverseClick={() => scrollToPrevious(4)}
+            forceUp={true}
+          />
+        )}
       </section>
     </main>
   );

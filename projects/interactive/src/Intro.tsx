@@ -1,15 +1,23 @@
 // TODO - copied directly from quantitative project, needs to be refactored
 
-const introText = `The Revolutionary War pension and bounty-land warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855. These files include applications from soldiers, widows, and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony. Many veterans or widows reapplied under later, more generous laws, so the files often span decades and contain multiple layers of documentation. Together, they form one of the richest archival sources for understanding the lives and service of Revolutionary War participants. The archive contains the records for nearly 80 thousand applications.`;
+import { FunctionComponent } from 'react';
+import { UnderlinedHeader } from './components';
+
+const introText = [
+  'The Revolutionary War pension and bounty-land warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855.',
+  'These files include applications from soldiers, widows, and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony.',
+  'Many veterans or widows reapplied under later, more generous laws, so the files often span decades and contain multiple layers of documentation.',
+  'Together, they form one of the richest archival sources for understanding the lives and service of Revolutionary War participants.',
+  'The archive contains the records for nearly 80 thousand applications.',
+];
 
 // map through introText and split by period then set each section to a new paragraph
-const introTextSections = introText.split('.').map((section, index) => (
+const introTextSections = introText.map((section, index) => (
   <p
     style={{
       fontSize: '20px',
       lineHeight: '1.5',
-      marginBottom: '20px',
-      color: 'white',
+      marginBottom: '28px',
     }}
     key={index}
   >
@@ -17,26 +25,30 @@ const introTextSections = introText.split('.').map((section, index) => (
   </p>
 ));
 
-export const Intro = () => {
+export const Intro: FunctionComponent = () => {
   return (
     <div>
-      <h2>About</h2>
       <div
         style={{
-          maxWidth: '800px',
+          maxWidth: '60vw',
           margin: '0 auto',
-          backgroundColor: 'black',
-          color: 'white',
-          padding: '40px',
-          borderRadius: '10px',
-          marginBottom: '28px',
-          marginTop: '28px',
+          marginBottom: '40px',
+          padding: '32px 0px',
         }}
       >
-        <div style={{ padding: '20px' }}>{introTextSections}</div>
+        <UnderlinedHeader text="About" />
+        <div>
+          <div>{introTextSections}</div>
+        </div>
       </div>
-
-      <h5>
+      <div
+        style={{
+          width: '80vw',
+          borderTop: '1px solid black',
+          margin: '0 auto',
+        }}
+      >
+        {/* <h5> */}
         Sources:
         <div>
           <a
@@ -62,7 +74,8 @@ export const Intro = () => {
             Data
           </a>
         </div>
-      </h5>
+        {/* </h5> */}
+      </div>
     </div>
   );
 };
