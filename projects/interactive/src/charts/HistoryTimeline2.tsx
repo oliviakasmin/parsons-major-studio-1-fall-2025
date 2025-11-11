@@ -81,10 +81,8 @@ export const HistoryTimeline2: FunctionComponent = () => {
     // Set initial dimensions immediately
     const updateDimensions = () => {
       if (container) {
-        const containerWidth = container.offsetWidth || window.innerWidth;
-        const containerHeight = Math.max(container.offsetHeight || 600, 600);
+        const containerWidth = window.innerWidth;
         setWidth(containerWidth);
-        setHeight(containerHeight);
       }
     };
 
