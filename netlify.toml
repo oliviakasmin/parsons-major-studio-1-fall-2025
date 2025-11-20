@@ -10,3 +10,8 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Configure secrets scanning to omit the dist folder
+# Build outputs may contain expected environment variables
+[secrets]
+  scan_omit_keys = ["VITE_GEMINI_API_KEY"]
