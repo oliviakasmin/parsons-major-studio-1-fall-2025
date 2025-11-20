@@ -1,11 +1,14 @@
 import { FunctionComponent, useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import { StoryLLMModal } from './StoryLLM';
+import { UnderlinedHeader } from './components/UnderlinedHeader';
 
 //   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
+//
 const farmAnimalsLivestock = [
   { word: 'cow', frequency: 5126 },
-  { word: 'bull', frequency: 3123 },
   { word: 'mare', frequency: 2136 },
+  { word: 'bull', frequency: 3123 },
   { word: 'sheep', frequency: 1945 },
   { word: 'cattle', frequency: 1945 },
   { word: 'calf', frequency: 1653 },
@@ -51,19 +54,10 @@ const getData = async () => {
 };
 
 const getFarmAnimalsRows = (data: any[]) => {
-  let loggedCount = 0;
   return data.filter((row: any) => {
     const foundAnimal = farmAnimalsLivestock.find((animal: any) =>
       row.lemmatizedWords.includes(animal.word)
     );
-
-    // Log which animal is found for first 10 entries
-    if (loggedCount < 10 && foundAnimal) {
-      console.log(
-        `Entry ${loggedCount + 1}: Found animal "${foundAnimal.word}"`
-      );
-      loggedCount++;
-    }
 
     return foundAnimal !== undefined;
   });
@@ -79,6 +73,7 @@ const mapAnimalsToFiles = (data: any[]) => {
     const files = matchingRows.map((row: any) => ({
       NAID: row.NAID,
       pageURL: row.pageURL,
+      transcriptionText: row.transcriptionText || row.ocrText || '',
     }));
 
     return {
@@ -87,6 +82,14 @@ const mapAnimalsToFiles = (data: any[]) => {
     };
   });
 };
+const currentTheme = 'animal livestock';
+const themes = [
+  'top 20',
+  currentTheme,
+  'civilian occupations',
+  'religion',
+  'hopeless',
+];
 
 export const Frequency: FunctionComponent = () => {
   const [data, setData] = useState<any>(null);
@@ -95,6 +98,12 @@ export const Frequency: FunctionComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{
+    NAID: string;
+    pageURL: string;
+    selectedWord?: string;
+    transcriptionText?: string;
+  } | null>(null);
 
   useEffect(() => {
     getData().then(data => {
@@ -135,82 +144,126 @@ export const Frequency: FunctionComponent = () => {
   }, []);
 
   return (
-    <div className="frequency-container" ref={containerRef}>
-      {animalsWithFiles.map((animal, index) => {
-        const imageCount = getImagesCount(animal.frequency);
-        const imagesToShow = animal.files.slice(0, imageCount);
+    <>
+      <div
+        className="frequency-container"
+        style={{ padding: '40px' }}
+        ref={containerRef}
+      >
+        {/* Header row with themes */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '24px',
+            marginBottom: '32px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {themes.map((theme, index) => (
+            <UnderlinedHeader
+              key={index}
+              text={theme}
+              underlined={theme === currentTheme}
+              darkTheme={true}
+            />
+          ))}
+        </div>
 
-        // Calculate image size and overlap based on container width
-        // No need to reserve space for label since it flows after images
-        const availableWidth = containerWidth > 0 ? containerWidth : 500;
+        {animalsWithFiles.map((animal, index) => {
+          const imageCount = getImagesCount(animal.frequency);
+          const imagesToShow = animal.files.slice(0, imageCount);
 
-        // Calculate overlap amount (each image overlaps by 60% of its width)
-        const overlapRatio = 0.8;
-        // Formula: firstImageWidth + (imageCount - 1) * firstImageWidth * (1 - overlapRatio) = availableWidth
-        // Solving for firstImageWidth: availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-        const imageWidth =
-          imageCount > 0
-            ? Math.min(
-                50,
-                availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-              )
-            : 40;
-        const overlapAmount = imageWidth * overlapRatio;
+          // Calculate image size and overlap based on container width
+          // No need to reserve space for label since it flows after images
+          const availableWidth = containerWidth > 0 ? containerWidth : 500;
 
-        return (
-          <div
-            key={index}
-            style={{
-              marginBottom: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              overflow: 'visible',
-            }}
-          >
+          // Calculate overlap amount (each image overlaps by 60% of its width)
+          const overlapRatio = 0.8;
+          // Formula: firstImageWidth + (imageCount - 1) * firstImageWidth * (1 - overlapRatio) = availableWidth
+          // Solving for firstImageWidth: availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
+          const imageWidth =
+            imageCount > 0
+              ? Math.min(
+                  50,
+                  availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
+                )
+              : 40;
+          const overlapAmount = imageWidth * overlapRatio;
+
+          return (
             <div
+              key={index}
               style={{
-                position: 'relative',
+                marginBottom: '20px',
                 display: 'flex',
                 alignItems: 'center',
+                width: '100%',
                 overflow: 'visible',
               }}
             >
-              {imagesToShow.map((file: any, imgIndex: number) => {
-                const imageKey = `${index}-${imgIndex}`;
-                const isHovered = hoveredImage === imageKey;
-                const baseZIndex = imagesToShow.length - imgIndex;
+              <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  overflow: 'visible',
+                }}
+              >
+                {imagesToShow.map((file: any, imgIndex: number) => {
+                  const imageKey = `${index}-${imgIndex}`;
+                  const isHovered = hoveredImage === imageKey;
+                  const baseZIndex = imagesToShow.length - imgIndex;
 
-                return (
-                  <img
-                    key={imgIndex}
-                    src={file.pageURL}
-                    alt={`${animal.word} document ${imgIndex + 1}`}
-                    onMouseEnter={() => setHoveredImage(imageKey)}
-                    onMouseLeave={() => setHoveredImage(null)}
-                    style={{
-                      width: `${imageWidth}px`,
-                      height: 'auto',
-                      objectFit: 'cover',
-                      border: '1px solid #ccc',
-                      marginLeft: imgIndex > 0 ? `-${overlapAmount}px` : '0',
-                      zIndex: isHovered ? 1000 : baseZIndex,
-                      position: 'relative',
-                      flexShrink: 0,
-                      transform: isHovered ? 'scale(5)' : 'scale(1)',
-                      transition: 'transform 0.2s ease-in-out',
-                      cursor: 'pointer',
-                    }}
-                  />
-                );
-              })}
+                  return (
+                    <img
+                      key={imgIndex}
+                      src={file.pageURL}
+                      alt={`${animal.word} document ${imgIndex + 1}`}
+                      onMouseEnter={() => setHoveredImage(imageKey)}
+                      onMouseLeave={() => setHoveredImage(null)}
+                      onClick={() => {
+                        setSelectedImage({
+                          NAID: file.NAID,
+                          pageURL: file.pageURL,
+                          selectedWord: animal.word,
+                          transcriptionText: file.transcriptionText,
+                        });
+                      }}
+                      style={{
+                        width: `${imageWidth}px`,
+                        height: 'auto',
+                        objectFit: 'cover',
+                        border: '1px solid #ccc',
+                        marginLeft: imgIndex > 0 ? `-${overlapAmount}px` : '0',
+                        zIndex: isHovered ? 1000 : baseZIndex,
+                        position: 'relative',
+                        flexShrink: 0,
+                        transform: isHovered ? 'scale(5)' : 'scale(1)',
+                        transition: 'transform 0.2s ease-in-out',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              <strong style={{ marginLeft: '20px', flexShrink: 0 }}>
+                {animal.word}
+              </strong>
             </div>
-            <strong style={{ marginLeft: '20px', flexShrink: 0 }}>
-              {animal.word}
-            </strong>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+      {selectedImage && selectedImage.transcriptionText && (
+        <StoryLLMModal
+          open={!!selectedImage}
+          onClose={() => setSelectedImage(null)}
+          NAID={selectedImage.NAID}
+          pageURL={selectedImage.pageURL}
+          transcriptionText={selectedImage.transcriptionText}
+          theme={currentTheme}
+          selectedWord={selectedImage.selectedWord}
+        />
+      )}
+    </>
   );
 };
