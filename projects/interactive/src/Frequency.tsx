@@ -53,15 +53,15 @@ const getData = async () => {
   return data;
 };
 
-const getFarmAnimalsRows = (data: any[]) => {
-  return data.filter((row: any) => {
-    const foundAnimal = farmAnimalsLivestock.find((animal: any) =>
-      row.lemmatizedWords.includes(animal.word)
-    );
+// const getFarmAnimalsRows = (data: any[]) => {
+//   return data.filter((row: any) => {
+//     const foundAnimal = farmAnimalsLivestock.find((animal: any) =>
+//       row.lemmatizedWords.includes(animal.word)
+//     );
 
-    return foundAnimal !== undefined;
-  });
-};
+//     return foundAnimal !== undefined;
+//   });
+// };
 
 // Map farmAnimalsLivestock to include matching files
 const mapAnimalsToFiles = (data: any[]) => {
@@ -93,7 +93,6 @@ const themes = [
 
 export const Frequency: FunctionComponent = () => {
   const [data, setData] = useState<any>(null);
-  const [farmAnimalsRows, setFarmAnimalsRows] = useState<any>([]);
   const [animalsWithFiles, setAnimalsWithFiles] = useState<any[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
@@ -113,8 +112,6 @@ export const Frequency: FunctionComponent = () => {
 
   useEffect(() => {
     if (data) {
-      const rows = getFarmAnimalsRows(data);
-      setFarmAnimalsRows(rows);
       const mapped = mapAnimalsToFiles(data);
       setAnimalsWithFiles(mapped);
     }

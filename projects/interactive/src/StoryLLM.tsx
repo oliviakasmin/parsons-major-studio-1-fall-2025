@@ -101,10 +101,8 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [loadingText, setLoadingText] = useState(false);
   const [pageCount, setPageCount] = useState<number | null>(null);
-  const [selectedRows, setSelectedRows] = useState<
-    Array<{ pageURL: string; NAID: string }>
-  >([]);
-  const [cachedStory, setCachedStory] = useState<string | null>(null);
+  // Remove unused selectedRows state (there's a local variable with the same name)
+  // Remove unused cachedStory state (localStorage is checked directly instead)
 
   // Check localStorage first, then fetch transcription text if needed
   useEffect(() => {
@@ -119,9 +117,8 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
           const cachedData = JSON.parse(cached);
           if (cachedData.story) {
             // New format: { story: string, pageCount: number }
-            setCachedStory(cachedData.story);
+            // Remove setCachedStory call
             setStory(cachedData.story);
-            // Set pageCount from cached value, default to 1 if not present
             setPageCount(cachedData.pageCount ?? 1);
             setLoading(false);
             // Still set ocrText to transcriptionText prop for potential future use
@@ -130,16 +127,13 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
           }
         } catch {
           // Old format: just a string (backward compatibility)
-          setCachedStory(cached);
+          // Remove setCachedStory call
           setStory(cached);
-          setPageCount(1); // Default to 1 for old format
+          setPageCount(1);
           setLoading(false);
           setOcrText(transcriptionText);
           return; // Skip fetching transcription text
         }
-      } else {
-        // Clear cached story if not found
-        setCachedStory(null);
       }
 
       // No cached story, so we need to fetch transcription text for when user clicks generate
@@ -213,8 +207,7 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
       setLoading(false);
       setLoadingText(false);
       setPageCount(null);
-      setSelectedRows([]);
-      setCachedStory(null);
+      // Remove setSelectedRows and setCachedStory calls
     }
   }, [open]);
 
@@ -232,18 +225,17 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
         // Try to parse as JSON (new format)
         const cachedData = JSON.parse(cached);
         if (cachedData.story) {
-          setCachedStory(cachedData.story);
+          // Remove setCachedStory call
           setStory(cachedData.story);
-          // Set pageCount from cached value, default to 1 if not present
           setPageCount(cachedData.pageCount ?? 1);
           setLoading(false);
           return;
         }
       } catch {
         // Old format: just a string (backward compatibility)
-        setCachedStory(cached);
+        // Remove setCachedStory call
         setStory(cached);
-        setPageCount(1); // Default to 1 for old format
+        setPageCount(1);
         setLoading(false);
         return;
       }
@@ -262,7 +254,7 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
           pageCount: pageCount ?? 1,
         };
         localStorage.setItem(storageKey, JSON.stringify(dataToStore));
-        setCachedStory(result);
+        // Remove setCachedStory call
       }
     } catch (err) {
       const errorMessage =
