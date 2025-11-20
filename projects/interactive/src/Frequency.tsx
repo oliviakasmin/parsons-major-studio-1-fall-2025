@@ -29,7 +29,7 @@ const farmAnimalsLivestock = [
   { word: 'rooster', frequency: 3 },
   { word: 'livestock', frequency: 1 },
 ]
-  .slice(0, 10)
+  .slice(0, 15)
   .sort((a, b) => b.frequency - a.frequency);
 
 const maxFarmAnimals = farmAnimalsLivestock[0].frequency;
