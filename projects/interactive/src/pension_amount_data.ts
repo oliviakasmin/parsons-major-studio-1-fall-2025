@@ -150,7 +150,7 @@ export const getPensionAmountFormData = async () => {
   const valid = await getValidPensionRows();
   const grouped = groupPensionByYear(valid);
   const dateOptions = Object.keys(grouped);
-  console.log('dateOptions:', dateOptions);
+  // console.log('dateOptions:', dateOptions);
   const defaultDate = dateOptions[0];
   const { applicantTypeOptions, placeOptions } = getOptionsForYear(
     grouped,
