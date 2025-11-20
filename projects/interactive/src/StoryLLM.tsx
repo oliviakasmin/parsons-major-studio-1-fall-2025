@@ -5,9 +5,6 @@ import { designUtils } from './design_utils';
 import { CurlyBraceButton } from './components/CurlyBraceButton';
 import * as d3 from 'd3';
 
-// @ts-expect-error - Vite env types not configured
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
 const getStoryLLM = async (
   ocrText: string,
   theme?: string,
@@ -16,7 +13,8 @@ const getStoryLLM = async (
   if (!ocrText.length) {
     return;
   }
-  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  // @ts-expect-error - Vite env types not configured
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
   const themeSection =
     theme && theme?.length > 0 && selectedWord && selectedWord.length > 0
