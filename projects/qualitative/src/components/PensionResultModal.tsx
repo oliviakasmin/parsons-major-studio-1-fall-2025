@@ -25,10 +25,10 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
   imageUrl,
   naraURL,
 }) => {
-  console.log('state:', state);
-  console.log('amount:', amount);
-  console.log('actDate:', actDate);
-  console.log('imageUrl:', imageUrl);
+  // console.log('state:', state);
+  // console.log('amount:', amount);
+  // console.log('actDate:', actDate);
+  // console.log('imageUrl:', imageUrl);
   return (
     <Modal open={open} onClose={onClose}>
       <Paper

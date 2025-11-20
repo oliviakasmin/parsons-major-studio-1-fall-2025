@@ -43,7 +43,7 @@ export const AverageAmountByDate: React.FC<{ extraPoint?: ExtraPoint }> = ({
     loadData();
   }, []);
 
-  console.log('yearAverages:', yearAverages);
+  // console.log('yearAverages:', yearAverages);
   if (Object.keys(yearAverages).length === 0) {
     return <div>Loading...</div>;
   }

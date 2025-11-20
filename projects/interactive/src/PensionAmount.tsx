@@ -155,7 +155,7 @@ export const PensionAmount: FunctionComponent = () => {
     );
 
     if (matchingRows.length > 0) {
-      console.log('Matching rows:', matchingRows[0]);
+      // console.log('Matching rows:', matchingRows[0]);
       setModalData({
         amount: parseFloat(matchingRows[0]['normalized_yearly_amount']) || 0,
         actDate: matchingRows[0]['known_act_date'],
@@ -164,7 +164,7 @@ export const PensionAmount: FunctionComponent = () => {
       });
       setOpen(true);
     } else {
-      console.log('No matching rows found');
+      // console.log('No matching rows found');
     }
   };
   const handleClose = () => {

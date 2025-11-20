@@ -1,8 +1,10 @@
 import { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { Title } from './Title';
+import { Frequency } from './Frequency';
 import './App.css';
 import { PensionAmount } from './PensionAmount';
 import { Intro, History, ApplicationCategories, NavDownButton } from './';
+// import { StoryLLM } from './StoryLLM';
 
 const App: FunctionComponent = () => {
   const [showNavButtons, setShowNavButtons] = useState(false);
@@ -15,6 +17,7 @@ const App: FunctionComponent = () => {
     'history',
     'application-categories',
     'pension-amount',
+    'frequency',
   ];
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const App: FunctionComponent = () => {
   return (
     <main>
       <section
-        className="component-section component-section-centered"
+        className="component-section component-section-centered component-section-margins"
         id="title"
       >
         <Title />
@@ -75,7 +78,7 @@ const App: FunctionComponent = () => {
       </section>
 
       <section
-        className="component-section component-section-centered"
+        className="component-section component-section-centered component-section-margins"
         id="intro"
       >
         <Intro />
@@ -88,7 +91,7 @@ const App: FunctionComponent = () => {
       </section>
 
       <section
-        className="component-section component-section-centered"
+        className="component-section component-section-centered component-section-margins"
         id="history"
       >
         <History />
@@ -101,7 +104,7 @@ const App: FunctionComponent = () => {
       </section>
 
       <section
-        className="component-section component-section-centered"
+        className="component-section component-section-centered component-section-margins"
         id="application-categories"
       >
         <ApplicationCategories />
@@ -113,16 +116,33 @@ const App: FunctionComponent = () => {
         )}
       </section>
 
-      <section id="pension-amount" className="component-section">
+      <section
+        id="pension-amount"
+        className="component-section component-section-margins"
+      >
         <PensionAmount />
         {showNavButtons && (
           <NavDownButton
             onClick={() => scrollToNext(4)}
             onReverseClick={() => scrollToPrevious(4)}
+          />
+        )}
+      </section>
+
+      <section id="frequency" className="component-section frequency-container">
+        <Frequency />
+        {showNavButtons && (
+          <NavDownButton
+            onClick={() => scrollToNext(5)}
+            onReverseClick={() => scrollToPrevious(5)}
             forceUp={true}
           />
         )}
       </section>
+
+      {/* <section id="story" className="component-section story-container">
+        <StoryLLM />
+      </section> */}
     </main>
   );
 };

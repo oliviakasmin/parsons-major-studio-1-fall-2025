@@ -37,6 +37,15 @@
   background-color: #666;
 }
 
+/* Dark theme - lighter underlines */
+.underlined-header.dark-theme.underlined::before {
+  background-color: #d0d0d0;
+}
+
+.underlined-header.dark-theme.underlined::after {
+  background-color: #d0d0d0;
+}
+
 /* No underline when .no-underline class is present */
 .underlined-header.no-underline::before,
 .underlined-header.no-underline::after {

@@ -6,14 +6,16 @@ interface UnderlinedHeaderProps {
   text: string;
   size?: 'small' | 'medium' | 'large';
   underlined?: boolean;
+  darkTheme?: boolean;
 }
 
 export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
   text,
   size = 'medium',
   underlined = true,
+  darkTheme = false,
 }) => {
-  const className = `underlined-header ${size} ${underlined ? 'underlined' : 'no-underline'}`;
+  const className = `underlined-header ${size} ${underlined ? 'underlined' : 'no-underline'} ${darkTheme ? 'dark-theme' : ''}`;
 
   return (
     <h2
@@ -22,7 +24,7 @@ export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
         paddingBottom: '8px',
         textTransform: 'capitalize',
         fontWeight: '400',
-        color: designUtils.textColor,
+        color: darkTheme ? designUtils.backgroundColor : designUtils.textColor,
       }}
     >
       <span className={className}>{text}</span>

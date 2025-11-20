@@ -1,0 +1,336 @@
+{
+  "religion_related_words": {
+    "religious_figures_titles": [
+      { "word": "lord", "frequency": 47946 },
+      { "word": "clergyman", "frequency": 26859 },
+      { "word": "minister", "frequency": 10854 },
+      { "word": "god", "frequency": 9701 },
+      { "word": "pastor", "frequency": 8581 },
+      { "word": "bishop", "frequency": 5173 },
+      { "word": "elder", "frequency": 4873 },
+      { "word": "reverend", "frequency": 3105 },
+      { "word": "priest", "frequency": 1428 },
+      { "word": "jesus", "frequency": 1303 },
+      { "word": "deacon", "frequency": 1224 },
+      { "word": "preacher", "frequency": 1025 }
+    ],
+    "religious_concepts_terms": [
+      { "word": "faith", "frequency": 32363 },
+      { "word": "church", "frequency": 30693 },
+      { "word": "bible", "frequency": 18010 },
+      { "word": "christian", "frequency": 6175 },
+      { "word": "gospel", "frequency": 3824 },
+      { "word": "holy", "frequency": 3337 },
+      { "word": "faithful", "frequency": 2850 },
+      { "word": "testament", "frequency": 2720 },
+      { "word": "pray", "frequency": 2485 },
+      { "word": "saint", "frequency": 1776 },
+      { "word": "amen", "frequency": 1535 },
+      { "word": "angel", "frequency": 1298 },
+      { "word": "spirit", "frequency": 1220 },
+      { "word": "soul", "frequency": 1168 },
+      { "word": "baptism", "frequency": 1097 },
+      { "word": "prayer", "frequency": 954 },
+      { "word": "heaven", "frequency": 902 },
+      { "word": "baptized", "frequency": 702 },
+      { "word": "sermon", "frequency": 611 },
+      { "word": "bless", "frequency": 581 },
+      { "word": "hell", "frequency": 578 },
+      { "word": "praying", "frequency": 584 },
+      { "word": "revelation", "frequency": 502 },
+      { "word": "divine", "frequency": 375 },
+      { "word": "blessed", "frequency": 371 },
+      { "word": "religious", "frequency": 366 },
+      { "word": "religion", "frequency": 345 },
+      { "word": "blessing", "frequency": 341 },
+      { "word": "communion", "frequency": 290 },
+      { "word": "scripture", "frequency": 278 },
+      { "word": "prayed", "frequency": 277 },
+      { "word": "worship", "frequency": 258 },
+      { "word": "psalm", "frequency": 258 },
+      { "word": "sacred", "frequency": 193 },
+      { "word": "holiness", "frequency": 100 },
+      { "word": "spiritual", "frequency": 69 },
+      { "word": "heavenly", "frequency": 59 },
+      { "word": "sacrament", "frequency": 56 },
+      { "word": "worshipped", "frequency": 43 }
+    ],
+    "denominations": [
+      { "word": "baptist", "frequency": 2978 },
+      { "word": "presbyterian", "frequency": 1901 },
+      { "word": "methodist", "frequency": 854 },
+      { "word": "episcopal", "frequency": 652 },
+      { "word": "lutheran", "frequency": 544 },
+      { "word": "quaker", "frequency": 415 },
+      { "word": "catholic", "frequency": 115 }
+    ],
+    "religious_practices_concepts": [
+      { "word": "virtue", "frequency": 8018 },
+      { "word": "parish", "frequency": 6707 },
+      { "word": "mercy", "frequency": 3584 },
+      { "word": "grace", "frequency": 3224 },
+      { "word": "sin", "frequency": 2919 },
+      { "word": "save", "frequency": 2559 },
+      { "word": "saved", "frequency": 1532 },
+      { "word": "mission", "frequency": 1569 },
+      { "word": "congregation", "frequency": 1417 },
+      { "word": "repent", "frequency": 828 },
+      { "word": "piety", "frequency": 322 },
+      { "word": "righteous", "frequency": 321 },
+      { "word": "denomination", "frequency": 298 },
+      { "word": "devoted", "frequency": 288 },
+      { "word": "righteousness", "frequency": 250 },
+      { "word": "salvation", "frequency": 185 },
+      { "word": "evangelical", "frequency": 182 },
+      { "word": "redeem", "frequency": 171 },
+      { "word": "redemption", "frequency": 170 },
+      { "word": "sinner", "frequency": 167 },
+      { "word": "pious", "frequency": 165 },
+      { "word": "repentance", "frequency": 115 },
+      { "word": "forgive", "frequency": 106 },
+      { "word": "converted", "frequency": 104 },
+      { "word": "convert", "frequency": 98 },
+      { "word": "devotion", "frequency": 88 },
+      { "word": "missionary", "frequency": 87 },
+      { "word": "merciful", "frequency": 59 },
+      { "word": "gracious", "frequency": 58 },
+      { "word": "conversion", "frequency": 55 },
+      { "word": "revival", "frequency": 55 },
+      { "word": "forgiven", "frequency": 54 },
+      { "word": "sinful", "frequency": 52 },
+      { "word": "parishioner", "frequency": 45 },
+      { "word": "repenting", "frequency": 44 },
+      { "word": "devoting", "frequency": 43 },
+      { "word": "religiously", "frequency": 42 },
+      { "word": "forgiveness", "frequency": 41 },
+      { "word": "converting", "frequency": 40 },
+      { "word": "forgiving", "frequency": 31 },
+      { "word": "devotional", "frequency": 29 },
+      { "word": "sinfulness", "frequency": 15 }
+    ],
+    "religious_buildings_items": [
+      { "word": "bell", "frequency": 5388 },
+      { "word": "cross", "frequency": 3860 },
+      { "word": "temple", "frequency": 2169 },
+      { "word": "chapel", "frequency": 772 },
+      { "word": "pew", "frequency": 537 },
+      { "word": "organ", "frequency": 311 },
+      { "word": "hymn", "frequency": 200 },
+      { "word": "chant", "frequency": 170 },
+      { "word": "altar", "frequency": 157 },
+      { "word": "cathedral", "frequency": 58 },
+      { "word": "synagogue", "frequency": 56 },
+      { "word": "pulpit", "frequency": 51 },
+      { "word": "choir", "frequency": 48 },
+      { "word": "steeple", "frequency": 44 },
+      { "word": "shrine", "frequency": 40 },
+      { "word": "chanting", "frequency": 31 },
+      { "word": "rosary", "frequency": 25 },
+      { "word": "chorus", "frequency": 25 },
+      { "word": "mosque", "frequency": 13 },
+      { "word": "missal", "frequency": 9 },
+      { "word": "hymnal", "frequency": 4 },
+      { "word": "crucifix", "frequency": 3 }
+    ]
+  },
+  "top_40": {
+    "all_categories": [
+      {
+        "word": "lord",
+        "frequency": 47946,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "faith",
+        "frequency": 32363,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "church",
+        "frequency": 30693,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "clergyman",
+        "frequency": 26859,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "bible",
+        "frequency": 18010,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "minister",
+        "frequency": 10854,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "god",
+        "frequency": 9701,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "pastor",
+        "frequency": 8581,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "virtue",
+        "frequency": 8018,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "parish",
+        "frequency": 6707,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "christian",
+        "frequency": 6175,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "bell",
+        "frequency": 5388,
+        "category": "religious_buildings_items"
+      },
+      {
+        "word": "bishop",
+        "frequency": 5173,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "elder",
+        "frequency": 4873,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "cross",
+        "frequency": 3860,
+        "category": "religious_buildings_items"
+      },
+      {
+        "word": "gospel",
+        "frequency": 3824,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "mercy",
+        "frequency": 3584,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "holy",
+        "frequency": 3337,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "grace",
+        "frequency": 3224,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "reverend",
+        "frequency": 3105,
+        "category": "religious_figures_titles"
+      },
+      { "word": "baptist", "frequency": 2978, "category": "denominations" },
+      {
+        "word": "sin",
+        "frequency": 2919,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "faithful",
+        "frequency": 2850,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "testament",
+        "frequency": 2720,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "save",
+        "frequency": 2559,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "pray",
+        "frequency": 2485,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "temple",
+        "frequency": 2169,
+        "category": "religious_buildings_items"
+      },
+      {
+        "word": "presbyterian",
+        "frequency": 1901,
+        "category": "denominations"
+      },
+      {
+        "word": "saint",
+        "frequency": 1776,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "mission",
+        "frequency": 1569,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "amen",
+        "frequency": 1535,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "saved",
+        "frequency": 1532,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "congregation",
+        "frequency": 1417,
+        "category": "religious_practices_concepts"
+      },
+      {
+        "word": "priest",
+        "frequency": 1428,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "jesus",
+        "frequency": 1303,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "angel",
+        "frequency": 1298,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "deacon",
+        "frequency": 1224,
+        "category": "religious_figures_titles"
+      },
+      {
+        "word": "spirit",
+        "frequency": 1220,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "soul",
+        "frequency": 1168,
+        "category": "religious_concepts_terms"
+      },
+      {
+        "word": "baptism",
+        "frequency": 1097,
+        "category": "religious_concepts_terms"
+      }
+    ]
+  }
+}
