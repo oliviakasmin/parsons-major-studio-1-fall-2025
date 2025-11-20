@@ -10,3 +10,17 @@
   align-items: center;
   justify-content: center;
 }
+
+.component-section-margins {
+  /* margin-left: 40px;
+  margin-right: 40px;
+  padding-left: 40px;
+  padding-right: 40px; */
+}
+
+.frequency-container {
+  color: #faf9f7;
+  background: #2c1810;
+  margin: 0px;
+  padding: 0px;
+}
