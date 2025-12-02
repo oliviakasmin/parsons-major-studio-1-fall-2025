@@ -8,6 +8,7 @@ interface CurlyBraceButtonProps {
   onClick: () => void;
   color?: boolean;
   bold?: boolean;
+  darkTheme?: boolean;
 }
 
 export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
@@ -16,11 +17,14 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   onClick,
   color = true,
   bold = false,
+  darkTheme = false,
 }) => {
   const lineCount = 1 + (line2 ? 1 : 0);
 
   const braceFontSize = `${lineCount * 1.5}em`;
   const textColor = color ? designUtils.blueColor : designUtils.textColor;
+  const finalTextColor = darkTheme ? designUtils.backgroundColor : textColor;
+  const braceColor = darkTheme ? designUtils.backgroundColor : 'black';
   const fontWeight = bold ? 'bold' : 'normal';
   return (
     <Button
@@ -29,6 +33,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
         textTransform: 'none',
         display: 'flex',
         '&:hover': {
+          cursor: 'pointer',
           background: 'none',
           '& span[class*="text-content"]': {
             textDecoration: 'underline',
@@ -40,7 +45,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
       <span
         style={{
           fontSize: braceFontSize,
-          color: 'black',
+          color: braceColor,
           fontWeight: '100',
           fontFamily: 'Times New Roman',
           marginTop: `-${lineCount * 2}px`,
@@ -51,7 +56,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
       <span
         className="text-content"
         style={{
-          color: textColor,
+          color: finalTextColor,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Georgia',
@@ -68,7 +73,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
       <span
         style={{
           fontSize: braceFontSize,
-          color: 'black',
+          color: braceColor,
           fontWeight: '100',
           fontFamily: 'Times New Roman',
           marginTop: `-${lineCount * 2}px`,

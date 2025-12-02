@@ -11,6 +11,7 @@ body {
   line-height: 1.5;
   font-weight: 400;
   margin: 0px;
+  overflow-x: hidden;
 }
 
 #root {
@@ -469,13 +470,13 @@ body {
 }
 
 .section-underline-bottom {
-  border-bottom: 1px solid black;
+  border-bottom: 2px dotted black;
   width: 80vw;
   margin: 0 auto;
 }
 
 .section-underline-top {
-  border-top: 1px solid black;
+  border-top: 2px dotted black;
   width: 80vw;
   margin: 0 auto;
 }

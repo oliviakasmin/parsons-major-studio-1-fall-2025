@@ -138,7 +138,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
     svg.selectAll('*').remove();
 
     const margin = { top: 200, right: 120, bottom: 200, left: 120 };
-    const containerWidth = width;
+    const containerWidth = width || 0;
     const innerWidth = containerWidth - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 

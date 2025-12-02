@@ -4,6 +4,7 @@ import { StoryLLMModal } from './components/StoryLLM';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
 import { farmAnimalsLivestock } from '../public/data/frequency/counts.ts';
+import { FrequencySpread } from './components/FrequencySpread.tsx';
 //   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
 //
 
@@ -78,6 +79,9 @@ export const Frequency: FunctionComponent = () => {
     selectedWord?: string;
     transcriptionText?: string;
   } | null>(null);
+  const [frequencySpreadOpen, setFrequencySpreadOpen] =
+    useState<boolean>(false);
+  const [selectedWordData, setSelectedWordData] = useState<any>(null);
 
   useEffect(() => {
     getData().then(data => {
@@ -93,15 +97,41 @@ export const Frequency: FunctionComponent = () => {
   }, [data]);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Set initial dimensions immediately
     const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
+      if (container) {
+        const containerWidth =
+          container.offsetWidth || container.clientWidth || window.innerWidth;
+        setContainerWidth(containerWidth);
       }
     };
 
+    // Set initial dimensions
     updateWidth();
+
+    const observer = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const newWidth =
+          entry.contentRect?.width ||
+          entry.target.clientWidth ||
+          (entry.target as HTMLElement).offsetWidth ||
+          window.innerWidth;
+        setContainerWidth(newWidth);
+      }
+    });
+    observer.observe(container);
+
+    // Also listen to window resize as fallback
     window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+
+    // Cleanup
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateWidth);
+    };
   }, []);
 
   useEffect(() => {
@@ -146,8 +176,12 @@ export const Frequency: FunctionComponent = () => {
           const imagesToShow = animal.files.slice(0, imageCount);
 
           // Calculate image size and overlap based on container width
-          // No need to reserve space for label since it flows after images
-          const availableWidth = containerWidth > 0 ? containerWidth : 500;
+          // Reserve space for label (word text + margin) - estimate max 120px for longest word + 20px margin
+          const labelReservedSpace = 140;
+          const availableWidth =
+            containerWidth > 0
+              ? Math.max(containerWidth - labelReservedSpace, 300) // Ensure minimum space for images
+              : 500 - labelReservedSpace;
 
           // Calculate overlap amount (each image overlaps by 60% of its width)
           const overlapRatio = 0.8;
@@ -223,6 +257,14 @@ export const Frequency: FunctionComponent = () => {
                   marginLeft: '20px',
                   flexShrink: 0,
                 }}
+                onClick={() => {
+                  // open FrequencySpread modal
+                  setFrequencySpreadOpen(true);
+                  setSelectedWordData({
+                    word: animal.word,
+                    files: animal.files.slice(0, 50),
+                  });
+                }}
               >
                 {animal.word}
               </strong>
@@ -239,6 +281,17 @@ export const Frequency: FunctionComponent = () => {
           transcriptionText={selectedImage.transcriptionText}
           theme={currentTheme}
           selectedWord={selectedImage.selectedWord}
+        />
+      )}
+      {selectedWordData && frequencySpreadOpen && (
+        <FrequencySpread
+          images={selectedWordData.files}
+          category={selectedWordData.word}
+          open={true}
+          onClose={() => setSelectedWordData(null)}
+          currentTheme={currentTheme}
+          setSelectedImage={setSelectedImage}
+          selectedImage={selectedImage}
         />
       )}
     </>

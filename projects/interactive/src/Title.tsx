@@ -37,12 +37,10 @@ export const Title: FunctionComponent = () => {
         })}
       </div>
       <div className="title-text">
-        <h2>
-          <UnderlinedHeader
-            text="Bureaucracy in the Revolutionary War Era"
-            size="large"
-          />
-        </h2>
+        <UnderlinedHeader
+          text="Bureaucracy in the Revolutionary War Era"
+          size="large"
+        />
         <h4>The Very Human Burden of Applying for a Pension</h4>
       </div>
       <div className="title-images-row title-images-bottom">

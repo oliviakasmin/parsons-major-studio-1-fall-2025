@@ -125,7 +125,11 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
     // Get circle radius from xScale - use width per roundTo as spacing
     const spacingPerUnit = xScale(roundTo);
     const gap = 1; // gap in px between adjacent circles
-    const circleRadius = Math.min(spacingPerUnit / 2 - gap / 2, height / 4); // shrink radius by 1px to create 2px gap
+    const minRadius = 2; // Minimum radius to ensure visibility
+    const circleRadius = Math.max(
+      minRadius,
+      Math.min(spacingPerUnit / 2 - gap / 2, height / 4)
+    );
     const spacing = spacingPerUnit; // Spacing between circle centers
     // Create array of circle indices
     const circleData = Array.from({ length: numCircles }, (_, i) => i);
