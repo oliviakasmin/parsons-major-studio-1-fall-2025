@@ -1,14 +1,13 @@
 .component-section {
-  height: 100vh;
   width: 100%;
   position: relative;
 }
 
 .component-section-centered {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .component-section-margins {

@@ -29,7 +29,7 @@ export const StyledSelect: FunctionComponent<StyledSelectProps> = ({
         lineHeight: 'inherit',
         '&:hover': {
           textDecoration: 'underline',
-          textDecorationColor: designUtils.iconButtonColor,
+          textDecorationColor: designUtils.blueColor,
         },
         '& .MuiSelect-select': {
           fontFamily: 'inherit',

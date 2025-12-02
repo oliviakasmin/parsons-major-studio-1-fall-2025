@@ -2,3 +2,15 @@
   color: #faf9f7;
   background: #2c1810;
 }
+
+.frequency-word {
+  cursor: pointer;
+}
+
+.frequency-container strong {
+  cursor: pointer;
+}
+
+.frequency-container strong:hover {
+  color: #2453ff;
+}

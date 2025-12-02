@@ -9,6 +9,7 @@ import {
 import * as d3 from 'd3';
 import timelineData from '../../historical_research/timeline.json';
 import { TimelineCard } from '../components';
+import { designUtils } from '../design_utils';
 
 interface TimelineData {
   date: string;
@@ -26,6 +27,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<TimelineData | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<TimelineData | null>(null);
   const [width, setWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
@@ -49,11 +51,14 @@ export const HistoryTimeline2: FunctionComponent = () => {
   const regularData = processedData.filter(item => !item.highlight);
 
   const handleHoverLeave = useCallback(() => {
-    setSelectedItem(null);
-    setAnchorEl(null);
+    setHoveredItem(null);
   }, []);
 
   const handleHover = useCallback((event: MouseEvent, item: TimelineData) => {
+    setHoveredItem(item);
+  }, []);
+
+  const handleClick = useCallback((event: MouseEvent, item: TimelineData) => {
     setSelectedItem(item);
     // Create a temporary anchor element at the mouse position
     if (!anchorRef.current && containerRef.current) {
@@ -68,9 +73,14 @@ export const HistoryTimeline2: FunctionComponent = () => {
     if (anchorRef.current && containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
       anchorRef.current.style.left = `${event.clientX - containerRect.left}px`;
-      anchorRef.current.style.top = `${event.clientY - containerRect.top}px`;
+      anchorRef.current.style.top = `${event.clientY - containerRect.top - 20}px`;
       setAnchorEl(anchorRef.current);
     }
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSelectedItem(null);
+    setAnchorEl(null);
   }, []);
 
   // ResizeObserver to track container dimensions
@@ -81,7 +91,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
     // Set initial dimensions immediately
     const updateDimensions = () => {
       if (container) {
-        const containerWidth = container.offsetWidth || window.innerWidth;
+        const containerWidth = window.innerWidth;
         const containerHeight = Math.max(container.offsetHeight || 600, 600);
         setWidth(containerWidth);
         setHeight(containerHeight);
@@ -164,10 +174,11 @@ export const HistoryTimeline2: FunctionComponent = () => {
       .attr('cx', d => xScale(d.parsedDate))
       .attr('cy', innerHeight)
       .attr('r', 6)
-      .attr('fill', '#666')
+      .attr('fill', d => (hoveredItem === d ? designUtils.blueColor : '#666'))
       .style('cursor', 'pointer')
       .on('mouseenter', (event, d) => handleHover(event as MouseEvent, d))
-      .on('mouseleave', handleHoverLeave);
+      .on('mouseleave', handleHoverLeave)
+      .on('click', (event, d) => handleClick(event as MouseEvent, d));
 
     // First, draw all lines for highlighted data points
     highlightedData.forEach((d, i) => {
@@ -205,12 +216,13 @@ export const HistoryTimeline2: FunctionComponent = () => {
         .attr('y1', innerHeight)
         .attr('x2', xScale(d.parsedDate))
         .attr('y2', lineEndY)
-        .attr('stroke', '#333')
+        .attr('stroke', hoveredItem === d ? designUtils.blueColor : '#333')
         .attr('stroke-width', 1)
         .attr('opacity', 0.3)
         .style('cursor', 'pointer')
         .on('mouseenter', event => handleHover(event as MouseEvent, d))
-        .on('mouseleave', handleHoverLeave);
+        .on('mouseleave', handleHoverLeave)
+        .on('click', event => handleClick(event as MouseEvent, d));
     });
 
     // Then, draw all text labels for highlighted data points
@@ -227,7 +239,8 @@ export const HistoryTimeline2: FunctionComponent = () => {
         )
         .style('cursor', 'pointer')
         .on('mouseenter', event => handleHover(event as MouseEvent, d))
-        .on('mouseleave', handleHoverLeave);
+        .on('mouseleave', handleHoverLeave)
+        .on('click', event => handleClick(event as MouseEvent, d));
 
       // Calculate text dimensions for background
       const takeawayText = d.historical_context;
@@ -251,6 +264,9 @@ export const HistoryTimeline2: FunctionComponent = () => {
         lines.push(line);
       }
 
+      const isHovered = hoveredItem === d;
+      const textColor = isHovered ? designUtils.blueColor : 'black';
+
       // Year text with white background
       textGroup
         .append('text')
@@ -259,7 +275,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
         .attr('font-family', 'inherit')
         .attr('font-weight', 'bold')
         .attr('y', 0)
-        .attr('fill', 'black')
+        .attr('fill', textColor)
         .attr('stroke', 'white')
         .attr('stroke-width', '8px')
         .attr('paint-order', 'stroke fill')
@@ -274,7 +290,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
           .attr('font-family', 'inherit')
           .attr('y', 14 + index * lineHeight)
           .attr('x', 0)
-          .attr('fill', 'black')
+          .attr('fill', textColor)
           .attr('stroke', 'white')
           .attr('stroke-width', '6px')
           .attr('paint-order', 'stroke fill')
@@ -289,6 +305,8 @@ export const HistoryTimeline2: FunctionComponent = () => {
     height,
     handleHover,
     handleHoverLeave,
+    handleClick,
+    hoveredItem,
   ]);
 
   return (
@@ -312,7 +330,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
       <TimelineCard
         timelineData={selectedItem}
         anchorEl={anchorEl}
-        onClose={handleHoverLeave}
+        onClose={handleClose}
         open={!!selectedItem && !!anchorEl}
       />
     </div>

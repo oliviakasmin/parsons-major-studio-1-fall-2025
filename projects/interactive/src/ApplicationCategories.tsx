@@ -5,7 +5,7 @@ import curatedCategoryDefinitions from '../historical_research/curated_category_
 import { designUtils } from './design_utils';
 export const CATEGORIES = curatedCategoryDefinitions.map(cat => cat.category);
 export type CategoryType = (typeof CATEGORIES)[number];
-import { CurlyBraceButton } from './components/CurlyBraceButton';
+// import { CurlyBraceButton } from './components/CurlyBraceButton';
 import categorySampleImageData from '../data/WIP/category_samples_10_per_category.json';
 import { FormatProofQuote } from './components/FormatProofQuote';
 import { CategoryBar } from './charts/CategoryBar';
@@ -72,17 +72,17 @@ export const ApplicationCategories: FunctionComponent = () => {
     ? getCategoryNaraUrl(selectedCategory)
     : undefined;
 
-  const handleNextCategory = () => {
-    if (!selectedCategory) return;
-    const currentIndex = curatedCategoryDefinitions.findIndex(
-      cat => cat.category === selectedCategory
-    );
-    const nextIndex =
-      currentIndex < curatedCategoryDefinitions.length - 1
-        ? currentIndex + 1
-        : 0;
-    setSelectedCategory(curatedCategoryDefinitions[nextIndex].category);
-  };
+  // const handleNextCategory = () => {
+  //   if (!selectedCategory) return;
+  //   const currentIndex = curatedCategoryDefinitions.findIndex(
+  //     cat => cat.category === selectedCategory
+  //   );
+  //   const nextIndex =
+  //     currentIndex < curatedCategoryDefinitions.length - 1
+  //       ? currentIndex + 1
+  //       : 0;
+  //   setSelectedCategory(curatedCategoryDefinitions[nextIndex].category);
+  // };
 
   return (
     <div
@@ -139,6 +139,7 @@ export const ApplicationCategories: FunctionComponent = () => {
 
                   '&:hover': {
                     backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    color: designUtils.blueColor,
                   },
                   fontFamily: 'inherit',
                   fontSize: 'inherit',
@@ -171,7 +172,7 @@ export const ApplicationCategories: FunctionComponent = () => {
                 </div>
               </ListItem>
             ))}
-            <ListItem
+            {/* <ListItem
               sx={{
                 marginTop: '10%',
                 display: 'flex',
@@ -179,7 +180,7 @@ export const ApplicationCategories: FunctionComponent = () => {
               }}
             >
               <CurlyBraceButton onClick={handleNextCategory} line1="next" />
-            </ListItem>
+            </ListItem> */}
           </List>
         </Box>
 
@@ -221,7 +222,7 @@ export const ApplicationCategories: FunctionComponent = () => {
                     right: '2%',
                     width: '30%',
                     height: '20%',
-                    border: '1px solid #39ff14',
+                    border: `1px solid ${designUtils.blueColor}`,
                     backgroundColor: 'transparent',
                   }}
                 />

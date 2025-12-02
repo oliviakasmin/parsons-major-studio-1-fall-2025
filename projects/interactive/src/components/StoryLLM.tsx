@@ -1,8 +1,8 @@
 import { GoogleGenAI } from '@google/genai';
 import { useEffect, useState } from 'react';
 import { Modal, Box, Paper } from '@mui/material';
-import { designUtils } from './design_utils';
-import { CurlyBraceButton } from './components/CurlyBraceButton';
+import { designUtils } from '../design_utils';
+import { CurlyBraceButton } from './CurlyBraceButton';
 import * as d3 from 'd3';
 
 const getStoryLLM = async (
@@ -393,7 +393,7 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
         }}
       >
         <div style={{ position: 'absolute', right: 12, top: 12 }}>
-          <CurlyBraceButton onClick={onClose} line1="back" />
+          <CurlyBraceButton onClick={onClose} line1="back" color={true} />
         </div>
         <Box
           sx={{

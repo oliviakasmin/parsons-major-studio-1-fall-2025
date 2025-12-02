@@ -6,16 +6,22 @@ interface CurlyBraceButtonProps {
   line1: string;
   line2?: string;
   onClick: () => void;
+  color?: boolean;
+  bold?: boolean;
 }
 
 export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   line1,
   line2 = undefined,
   onClick,
+  color = true,
+  bold = false,
 }) => {
   const lineCount = 1 + (line2 ? 1 : 0);
 
   const braceFontSize = `${lineCount * 1.5}em`;
+  const textColor = color ? designUtils.blueColor : designUtils.textColor;
+  const fontWeight = bold ? 'bold' : 'normal';
   return (
     <Button
       onClick={onClick}
@@ -45,7 +51,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
       <span
         className="text-content"
         style={{
-          color: designUtils.textColor,
+          color: textColor,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Georgia',
@@ -53,6 +59,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
           marginRight: '16px',
           marginTop: `${lineCount * 2}px`,
           lineHeight: '1.2',
+          fontWeight: fontWeight,
         }}
       >
         <span>{line1}</span>

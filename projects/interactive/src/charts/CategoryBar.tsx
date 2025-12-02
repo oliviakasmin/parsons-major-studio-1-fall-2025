@@ -66,6 +66,7 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(0);
+  const prevIsSelectedRef = useRef<boolean | null>(null);
   const marginRight = 160;
 
   useEffect(() => {
@@ -93,6 +94,18 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
     if (!width || !selectedCategoryData) return;
     const svg = d3.select(containerRef.current).select('svg');
 
+    // Determine if we should animate
+    // Only animate when transitioning from unselected to selected (newly selected)
+    // Skip animation when transitioning from selected to unselected or on regular redraws
+    const wasSelected = prevIsSelectedRef.current;
+    const isNewlySelected = !wasSelected && isSelectedCategory;
+    const shouldAnimate =
+      isNewlySelected ||
+      (prevIsSelectedRef.current === null && isSelectedCategory);
+
+    // Update the ref for next render
+    prevIsSelectedRef.current = isSelectedCategory;
+
     // Clear previous drawing
     svg.selectAll('*').remove();
 
@@ -117,7 +130,11 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
     // Create array of circle indices
     const circleData = Array.from({ length: numCircles }, (_, i) => i);
 
-    svg
+    const dotColor = isSelectedCategory
+      ? designUtils.blueColor
+      : designUtils.iconButtonColor;
+
+    const circles = svg
       .selectAll<SVGCircleElement, number>('circle')
       .data(circleData)
       .join(enter =>
@@ -127,14 +144,22 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
           .attr('cx', (_d, i) => i * spacing + circleRadius)
           .attr('cy', height / 2)
           .attr('r', circleRadius)
-          .attr('fill', designUtils.iconButtonColor)
-          .attr('fill-opacity', 0)
-          .transition()
-          .duration(400)
-          .delay((_d, i) => i * 10) // Stagger the animation
-          .ease(d3.easeCubicOut)
-          .attr('fill-opacity', 1)
+          .attr('fill', dotColor)
       );
+
+    // Only apply animation if newly selected
+    if (shouldAnimate) {
+      circles
+        .attr('fill-opacity', 0)
+        .transition()
+        .duration(400)
+        .delay((_d, i) => i * 10) // Stagger the animation
+        .ease(d3.easeCubicOut)
+        .attr('fill-opacity', 1);
+    } else {
+      // Set opacity immediately without animation
+      circles.attr('fill-opacity', 1);
+    }
 
     //add label after the bar so the end of each label is aligned with the full width of the container
     svg
@@ -154,7 +179,7 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
           .attr('dominant-baseline', 'middle')
           .style('text-transform', 'none')
       );
-  }, [width, height, selectedCategoryData]);
+  }, [width, height, selectedCategoryData, isSelectedCategory]);
 
   // Separate effect to update text content and font-weight when selection changes, without re-rendering the bar
   useEffect(() => {

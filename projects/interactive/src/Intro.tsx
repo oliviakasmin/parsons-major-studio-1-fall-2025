@@ -3,6 +3,8 @@
 import { FunctionComponent } from 'react';
 import { UnderlinedHeader } from './components';
 
+const dividerLineImage = 'Divider_line.png';
+
 const introText = [
   'The Revolutionary War pension and bounty-land warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855.',
   'These files include applications from soldiers, widows, and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony.',
@@ -27,12 +29,23 @@ const introTextSections = introText.map((section, index) => (
 
 export const Intro: FunctionComponent = () => {
   return (
-    <div>
+    <div
+      className="section-underline-bottom section-underline-top"
+      style={
+        {
+          // width: '80vw',
+          // borderTop: '1px solid black',
+          // borderBottom: '1px solid black',
+          // margin: '0 auto',
+        }
+      }
+    >
       <div
         style={{
           maxWidth: '60vw',
           margin: '0 auto',
-          marginBottom: '40px',
+          marginBottom: '20px',
+          marginTop: '40px',
           padding: '32px 0px',
         }}
       >
@@ -41,11 +54,18 @@ export const Intro: FunctionComponent = () => {
           <div>{introTextSections}</div>
         </div>
       </div>
+      <img
+        src={`/${dividerLineImage}`}
+        alt={dividerLineImage}
+        style={{ width: '20%', margin: '0 auto', display: 'block' }}
+      />
       <div
         style={{
-          width: '80vw',
-          borderTop: '1px solid black',
+          maxWidth: '60vw',
           margin: '0 auto',
+          marginBottom: '20px',
+          marginTop: '20px',
+          padding: '32px 0px',
         }}
       >
         {/* <h5> */}

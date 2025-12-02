@@ -31,7 +31,9 @@ export const formatActDate = (dateString: string) => {
             ? 'rd'
             : 'th';
 
-  return `Act ${day}${ord} ${months[month - 1]}, ${y}`;
+  const formattedDate = `Act ${day}${ord} ${months[month - 1]}, ${y}`;
+  if (!formattedDate.length) return `${y}`;
+  return formattedDate;
 };
 
 // From ChatGPT: https://chatgpt.com/c/68ebf5ec-5ca8-8333-a3f1-83c78b28889b

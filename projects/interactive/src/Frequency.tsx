@@ -1,36 +1,11 @@
 import { FunctionComponent, useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { StoryLLMModal } from './StoryLLM';
+import { StoryLLMModal } from './components/StoryLLM';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
-
+import './Frequency.css';
+import { farmAnimalsLivestock } from '../public/data/frequency/counts.ts';
 //   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
 //
-const farmAnimalsLivestock = [
-  { word: 'cow', frequency: 5126 },
-  { word: 'mare', frequency: 2136 },
-  { word: 'bull', frequency: 3123 },
-  { word: 'sheep', frequency: 1945 },
-  { word: 'cattle', frequency: 1945 },
-  { word: 'calf', frequency: 1653 },
-  { word: 'hen', frequency: 1587 },
-  { word: 'hog', frequency: 1533 },
-  { word: 'pig', frequency: 1030 },
-  { word: 'ox', frequency: 995 },
-  { word: 'colt', frequency: 916 },
-  { word: 'swine', frequency: 827 },
-  { word: 'goose', frequency: 391 },
-  { word: 'duck', frequency: 336 },
-  { word: 'turkey', frequency: 182 },
-  { word: 'mule', frequency: 139 },
-  { word: 'chicken', frequency: 91 },
-  { word: 'goat', frequency: 65 },
-  { word: 'poultry', frequency: 61 },
-  { word: 'donkey', frequency: 6 },
-  { word: 'rooster', frequency: 3 },
-  { word: 'livestock', frequency: 1 },
-]
-  .slice(0, 15)
-  .sort((a, b) => b.frequency - a.frequency);
 
 const maxFarmAnimals = farmAnimalsLivestock[0].frequency;
 const minFarmAnimals =
@@ -84,7 +59,7 @@ const mapAnimalsToFiles = (data: any[]) => {
 };
 const currentTheme = 'animal livestock';
 const themes = [
-  'top 20',
+  'top 10',
   currentTheme,
   'civilian occupations',
   'religion',
@@ -235,7 +210,7 @@ export const Frequency: FunctionComponent = () => {
                         zIndex: isHovered ? 1000 : baseZIndex,
                         position: 'relative',
                         flexShrink: 0,
-                        transform: isHovered ? 'scale(5)' : 'scale(1)',
+                        transform: isHovered ? 'scale(3)' : 'scale(1)',
                         transition: 'transform 0.2s ease-in-out',
                         cursor: 'pointer',
                       }}
@@ -243,7 +218,12 @@ export const Frequency: FunctionComponent = () => {
                   );
                 })}
               </div>
-              <strong style={{ marginLeft: '20px', flexShrink: 0 }}>
+              <strong
+                style={{
+                  marginLeft: '20px',
+                  flexShrink: 0,
+                }}
+              >
                 {animal.word}
               </strong>
             </div>
