@@ -16,7 +16,7 @@ export const Title: FunctionComponent = () => {
   const bottomRowImages = titleImages.slice(3, 6);
 
   return (
-    <div className="title-wrap">
+    <div className="title-wrap" style={{ padding: '1.5%' }}>
       <div className="title-images-row title-images-top">
         {topRowImages.map((image, rowIndex) => {
           const globalIndex = rowIndex;

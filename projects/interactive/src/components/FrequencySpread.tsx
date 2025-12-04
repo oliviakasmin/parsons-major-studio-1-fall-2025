@@ -58,7 +58,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
             width: '100vw',
             height: '100vh',
             //   backgroundColor: designUtils.backgroundColor,
-            overflow: 'auto',
+            overflow: 'hidden',
             padding: '40px',
             color: '#faf9f7',
             background: '#2c1810',

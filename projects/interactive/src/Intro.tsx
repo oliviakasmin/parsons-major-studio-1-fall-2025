@@ -7,9 +7,8 @@ const dividerLineImage = 'Divider_line.png';
 
 const introText = [
   'The Revolutionary War pension and bounty-land warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855.',
-  'These files include applications from soldiers, widows, and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony.',
-  'Many veterans or widows reapplied under later, more generous laws, so the files often span decades and contain multiple layers of documentation.',
-  'Together, they form one of the richest archival sources for understanding the lives and service of Revolutionary War participants.',
+  'These files include applications from soldiers, widows and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony.',
+  'Many veterans or widows reapplied under later, more generous laws, so the files often span decades and contain multiple layers of documentation. Together, they form one of the richest archival sources for understanding the lives and service of Revolutionary War participants.',
   'The archive contains the records for nearly 80 thousand applications.',
 ];
 
@@ -20,6 +19,7 @@ const introTextSections = introText.map((section, index) => (
       fontSize: '20px',
       lineHeight: '1.5',
       marginBottom: '28px',
+      fontWeight: index === 1 ? '600' : 'normal',
     }}
     key={index}
   >
@@ -29,17 +29,7 @@ const introTextSections = introText.map((section, index) => (
 
 export const Intro: FunctionComponent = () => {
   return (
-    <div
-      className="section-underline-bottom section-underline-top"
-      style={
-        {
-          // width: '80vw',
-          // borderTop: '1px solid black',
-          // borderBottom: '1px solid black',
-          // margin: '0 auto',
-        }
-      }
-    >
+    <div className="section-underline-bottom section-underline-top">
       <div
         style={{
           maxWidth: '60vw',

@@ -5,6 +5,7 @@ import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
 import { farmAnimalsLivestock } from '../public/data/frequency/counts.ts';
 import { FrequencySpread } from './components/FrequencySpread.tsx';
+// import { designUtils } from './design_utils.ts';
 //   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
 //
 
@@ -149,7 +150,7 @@ export const Frequency: FunctionComponent = () => {
     <>
       <div
         className="frequency-container"
-        style={{ padding: '40px' }}
+        style={{ padding: '40px', minHeight: '100vh' }}
         ref={containerRef}
       >
         {/* Header row with themes */}
@@ -222,6 +223,7 @@ export const Frequency: FunctionComponent = () => {
 
                   return (
                     <img
+                      // loading="lazy"
                       key={imgIndex}
                       src={file.pageURL}
                       alt={`${animal.word} document ${imgIndex + 1}`}
@@ -237,6 +239,7 @@ export const Frequency: FunctionComponent = () => {
                       }}
                       style={{
                         width: `${imageWidth}px`,
+                        minHeight: `${imageWidth}px`,
                         height: 'auto',
                         objectFit: 'cover',
                         border: '1px solid #ccc',
@@ -252,7 +255,7 @@ export const Frequency: FunctionComponent = () => {
                   );
                 })}
               </div>
-              <strong
+              <div
                 style={{
                   marginLeft: '20px',
                   flexShrink: 0,
@@ -266,8 +269,11 @@ export const Frequency: FunctionComponent = () => {
                   });
                 }}
               >
-                {animal.word}
-              </strong>
+                <span className="frequency-word">{animal.word}</span>
+                <span className="frequency-word-count">
+                  ({animal.frequency})
+                </span>
+              </div>
             </div>
           );
         })}

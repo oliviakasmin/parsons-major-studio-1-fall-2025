@@ -159,6 +159,12 @@ const App: FunctionComponent = () => {
       {/* <section id="story" className="component-section story-container">
         <StoryLLM />
       </section> */}
+
+      <div
+        style={{ height: '5vh', margin: '0.5rem auto', textAlign: 'center' }}
+      >
+        footer info here
+      </div>
     </main>
   );
 };
