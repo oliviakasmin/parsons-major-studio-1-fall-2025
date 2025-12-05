@@ -1,24 +1,15 @@
 import { FunctionComponent } from 'react';
 import categoryData from '../../data/viz_data/category_count_dict.json';
-import { CategoryType } from '../ApplicationCategories';
+import { CategoryKeyType } from '../utils';
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import { designUtils } from '../design_utils';
 
 interface CategoryBarProps {
-  category: CategoryType;
+  categoryKey: CategoryKeyType;
   height: number;
   isSelectedCategory: boolean;
 }
-
-const appCategories = [
-  'soldier',
-  'rejected',
-  'widow',
-  'bounty land warrant',
-  'old war',
-  'N A Acc',
-] as const;
 
 interface ImportedCategoryData {
   count: number;
@@ -26,41 +17,32 @@ interface ImportedCategoryData {
 }
 
 interface CategoryChartData {
-  category: string;
+  categoryKey: CategoryKeyType;
   count: number;
 }
 
-// Map appCategory keys (from JSON) to CategoryType (display format)
-const mapAppCategoryToCategoryType = (appCategory: string): string => {
-  const mapping: Record<string, string> = {
-    soldier: 'Survived',
-    widow: 'Widow',
-    rejected: 'Rejected',
-    'bounty land warrant': 'Bounty land warrant',
-    'old war': 'Old War',
-    'N A Acc': 'N A Acc',
-  };
-
-  return (
-    mapping[appCategory] ||
-    appCategory.charAt(0).toUpperCase() + appCategory.slice(1)
-  );
+// Map JSON keys to CategoryKeyType
+const JSON_KEY_TO_CATEGORY_KEY: Record<string, CategoryKeyType> = {
+  soldier: 'survived',
+  rejected: 'rejected',
+  widow: 'widow',
+  'bounty land warrant': 'blwt',
+  'old war': 'ow',
+  'N A Acc': 'naacc',
 };
 
-// Transform imported data - filter for allowed categories only
+// Transform imported data - filter and map to CategoryKeyType
 const data: CategoryChartData[] = Object.entries(
   categoryData as Record<string, ImportedCategoryData>
 )
-  .filter(([category]) =>
-    appCategories.includes(category as (typeof appCategories)[number])
-  )
-  .map(([category, values]) => ({
-    category: mapAppCategoryToCategoryType(category),
+  .filter(([key]) => key in JSON_KEY_TO_CATEGORY_KEY)
+  .map(([key, values]) => ({
+    categoryKey: JSON_KEY_TO_CATEGORY_KEY[key],
     count: values.count,
   }));
 
 export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
-  category,
+  categoryKey,
   height,
   isSelectedCategory,
 }) => {
@@ -87,7 +69,7 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
   }, []);
 
   // Find the data for the selected category
-  const selectedCategoryData = data.find(d => d.category === category);
+  const selectedCategoryData = data.find(d => d.categoryKey === categoryKey);
 
   // D3 rendering effect
   useEffect(() => {

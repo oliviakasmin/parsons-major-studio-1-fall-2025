@@ -8,6 +8,7 @@ import { FrequencySpread } from './components/FrequencySpread.tsx';
 // import { designUtils } from './design_utils.ts';
 //   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
 //
+import { CurlyBraceButton } from './components/CurlyBraceButton';
 
 const maxFarmAnimals = farmAnimalsLivestock[0].frequency;
 const minFarmAnimals =
@@ -59,14 +60,8 @@ const mapAnimalsToFiles = (data: any[]) => {
     };
   });
 };
-const currentTheme = 'animal livestock';
-const themes = [
-  'top 10',
-  currentTheme,
-  'civilian occupations',
-  'religion',
-  'hopeless',
-];
+const currentTheme = 'animals';
+const themes = ['hopelessness', currentTheme, 'religion'];
 
 export const Frequency: FunctionComponent = () => {
   const [data, setData] = useState<any>(null);
@@ -74,6 +69,10 @@ export const Frequency: FunctionComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+  const [hoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
+    null
+  );
+  const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<{
     NAID: string;
     pageURL: string;
@@ -162,13 +161,23 @@ export const Frequency: FunctionComponent = () => {
             flexWrap: 'wrap',
           }}
         >
+          <UnderlinedHeader text="Top 10" darkTheme={true} underlined={false} />
           {themes.map((theme, index) => (
-            <UnderlinedHeader
+            <div
               key={index}
-              text={theme}
-              underlined={theme === currentTheme}
-              darkTheme={true}
-            />
+              onMouseEnter={() => setHoveredTheme(theme)}
+              onMouseLeave={() => setHoveredTheme(null)}
+              style={{ cursor: 'pointer' }}
+            >
+              <UnderlinedHeader
+                text={theme}
+                underlined={theme === currentTheme || theme === hoveredTheme}
+                hoverUnderline={
+                  theme === hoveredTheme && theme !== currentTheme
+                }
+                darkTheme={true}
+              />
+            </div>
           ))}
         </div>
 
@@ -260,6 +269,8 @@ export const Frequency: FunctionComponent = () => {
                   marginLeft: '20px',
                   flexShrink: 0,
                 }}
+                onMouseEnter={() => setHoveredButtonIndex(index)}
+                onMouseLeave={() => setHoveredButtonIndex(null)}
                 onClick={() => {
                   // open FrequencySpread modal
                   setFrequencySpreadOpen(true);
@@ -269,7 +280,29 @@ export const Frequency: FunctionComponent = () => {
                   });
                 }}
               >
-                <span className="frequency-word">{animal.word}</span>
+                {/* <span className="frequency-word">{animal.word}</span> */}
+
+                <CurlyBraceButton
+                  darkTheme={true}
+                  hidden={hoveredButtonIndex !== index}
+                  line1={
+                    <UnderlinedHeader
+                      text={animal.word}
+                      underlined={true}
+                      darkTheme={true}
+                      noTextTransform={true}
+                      size="small"
+                      hoverUnderline={hoveredButtonIndex === index}
+                    />
+                  }
+                  onClick={() => {
+                    setFrequencySpreadOpen(true);
+                    setSelectedWordData({
+                      word: animal.word,
+                      files: animal.files.slice(0, 50),
+                    });
+                  }}
+                />
                 <span className="frequency-word-count">
                   ({animal.frequency})
                 </span>

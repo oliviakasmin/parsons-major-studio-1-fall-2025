@@ -6,7 +6,7 @@ import { designUtils } from './design_utils';
 // import { CurlyBraceButton } from './components/CurlyBraceButton';
 import { FormatProofQuote } from './components/FormatProofQuote';
 import { CategoryBar } from './charts/CategoryBar';
-import { CategoryType, CategoryKeyType } from './utils';
+import { CategoryKeyType } from './utils';
 
 const cardImagePath = 'images/category_card_images/';
 const letterImagePath = 'images/category_letter_images/';
@@ -33,17 +33,17 @@ const categoryImageData: Record<CategoryKeyType, CategoryImageData> = {
     cardImage: 'S_card.jpg',
     cardLetter: 'S.png',
   },
-  rejected: {
-    displayName: 'Rejected',
-    naraURL: 'https://catalog.archives.gov/id/54266410',
-    cardImage: 'R_card.jpg',
-    cardLetter: 'R.png',
-  },
   widow: {
     displayName: 'Widow',
     naraURL: 'https://catalog.archives.gov/id/54879996',
     cardImage: 'W_card.jpg',
     cardLetter: 'W.png',
+  },
+  rejected: {
+    displayName: 'Rejected',
+    naraURL: 'https://catalog.archives.gov/id/54266410',
+    cardImage: 'R_card.jpg',
+    cardLetter: 'R.png',
   },
   blwt: {
     displayName: 'Bounty land warrant',
@@ -186,7 +186,6 @@ export const ApplicationCategories: FunctionComponent = () => {
                     fontSize: 'inherit',
                     fontWeight: 'inherit',
                     lineHeight: 'inherit',
-                    textTransform: 'capitalize',
                   }}
                 >
                   <div
@@ -194,11 +193,19 @@ export const ApplicationCategories: FunctionComponent = () => {
                       fontSize: '1.25em',
                     }}
                   >
-                    {category.displayName}
+                    {category.displayName}{' '}
+                    <span
+                      style={{
+                        color: designUtils.iconButtonColor,
+                        fontSize: '1em',
+                      }}
+                    >
+                      {categoryKey === 'survived' ? '(soldier)' : ''}
+                    </span>
                   </div>
                   <div style={{ marginTop: 4, width: '100%' }}>
                     <CategoryBar
-                      category={category.displayName as CategoryType}
+                      categoryKey={categoryKey}
                       height={16}
                       isSelectedCategory={categoryKey === selectedCategoryKey}
                     />
