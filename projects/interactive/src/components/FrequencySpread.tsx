@@ -15,6 +15,7 @@ type FrequencySpreadProps = {
   currentTheme: string;
   setSelectedImage: (any: any) => void;
   selectedImage: any;
+  frequency: number;
 };
 
 export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
@@ -25,6 +26,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
   currentTheme,
   setSelectedImage,
   selectedImage,
+  frequency,
 }) => {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
 
@@ -74,7 +76,10 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
               marginBottom: '20px',
             }}
           >
-            <UnderlinedHeader text={category} darkTheme={true} />
+            <div style={{ display: 'flex', alignItems: 'baseline' }}>
+              <UnderlinedHeader text={category} darkTheme={true} />
+              <span style={{ marginLeft: '24px' }}>({frequency})</span>
+            </div>
           </Box>
           <div style={{ position: 'absolute', right: 12, top: 12 }}>
             <CurlyBraceButton

@@ -1,5 +1,6 @@
 import { FunctionComponent, useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import { List, ListItem } from '@mui/material';
 import { StoryLLMModal } from './components/StoryLLM';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
@@ -81,7 +82,11 @@ export const Frequency: FunctionComponent = () => {
   } | null>(null);
   const [frequencySpreadOpen, setFrequencySpreadOpen] =
     useState<boolean>(false);
-  const [selectedWordData, setSelectedWordData] = useState<any>(null);
+  const [selectedWordData, setSelectedWordData] = useState<{
+    word: string;
+    files: any[];
+    frequency: number;
+  } | null>(null);
 
   useEffect(() => {
     getData().then(data => {
@@ -181,135 +186,160 @@ export const Frequency: FunctionComponent = () => {
           ))}
         </div>
 
-        {animalsWithFiles.map((animal, index) => {
-          const imageCount = getImagesCount(animal.frequency);
-          const imagesToShow = animal.files.slice(0, imageCount);
+        <List
+          sx={{
+            padding: 0,
+            width: '100%',
+          }}
+        >
+          {animalsWithFiles.map((animal, index) => {
+            const imageCount = getImagesCount(animal.frequency);
+            const imagesToShow = animal.files.slice(0, imageCount);
 
-          // Calculate image size and overlap based on container width
-          // Reserve space for label (word text + margin) - estimate max 120px for longest word + 20px margin
-          const labelReservedSpace = 140;
-          const availableWidth =
-            containerWidth > 0
-              ? Math.max(containerWidth - labelReservedSpace, 300) // Ensure minimum space for images
-              : 500 - labelReservedSpace;
+            // Calculate image size and overlap based on container width
+            // Reserve space for label (word text + margin) - estimate max 120px for longest word + 20px margin
+            const labelReservedSpace = 140;
+            const availableWidth =
+              containerWidth > 0
+                ? Math.max(containerWidth - labelReservedSpace, 300) // Ensure minimum space for images
+                : 500 - labelReservedSpace;
 
-          // Calculate overlap amount (each image overlaps by 60% of its width)
-          const overlapRatio = 0.8;
-          // Formula: firstImageWidth + (imageCount - 1) * firstImageWidth * (1 - overlapRatio) = availableWidth
-          // Solving for firstImageWidth: availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-          const imageWidth =
-            imageCount > 0
-              ? Math.min(
-                  50,
-                  availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-                )
-              : 40;
-          const overlapAmount = imageWidth * overlapRatio;
+            // Calculate overlap amount (each image overlaps by 60% of its width)
+            const overlapRatio = 0.8;
+            // Formula: firstImageWidth + (imageCount - 1) * firstImageWidth * (1 - overlapRatio) = availableWidth
+            // Solving for firstImageWidth: availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
+            const imageWidth =
+              imageCount > 0
+                ? Math.min(
+                    50,
+                    availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
+                  )
+                : 40;
+            const overlapAmount = imageWidth * overlapRatio;
 
-          return (
-            <div
-              key={index}
-              style={{
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                width: '100%',
-                overflow: 'visible',
-              }}
-            >
-              <div
-                style={{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  overflow: 'visible',
-                }}
-              >
-                {imagesToShow.map((file: any, imgIndex: number) => {
-                  const imageKey = `${index}-${imgIndex}`;
-                  const isHovered = hoveredImage === imageKey;
-                  const baseZIndex = imagesToShow.length - imgIndex;
+            const handleListItemClick = () => {
+              setFrequencySpreadOpen(true);
+              setSelectedWordData({
+                word: animal.word,
+                files: animal.files.slice(0, 50),
+                frequency: animal.frequency,
+              });
+            };
 
-                  return (
-                    <img
-                      // loading="lazy"
-                      key={imgIndex}
-                      src={file.pageURL}
-                      alt={`${animal.word} document ${imgIndex + 1}`}
-                      onMouseEnter={() => setHoveredImage(imageKey)}
-                      onMouseLeave={() => setHoveredImage(null)}
-                      onClick={() => {
-                        setSelectedImage({
-                          NAID: file.NAID,
-                          pageURL: file.pageURL,
-                          selectedWord: animal.word,
-                          transcriptionText: file.transcriptionText,
-                        });
-                      }}
-                      style={{
-                        width: `${imageWidth}px`,
-                        minHeight: `${imageWidth}px`,
-                        height: 'auto',
-                        objectFit: 'cover',
-                        border: '1px solid #ccc',
-                        marginLeft: imgIndex > 0 ? `-${overlapAmount}px` : '0',
-                        zIndex: isHovered ? 1000 : baseZIndex,
-                        position: 'relative',
-                        flexShrink: 0,
-                        transform: isHovered ? 'scale(3)' : 'scale(1)',
-                        transition: 'transform 0.2s ease-in-out',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  );
-                })}
-              </div>
-              <div
-                style={{
-                  marginLeft: '20px',
-                  flexShrink: 0,
-                }}
+            // Check if any image in this row is hovered
+            const isRowHovered = hoveredImage?.startsWith(`${index}-`) ?? false;
+
+            return (
+              <ListItem
+                key={index}
                 onMouseEnter={() => setHoveredButtonIndex(index)}
                 onMouseLeave={() => setHoveredButtonIndex(null)}
-                onClick={() => {
-                  // open FrequencySpread modal
-                  setFrequencySpreadOpen(true);
-                  setSelectedWordData({
-                    word: animal.word,
-                    files: animal.files.slice(0, 50),
-                  });
+                onClick={handleListItemClick}
+                sx={{
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                  overflow: 'visible',
+                  padding: 0,
+                  position: 'relative',
+                  zIndex: isRowHovered ? 1000 : 0, // Higher z-index when row has hovered image
+                  cursor: 'pointer',
                 }}
               >
-                {/* <span className="frequency-word">{animal.word}</span> */}
-
-                <CurlyBraceButton
-                  darkTheme={true}
-                  hidden={hoveredButtonIndex !== index}
-                  line1={
-                    <UnderlinedHeader
-                      text={animal.word}
-                      underlined={true}
-                      darkTheme={true}
-                      noTextTransform={true}
-                      size="small"
-                      hoverUnderline={hoveredButtonIndex === index}
-                    />
-                  }
-                  onClick={() => {
-                    setFrequencySpreadOpen(true);
-                    setSelectedWordData({
-                      word: animal.word,
-                      files: animal.files.slice(0, 50),
-                    });
+                <div
+                  style={{
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    overflow: 'visible',
                   }}
-                />
-                <span className="frequency-word-count">
-                  ({animal.frequency})
-                </span>
-              </div>
-            </div>
-          );
-        })}
+                  onClick={e => e.stopPropagation()}
+                >
+                  {imagesToShow.map((file: any, imgIndex: number) => {
+                    const imageKey = `${index}-${imgIndex}`;
+                    const isHovered = hoveredImage === imageKey;
+                    const baseZIndex = imagesToShow.length - imgIndex;
+
+                    return (
+                      <img
+                        // loading="lazy"
+                        key={imgIndex}
+                        src={file.pageURL}
+                        alt={`${animal.word} document ${imgIndex + 1}`}
+                        onMouseEnter={() => setHoveredImage(imageKey)}
+                        onMouseLeave={() => setHoveredImage(null)}
+                        onClick={() => {
+                          setSelectedImage({
+                            NAID: file.NAID,
+                            pageURL: file.pageURL,
+                            selectedWord: animal.word,
+                            transcriptionText: file.transcriptionText,
+                          });
+                        }}
+                        style={{
+                          width: `${imageWidth}px`,
+                          minHeight: `${imageWidth}px`,
+                          height: 'auto',
+                          objectFit: 'cover',
+                          border: '1px solid #ccc',
+                          marginLeft:
+                            imgIndex > 0 ? `-${overlapAmount}px` : '0',
+                          zIndex: isHovered ? 10000 : baseZIndex,
+                          position: 'relative',
+                          flexShrink: 0,
+                          transform: isHovered ? 'scale(3)' : 'scale(1)',
+                          transition: 'transform 0.2s ease-in-out',
+                          cursor: 'pointer',
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+                <div
+                  style={{
+                    marginLeft: '20px',
+                  }}
+                  onMouseEnter={() => setHoveredButtonIndex(index)}
+                  onMouseLeave={() => setHoveredButtonIndex(null)}
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleListItemClick();
+                  }}
+                >
+                  <CurlyBraceButton
+                    darkTheme={true}
+                    hidden={hoveredButtonIndex !== index}
+                    line1={
+                      <div
+                      // style={{ display: 'flex', alignItems: 'baseline' }}
+                      >
+                        <UnderlinedHeader
+                          text={animal.word}
+                          underlined={true}
+                          darkTheme={true}
+                          noTextTransform={true}
+                          size="small"
+                          hoverUnderline={hoveredButtonIndex === index}
+                        />
+                        {/* <span
+                          style={{
+                            fontSize: '12px',
+                            display: `${hoveredButtonIndex === index ? 'inline' : 'none'}`,
+                            marginLeft: '24px',
+                          }}
+                        >
+                          ({animal.frequency})
+                        </span> */}
+                      </div>
+                    }
+                    onClick={handleListItemClick}
+                  />
+                </div>
+              </ListItem>
+            );
+          })}
+        </List>
       </div>
       {selectedImage && selectedImage.transcriptionText && (
         <StoryLLMModal
@@ -331,6 +361,7 @@ export const Frequency: FunctionComponent = () => {
           currentTheme={currentTheme}
           setSelectedImage={setSelectedImage}
           selectedImage={selectedImage}
+          frequency={selectedWordData.frequency}
         />
       )}
     </>
