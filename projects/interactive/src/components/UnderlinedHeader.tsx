@@ -7,6 +7,7 @@ interface UnderlinedHeaderProps {
   size?: 'small' | 'medium' | 'large';
   underlined?: boolean;
   darkTheme?: boolean;
+  noTextTransform?: boolean;
 }
 
 export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
@@ -14,6 +15,7 @@ export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
   size = 'medium',
   underlined = true,
   darkTheme = false,
+  noTextTransform = false,
 }) => {
   const className = `underlined-header ${size} ${underlined ? 'underlined' : 'no-underline'} ${darkTheme ? 'dark-theme' : ''}`;
 
@@ -22,7 +24,7 @@ export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
       style={{
         margin: '0',
         paddingBottom: '8px',
-        textTransform: 'capitalize',
+        textTransform: noTextTransform ? 'none' : 'capitalize',
         fontWeight: '400',
         color: darkTheme ? designUtils.backgroundColor : designUtils.textColor,
       }}

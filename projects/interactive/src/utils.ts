@@ -1,3 +1,5 @@
+import curatedCategoryDefinitions from '../historical_research/curated_category_definitions.json';
+
 export const formatActDate = (dateString: string) => {
   const [y, m, d] = dateString.trim().split('-');
   if (!y || !m || !d) return '';
@@ -77,3 +79,12 @@ export function convertDollarsToToday(amount: number, year: string) {
   const factor = CPI_2025 / cpiYear;
   return Math.round(amount * factor * 100) / 100; // 2 decimals
 }
+
+// CategoryType should remain as display names for compatibility with CategoryBar
+const CATEGORIES_DISPLAY_NAMES = curatedCategoryDefinitions.map(
+  cat => cat.category
+);
+export type CategoryType = (typeof CATEGORIES_DISPLAY_NAMES)[number];
+
+const CATEGORIES_KEYS = curatedCategoryDefinitions.map(cat => cat.key);
+export type CategoryKeyType = (typeof CATEGORIES_KEYS)[number];

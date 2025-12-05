@@ -33,7 +33,7 @@ interface CategoryChartData {
 // Map appCategory keys (from JSON) to CategoryType (display format)
 const mapAppCategoryToCategoryType = (appCategory: string): string => {
   const mapping: Record<string, string> = {
-    soldier: 'Survived (soldier)',
+    soldier: 'Survived',
     widow: 'Widow',
     rejected: 'Rejected',
     'bounty land warrant': 'Bounty land warrant',

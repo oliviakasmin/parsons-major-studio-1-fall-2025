@@ -13,7 +13,7 @@ export const CategoriesChart: FunctionComponent = () => {
       }}
     >
       <p>
-        <span style={{ fontWeight: 'bold' }}>Survived (soldier)</span> 45.5%
+        <span style={{ fontWeight: 'bold' }}>Survived</span> 45.5%
       </p>
       <p>
         <span style={{ fontWeight: 'bold' }}>Widow</span> 31.5%

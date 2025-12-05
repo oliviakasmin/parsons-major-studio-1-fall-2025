@@ -27,7 +27,7 @@ export const Title: FunctionComponent = () => {
               data-image-index={globalIndex}
             >
               <img
-                src={`/title_images/${image}`}
+                src={`images/title_images/${image}`}
                 alt={image}
                 className="title-image"
                 style={{ maxHeight: '100px', maxWidth: '200px' }}
@@ -53,7 +53,7 @@ export const Title: FunctionComponent = () => {
               data-image-index={globalIndex}
             >
               <img
-                src={`/title_images/${image}`}
+                src={`images/title_images/${image}`}
                 alt={image}
                 className="title-image"
                 style={{ maxHeight: '100px', maxWidth: '200px' }}

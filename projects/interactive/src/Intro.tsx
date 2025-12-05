@@ -3,7 +3,7 @@
 import { FunctionComponent } from 'react';
 import { UnderlinedHeader } from './components';
 
-const dividerLineImage = 'Divider_line.png';
+const dividerLineImage = 'images/Divider_line.png';
 
 const introText = [
   'The Revolutionary War pension and bounty-land warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855.',
