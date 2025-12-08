@@ -1,0 +1,26 @@
+export const farmAnimalsLivestock = [
+  { word: 'cow', frequency: 5126 },
+  { word: 'mare', frequency: 2136 },
+  { word: 'bull', frequency: 3123 },
+  { word: 'sheep', frequency: 1945 },
+  { word: 'cattle', frequency: 1945 },
+  { word: 'calf', frequency: 1653 },
+  { word: 'hen', frequency: 1587 },
+  { word: 'hog', frequency: 1533 },
+  { word: 'pig', frequency: 1030 },
+  { word: 'ox', frequency: 995 },
+  { word: 'colt', frequency: 916 },
+  { word: 'swine', frequency: 827 },
+  { word: 'goose', frequency: 391 },
+  { word: 'duck', frequency: 336 },
+  { word: 'turkey', frequency: 182 },
+  { word: 'mule', frequency: 139 },
+  { word: 'chicken', frequency: 91 },
+  { word: 'goat', frequency: 65 },
+  { word: 'poultry', frequency: 61 },
+  { word: 'donkey', frequency: 6 },
+  { word: 'rooster', frequency: 3 },
+  { word: 'livestock', frequency: 1 },
+]
+  .slice(0, 10)
+  .sort((a, b) => b.frequency - a.frequency);

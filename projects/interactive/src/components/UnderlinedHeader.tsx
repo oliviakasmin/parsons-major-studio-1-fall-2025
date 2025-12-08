@@ -7,6 +7,8 @@ interface UnderlinedHeaderProps {
   size?: 'small' | 'medium' | 'large';
   underlined?: boolean;
   darkTheme?: boolean;
+  noTextTransform?: boolean;
+  hoverUnderline?: boolean;
 }
 
 export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
@@ -14,15 +16,17 @@ export const UnderlinedHeader: FunctionComponent<UnderlinedHeaderProps> = ({
   size = 'medium',
   underlined = true,
   darkTheme = false,
+  noTextTransform = false,
+  hoverUnderline = false,
 }) => {
-  const className = `underlined-header ${size} ${underlined ? 'underlined' : 'no-underline'} ${darkTheme ? 'dark-theme' : ''}`;
+  const className = `underlined-header ${size} ${underlined ? 'underlined' : 'no-underline'} ${darkTheme ? 'dark-theme' : ''} ${hoverUnderline ? 'hover-underline' : ''}`;
 
   return (
     <h2
       style={{
         margin: '0',
         paddingBottom: '8px',
-        textTransform: 'capitalize',
+        textTransform: noTextTransform ? 'none' : 'capitalize',
         fontWeight: '400',
         color: darkTheme ? designUtils.backgroundColor : designUtils.textColor,
       }}

@@ -1,24 +1,15 @@
 import { FunctionComponent } from 'react';
 import categoryData from '../../data/viz_data/category_count_dict.json';
-import { CategoryType } from '../ApplicationCategories';
+import { CategoryKeyType } from '../utils';
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import { designUtils } from '../design_utils';
 
 interface CategoryBarProps {
-  category: CategoryType;
+  categoryKey: CategoryKeyType;
   height: number;
   isSelectedCategory: boolean;
 }
-
-const appCategories = [
-  'soldier',
-  'rejected',
-  'widow',
-  'bounty land warrant',
-  'old war',
-  'N A Acc',
-] as const;
 
 interface ImportedCategoryData {
   count: number;
@@ -26,46 +17,38 @@ interface ImportedCategoryData {
 }
 
 interface CategoryChartData {
-  category: string;
+  categoryKey: CategoryKeyType;
   count: number;
 }
 
-// Map appCategory keys (from JSON) to CategoryType (display format)
-const mapAppCategoryToCategoryType = (appCategory: string): string => {
-  const mapping: Record<string, string> = {
-    soldier: 'Survived (soldier)',
-    widow: 'Widow',
-    rejected: 'Rejected',
-    'bounty land warrant': 'Bounty land warrant',
-    'old war': 'Old War',
-    'N A Acc': 'N A Acc',
-  };
-
-  return (
-    mapping[appCategory] ||
-    appCategory.charAt(0).toUpperCase() + appCategory.slice(1)
-  );
+// Map JSON keys to CategoryKeyType
+const JSON_KEY_TO_CATEGORY_KEY: Record<string, CategoryKeyType> = {
+  soldier: 'survived',
+  rejected: 'rejected',
+  widow: 'widow',
+  'bounty land warrant': 'blwt',
+  'old war': 'ow',
+  'N A Acc': 'naacc',
 };
 
-// Transform imported data - filter for allowed categories only
+// Transform imported data - filter and map to CategoryKeyType
 const data: CategoryChartData[] = Object.entries(
   categoryData as Record<string, ImportedCategoryData>
 )
-  .filter(([category]) =>
-    appCategories.includes(category as (typeof appCategories)[number])
-  )
-  .map(([category, values]) => ({
-    category: mapAppCategoryToCategoryType(category),
+  .filter(([key]) => key in JSON_KEY_TO_CATEGORY_KEY)
+  .map(([key, values]) => ({
+    categoryKey: JSON_KEY_TO_CATEGORY_KEY[key],
     count: values.count,
   }));
 
 export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
-  category,
+  categoryKey,
   height,
   isSelectedCategory,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(0);
+  const prevIsSelectedRef = useRef<boolean | null>(null);
   const marginRight = 160;
 
   useEffect(() => {
@@ -86,12 +69,24 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
   }, []);
 
   // Find the data for the selected category
-  const selectedCategoryData = data.find(d => d.category === category);
+  const selectedCategoryData = data.find(d => d.categoryKey === categoryKey);
 
   // D3 rendering effect
   useEffect(() => {
     if (!width || !selectedCategoryData) return;
     const svg = d3.select(containerRef.current).select('svg');
+
+    // Determine if we should animate
+    // Only animate when transitioning from unselected to selected (newly selected)
+    // Skip animation when transitioning from selected to unselected or on regular redraws
+    const wasSelected = prevIsSelectedRef.current;
+    const isNewlySelected = !wasSelected && isSelectedCategory;
+    const shouldAnimate =
+      isNewlySelected ||
+      (prevIsSelectedRef.current === null && isSelectedCategory);
+
+    // Update the ref for next render
+    prevIsSelectedRef.current = isSelectedCategory;
 
     // Clear previous drawing
     svg.selectAll('*').remove();
@@ -112,12 +107,20 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
     // Get circle radius from xScale - use width per roundTo as spacing
     const spacingPerUnit = xScale(roundTo);
     const gap = 1; // gap in px between adjacent circles
-    const circleRadius = Math.min(spacingPerUnit / 2 - gap / 2, height / 4); // shrink radius by 1px to create 2px gap
+    const minRadius = 2; // Minimum radius to ensure visibility
+    const circleRadius = Math.max(
+      minRadius,
+      Math.min(spacingPerUnit / 2 - gap / 2, height / 4)
+    );
     const spacing = spacingPerUnit; // Spacing between circle centers
     // Create array of circle indices
     const circleData = Array.from({ length: numCircles }, (_, i) => i);
 
-    svg
+    const dotColor = isSelectedCategory
+      ? designUtils.blueColor
+      : designUtils.iconButtonColor;
+
+    const circles = svg
       .selectAll<SVGCircleElement, number>('circle')
       .data(circleData)
       .join(enter =>
@@ -127,14 +130,22 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
           .attr('cx', (_d, i) => i * spacing + circleRadius)
           .attr('cy', height / 2)
           .attr('r', circleRadius)
-          .attr('fill', designUtils.iconButtonColor)
-          .attr('fill-opacity', 0)
-          .transition()
-          .duration(400)
-          .delay((_d, i) => i * 10) // Stagger the animation
-          .ease(d3.easeCubicOut)
-          .attr('fill-opacity', 1)
+          .attr('fill', dotColor)
       );
+
+    // Only apply animation if newly selected
+    if (shouldAnimate) {
+      circles
+        .attr('fill-opacity', 0)
+        .transition()
+        .duration(400)
+        .delay((_d, i) => i * 10) // Stagger the animation
+        .ease(d3.easeCubicOut)
+        .attr('fill-opacity', 1);
+    } else {
+      // Set opacity immediately without animation
+      circles.attr('fill-opacity', 1);
+    }
 
     //add label after the bar so the end of each label is aligned with the full width of the container
     svg
@@ -154,7 +165,7 @@ export const CategoryBar: FunctionComponent<CategoryBarProps> = ({
           .attr('dominant-baseline', 'middle')
           .style('text-transform', 'none')
       );
-  }, [width, height, selectedCategoryData]);
+  }, [width, height, selectedCategoryData, isSelectedCategory]);
 
   // Separate effect to update text content and font-weight when selection changes, without re-rendering the bar
   useEffect(() => {

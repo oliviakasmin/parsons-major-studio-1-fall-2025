@@ -1,8 +1,8 @@
 [
   {
     "date": "1776-08-26",
-    "historical_context": "Continental Congress authorized the first invalid pensions for those disabled in service.",
-    "relevant_quotes": "\"On August 26, 1776, Congress resolved that every commissioned officer, noncommissioned officer, and private soldier or sailor disabled in the line of duty should receive half pay during his disability. (M804 pamphlet, p. 1–2)\"",
+    "historical_context": "Congress authorized the first invalid pensions for those disabled in service.",
+    "relevant_quotes": "\"On August 26, 1776, the first pension legislation for the American colonies as a group was enacted. (M804 pamphlet, p. 1–2)\"",
     "relevant_categories": "Old War||Soldier",
     "main_takeaway": "Established the earliest disability (invalid) pensions during the Revolution.",
     "category_applicability_note": "\"Most surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\" || \"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
@@ -15,7 +15,7 @@
     "relevant_categories": "Widow",
     "main_takeaway": "Earliest recognition of widows and orphans, though limited in duration.",
     "category_applicability_note": "\"Most of the surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\" || \"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
-    "highlight": true
+    "highlight": false
   },
   {
     "date": "1778-05-15",
@@ -33,7 +33,7 @@
     "relevant_categories": "Old War||Soldier",
     "main_takeaway": "Created lifetime pension rights for officers.",
     "category_applicability_note": "\"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records. (M804 pamphlet, p. 1)\" || \"Most of the surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\"",
-    "highlight": true
+    "highlight": false
   },
   {
     "date": "1788-09-16",
@@ -45,13 +45,13 @@
     "highlight": false
   },
   {
-    "date": "1792",
+    "date": "1792-03-23",
     "historical_context": "Invalid pensions continued under the Federal Government after the Constitution.",
     "relevant_quotes": "\"In 1792 Congress enacted legislation continuing invalid pensions under the authority of the Federal Government. (M804 pamphlet, p. 2)\"",
     "relevant_categories": "Old War||Soldier",
     "main_takeaway": "Maintained disability pensions during the early federal period.",
     "category_applicability_note": "\"Some 'Old War' pension files were also interfiled. (M804 pamphlet, p. 4)\"",
-    "highlight": true
+    "highlight": false
   },
   {
     "date": "1806-04-06",
@@ -96,7 +96,7 @@
     "relevant_categories": "Soldier",
     "main_takeaway": "This law is one of the Four Acts that defined Revolutionary War pensions. Expanded survivor eligibility by removing need requirements for full-term veterans.",
     "category_applicability_note": "\"Files appear in the survivor/soldier series under the pre-1910 arrangement. (M804 pamphlet, p. 4)\"",
-    "highlight": true
+    "highlight": false
   },
   {
     "date": "1832-06-07",
@@ -150,7 +150,7 @@
     "relevant_categories": "Bounty land warrant||Widow",
     "main_takeaway": "Bounty-land benefits extended widely, including to family members.",
     "category_applicability_note": "\"Some bounty-land-warrant applications were also interfiled. (M804 pamphlet, p. 4)\"",
-    "highlight": true
+    "highlight": false
   },
   {
     "date": "archival-category",

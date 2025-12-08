@@ -1,3 +1,5 @@
+import curatedCategoryDefinitions from '../historical_research/curated_category_definitions.json';
+
 export const formatActDate = (dateString: string) => {
   const [y, m, d] = dateString.trim().split('-');
   if (!y || !m || !d) return '';
@@ -31,7 +33,9 @@ export const formatActDate = (dateString: string) => {
             ? 'rd'
             : 'th';
 
-  return `Act ${day}${ord} ${months[month - 1]}, ${y}`;
+  const formattedDate = `Act ${day}${ord} ${months[month - 1]}, ${y}`;
+  if (!formattedDate.length) return `${y}`;
+  return formattedDate;
 };
 
 // From ChatGPT: https://chatgpt.com/c/68ebf5ec-5ca8-8333-a3f1-83c78b28889b
@@ -75,3 +79,6 @@ export function convertDollarsToToday(amount: number, year: string) {
   const factor = CPI_2025 / cpiYear;
   return Math.round(amount * factor * 100) / 100; // 2 decimals
 }
+
+const CATEGORIES_KEYS = curatedCategoryDefinitions.map(cat => cat.key);
+export type CategoryKeyType = (typeof CATEGORIES_KEYS)[number];

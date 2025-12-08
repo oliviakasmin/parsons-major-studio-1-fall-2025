@@ -3,86 +3,123 @@ import { Box, List, ListItem, Link } from '@mui/material';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import curatedCategoryDefinitions from '../historical_research/curated_category_definitions.json';
 import { designUtils } from './design_utils';
-export const CATEGORIES = curatedCategoryDefinitions.map(cat => cat.category);
-export type CategoryType = (typeof CATEGORIES)[number];
-import { CurlyBraceButton } from './components/CurlyBraceButton';
-import categorySampleImageData from '../data/WIP/category_samples_10_per_category.json';
+// import { CurlyBraceButton } from './components/CurlyBraceButton';
 import { FormatProofQuote } from './components/FormatProofQuote';
 import { CategoryBar } from './charts/CategoryBar';
+import { CategoryKeyType } from './utils';
 
-type CategoryInfo = {
+const cardImagePath = 'images/category_card_images/';
+const letterImagePath = 'images/category_letter_images/';
+
+type CategoryImageData = {
+  displayName: string;
+  naraURL: string;
+  cardImage: string;
+  cardLetter: string;
+};
+
+type CategoryDefinitionData = {
   category: string;
   definition: string;
   proof_quote: string;
 };
 
-// Map display category names to JSON keys
-const mapCategoryTypeToJsonKey = (categoryType: string): string => {
-  const mapping: Record<string, string> = {
-    'Survived (soldier)': 'soldier',
-    Widow: 'widow',
-    Rejected: 'rejected',
-    'Bounty land warrant': 'bounty land warrant',
-    'Old War': 'old war',
-    'N A Acc': 'N A Acc',
-  };
-  return mapping[categoryType] || categoryType.toLowerCase();
+type CategoryData = CategoryImageData & CategoryDefinitionData;
+
+const categoryImageData: Record<CategoryKeyType, CategoryImageData> = {
+  survived: {
+    displayName: 'Survived',
+    naraURL: 'https://catalog.archives.gov/id/144143658',
+    cardImage: 'S_card.jpg',
+    cardLetter: 'S.png',
+  },
+  widow: {
+    displayName: 'Widow',
+    naraURL: 'https://catalog.archives.gov/id/54879996',
+    cardImage: 'W_card.jpg',
+    cardLetter: 'W.png',
+  },
+  rejected: {
+    displayName: 'Rejected',
+    naraURL: 'https://catalog.archives.gov/id/54266410',
+    cardImage: 'R_card.jpg',
+    cardLetter: 'R.png',
+  },
+  blwt: {
+    displayName: 'Bounty land warrant',
+    naraURL: 'https://catalog.archives.gov/id/196440138',
+    cardImage: 'BLWT_card.jpg',
+    cardLetter: 'B.png',
+  },
+  ow: {
+    displayName: 'Old War',
+    naraURL: 'https://catalog.archives.gov/id/196187193',
+    cardImage: 'OW_card.jpg',
+    cardLetter: 'O.png',
+  },
+  naacc: {
+    displayName: 'N A Acc',
+    naraURL: 'https://catalog.archives.gov/id/53972882',
+    cardImage: 'NAAC_card.jpg',
+    cardLetter: 'N.png',
+  },
 };
 
-// Get the first pageURL for a category
-const getCategoryImageUrl = (categoryType: string): string | undefined => {
-  const jsonKey = mapCategoryTypeToJsonKey(categoryType);
-  const samples =
-    categorySampleImageData.single_category_samples?.[
-      jsonKey as keyof typeof categorySampleImageData.single_category_samples
-    ];
-  if (samples && samples.length > 0 && samples[0].pageURL) {
-    return samples[0].pageURL;
-  }
-  return undefined;
-};
+// Combine image data with definition data
+const categoryAllData: Record<CategoryKeyType, CategoryData> =
+  Object.fromEntries(
+    Object.keys(categoryImageData).map(key => {
+      const categoryKey = key as CategoryKeyType;
+      const imageData = categoryImageData[categoryKey];
+      const definitionData = curatedCategoryDefinitions.find(
+        def => def.key === categoryKey
+      )!;
+      return [
+        categoryKey,
+        {
+          displayName: imageData.displayName,
+          category: definitionData.category,
+          definition: definitionData.definition,
+          proof_quote: definitionData.proof_quote,
+          naraURL: imageData.naraURL,
+          cardImage: imageData.cardImage,
+          cardLetter: imageData.cardLetter,
+        },
+      ];
+    })
+  ) as Record<CategoryKeyType, CategoryData>;
 
-// Get the first naraURL for a category
-const getCategoryNaraUrl = (categoryType: string): string | undefined => {
-  const jsonKey = mapCategoryTypeToJsonKey(categoryType);
-  const samples =
-    categorySampleImageData.single_category_samples?.[
-      jsonKey as keyof typeof categorySampleImageData.single_category_samples
-    ];
-  if (samples && samples.length > 0 && samples[0].naraURL) {
-    return samples[0].naraURL;
-  }
-  return undefined;
+const CATEGORIES: CategoryKeyType[] = Object.keys(
+  categoryAllData
+) as CategoryKeyType[];
+
+const CategoryTitleWithLetterImage: FunctionComponent<{
+  categoryKey: CategoryKeyType;
+}> = ({ categoryKey }) => {
+  const category = categoryAllData[categoryKey];
+  return (
+    <div style={{ display: 'flex', gap: 2 }}>
+      <img
+        src={`${letterImagePath}${category.cardLetter}`}
+        alt={`${category.displayName} letter image`}
+        style={{ width: '30px', height: 'auto' }}
+      />
+      <UnderlinedHeader
+        text={category.displayName.slice(1)}
+        size="small"
+        noTextTransform={true}
+      />
+    </div>
+  );
 };
 
 export const ApplicationCategories: FunctionComponent = () => {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
-    curatedCategoryDefinitions[0]?.category || null
-  );
+  const [selectedCategoryKey, setSelectedCategoryKey] =
+    useState<CategoryKeyType>(CATEGORIES[0]);
 
-  const selectedCategoryInfo = curatedCategoryDefinitions.find(
-    cat => cat.category === selectedCategory
-  ) as CategoryInfo | undefined;
-
-  const selectedCategoryImageUrl = selectedCategory
-    ? getCategoryImageUrl(selectedCategory)
-    : undefined;
-
-  const selectedCategoryNaraUrl = selectedCategory
-    ? getCategoryNaraUrl(selectedCategory)
-    : undefined;
-
-  const handleNextCategory = () => {
-    if (!selectedCategory) return;
-    const currentIndex = curatedCategoryDefinitions.findIndex(
-      cat => cat.category === selectedCategory
-    );
-    const nextIndex =
-      currentIndex < curatedCategoryDefinitions.length - 1
-        ? currentIndex + 1
-        : 0;
-    setSelectedCategory(curatedCategoryDefinitions[nextIndex].category);
-  };
+  const selectedCategory = categoryAllData[selectedCategoryKey];
+  const selectedCategoryImageUrl = `${cardImagePath}${selectedCategory.cardImage}`;
+  const selectedCategoryNaraUrl = selectedCategory.naraURL;
 
   return (
     <div
@@ -92,6 +129,8 @@ export const ApplicationCategories: FunctionComponent = () => {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        marginTop: '32px',
+        marginBottom: '32px',
       }}
     >
       <Box sx={{ textAlign: 'center', marginBottom: 2, flexShrink: 0 }}>
@@ -125,61 +164,55 @@ export const ApplicationCategories: FunctionComponent = () => {
               paddingLeft: 0,
             }}
           >
-            {curatedCategoryDefinitions.map((cat: CategoryInfo) => (
-              <ListItem
-                key={cat.category}
-                onClick={() => setSelectedCategory(cat.category)}
-                sx={{
-                  cursor: 'pointer',
-                  paddingY: 1.5,
-                  paddingLeft: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
+            {CATEGORIES.map(categoryKey => {
+              const category = categoryAllData[categoryKey];
+              return (
+                <ListItem
+                  key={categoryKey}
+                  onClick={() => setSelectedCategoryKey(categoryKey)}
+                  sx={{
+                    cursor: 'pointer',
+                    paddingY: 1.5,
+                    paddingLeft: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
 
-                  '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                  },
-                  fontFamily: 'inherit',
-                  fontSize: 'inherit',
-                  fontWeight: 'inherit',
-                  lineHeight: 'inherit',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {/* <UnderlinedHeader
-                  text={
-                    cat.category.charAt(0).toUpperCase() + cat.category.slice(1)
-                  }
-                  underlined={cat.category === selectedCategory}
-                  size="small"
-                /> */}
-                <div
-                  style={{
-                    fontSize: '1.25em',
-                    // fontWeight: `${cat.category === selectedCategory ? 'bold' : 'normal'}`,
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                      color: designUtils.blueColor,
+                    },
+                    fontFamily: 'inherit',
+                    fontSize: 'inherit',
+                    fontWeight: 'inherit',
+                    lineHeight: 'inherit',
                   }}
                 >
-                  {cat.category}
-                </div>
-                <div style={{ marginTop: 4, width: '100%' }}>
-                  <CategoryBar
-                    category={cat.category}
-                    height={16}
-                    isSelectedCategory={cat.category === selectedCategory}
-                  />
-                </div>
-              </ListItem>
-            ))}
-            <ListItem
-              sx={{
-                marginTop: '10%',
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <CurlyBraceButton onClick={handleNextCategory} line1="next" />
-            </ListItem>
+                  <div
+                    style={{
+                      fontSize: '1.25em',
+                    }}
+                  >
+                    {category.displayName}{' '}
+                    <span
+                      style={{
+                        color: designUtils.iconButtonColor,
+                        fontSize: '1em',
+                      }}
+                    >
+                      {categoryKey === 'survived' ? '(soldier)' : ''}
+                    </span>
+                  </div>
+                  <div style={{ marginTop: 4, width: '100%' }}>
+                    <CategoryBar
+                      categoryKey={categoryKey}
+                      height={16}
+                      isSelectedCategory={categoryKey === selectedCategoryKey}
+                    />
+                  </div>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
 
@@ -194,93 +227,83 @@ export const ApplicationCategories: FunctionComponent = () => {
             paddingTop: '20px', // the list has 8px top and each list item has 8px top
           }}
         >
-          {selectedCategoryImageUrl && (
-            <Box
-              sx={{
-                width: '100%',
-                marginBottom: 3,
+          <Box
+            sx={{
+              width: '100%',
+              marginBottom: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <img
+                src={selectedCategoryImageUrl}
+                alt={`${selectedCategory.displayName} application card`}
+                style={{
+                  height: '40vh',
+                  display: 'block',
+                }}
+              />
+              {/* Neon green annotation rectangle in upper right corner */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '5%',
+                  right: '2%',
+                  width: '30%',
+                  height: '20%',
+                  border: `1px solid ${designUtils.blueColor}`,
+                  backgroundColor: 'transparent',
+                }}
+              />
+            </div>
+            {/* Caption */}
+            <div
+              style={{
                 display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                gap: 10,
+                justifyContent: 'center',
+                marginTop: 8,
+                fontSize: '0.8em',
+                textAlign: 'center',
               }}
             >
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <img
-                  src={selectedCategoryImageUrl}
-                  alt={`${selectedCategory} application card`}
-                  style={{
-                    height: '40vh',
-                    display: 'block',
-                  }}
-                />
-                {/* Neon green annotation rectangle in upper right corner */}
+              <Link href={selectedCategoryNaraUrl} target="_blank">
                 <div
                   style={{
-                    position: 'absolute',
-                    top: '5%',
-                    right: '2%',
-                    width: '30%',
-                    height: '20%',
-                    border: '1px solid #39ff14',
-                    backgroundColor: 'transparent',
-                  }}
-                />
-              </div>
-              {/* Caption */}
-              {selectedCategoryNaraUrl && (
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 10,
-                    justifyContent: 'center',
-                    marginTop: 8,
-                    fontSize: '0.8em',
-                    textAlign: 'center',
+                    textDecoration: 'underline',
+                    color: designUtils.textColor,
                   }}
                 >
-                  <Link href={selectedCategoryNaraUrl} target="_blank">
-                    <div
-                      style={{
-                        textDecoration: 'underline',
-                        color: designUtils.textColor,
-                      }}
-                    >
-                      source
-                    </div>
-                  </Link>
+                  source
                 </div>
-              )}
-            </Box>
-          )}
+              </Link>
+            </div>
+          </Box>
 
-          {selectedCategoryInfo && (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+            }}
+          >
+            {/* <UnderlinedHeader text={selectedCategory.category} size="small" />
+             */}
+            <CategoryTitleWithLetterImage categoryKey={selectedCategoryKey} />
+            <p style={{ fontSize: '0.9em' }}>{selectedCategory.definition}</p>
+
+            <p
+              style={{
+                marginBottom: '8px',
+                fontStyle: 'italic',
+                fontSize: '0.9em',
               }}
             >
-              <UnderlinedHeader
-                text={selectedCategoryInfo.category}
-                size="small"
-              />
-
-              <p style={{ fontSize: '0.9em' }}>
-                {selectedCategoryInfo.definition}
-              </p>
-
-              <p
-                style={{
-                  marginBottom: '8px',
-                  fontStyle: 'italic',
-                  fontSize: '0.9em',
-                }}
-              >
-                {FormatProofQuote(selectedCategoryInfo.proof_quote)}
-              </p>
-            </Box>
-          )}
+              {FormatProofQuote(selectedCategory.proof_quote)}
+            </p>
+          </Box>
         </Box>
       </Box>
     </div>

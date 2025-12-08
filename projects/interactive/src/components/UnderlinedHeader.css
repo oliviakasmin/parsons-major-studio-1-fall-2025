@@ -51,3 +51,21 @@
 .underlined-header.no-underline::after {
   display: none;
 }
+
+/* Blue underline for hover-underline class - light theme */
+.underlined-header.hover-underline.underlined::before {
+  background-color: #2453ff;
+}
+
+.underlined-header.hover-underline.underlined::after {
+  background-color: #2453ff;
+}
+
+/* Lighter blue underline for hover-underline class - dark theme */
+.underlined-header.hover-underline.dark-theme.underlined::before {
+  background-color: #7a9fff;
+}
+
+.underlined-header.hover-underline.dark-theme.underlined::after {
+  background-color: #7a9fff;
+}

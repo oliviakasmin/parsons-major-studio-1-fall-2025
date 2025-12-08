@@ -2,3 +2,26 @@
   color: #faf9f7;
   background: #2c1810;
 }
+
+.frequency-word {
+  cursor: pointer;
+  background: #faf9f7;
+  color: #2c1810;
+  font-weight: 600;
+  padding: 4px 8px;
+  margin-right: 12px;
+}
+
+.frequency-word:hover {
+  color: #2453ff;
+  text-decoration: underline;
+}
+
+.frequency-word-count {
+  font-size: 12px;
+  display: none;
+}
+
+.frequency-word:hover + .frequency-word-count {
+  display: inline;
+}
