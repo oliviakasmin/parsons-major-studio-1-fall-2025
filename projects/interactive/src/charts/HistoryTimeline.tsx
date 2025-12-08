@@ -21,7 +21,7 @@ interface TimelineData {
   highlight: boolean;
 }
 
-export const HistoryTimeline2: FunctionComponent = () => {
+export const HistoryTimeline: FunctionComponent = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
@@ -173,8 +173,14 @@ export const HistoryTimeline2: FunctionComponent = () => {
       .attr('class', 'regular-dot')
       .attr('cx', d => xScale(d.parsedDate))
       .attr('cy', innerHeight)
-      .attr('r', 6)
-      .attr('fill', d => (hoveredItem === d ? designUtils.blueColor : '#666'))
+      .attr('r', 8)
+      .attr('fill', d =>
+        hoveredItem === d ? designUtils.blueColor : designUtils.backgroundColor
+      )
+      .attr('stroke', d =>
+        hoveredItem === d ? designUtils.blueColor : designUtils.iconButtonColor
+      )
+      .attr('stroke-width', 2)
       .style('cursor', 'pointer')
       .on('mouseenter', (_event, d) => handleHover(d))
       .on('mouseleave', handleHoverLeave)

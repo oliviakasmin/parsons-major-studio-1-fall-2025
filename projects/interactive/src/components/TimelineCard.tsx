@@ -44,7 +44,6 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
       }}
       disableRestoreFocus
       sx={{
-        pointerEvents: 'none',
         '& .MuiPopover-paper': {
           pointerEvents: 'auto',
           maxWidth: 500,
@@ -52,11 +51,6 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
           overflow: 'auto',
           mt: 1,
           backgroundColor: designUtils.backgroundColor,
-        },
-      }}
-      slotProps={{
-        paper: {
-          onMouseLeave: onClose,
         },
       }}
     >
@@ -91,15 +85,6 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
             </p>
           </div>
         )}
-
-        <div style={{ marginBottom: '16px' }}>
-          <strong style={{ display: 'block', marginBottom: '4px' }}>
-            Relevant Categories:
-          </strong>
-          <p style={{ margin: 0 }}>
-            {timelineData.relevant_categories.split('||').join(' • ')}
-          </p>
-        </div>
       </Box>
     </Popover>
   );
