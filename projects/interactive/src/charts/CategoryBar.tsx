@@ -11,11 +11,6 @@ interface CategoryBarProps {
   isSelectedCategory: boolean;
 }
 
-interface ImportedCategoryData {
-  count: number;
-  avg_page_count: number;
-}
-
 interface CategoryChartData {
   categoryKey: CategoryKeyType;
   count: number;

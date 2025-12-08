@@ -124,7 +124,8 @@ export const ApplicationCategories: FunctionComponent = () => {
   return (
     <div
       style={{
-        padding: '40px',
+        // padding: '40px',
+        padding: '8rem',
         height: '100vh',
         display: 'flex',
         flexDirection: 'column',
