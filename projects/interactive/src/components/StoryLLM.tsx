@@ -4,6 +4,7 @@ import { Modal, Box, Paper } from '@mui/material';
 import { designUtils } from '../design_utils';
 import { CurlyBraceButton } from './CurlyBraceButton';
 import * as d3 from 'd3';
+import { ImageWrapper } from './ImageWrapper';
 
 const getStoryLLM = async (
   ocrText: string,
@@ -482,44 +483,21 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
                 height: '80vh',
               }}
             >
-              <img
-                src={pageURL}
-                alt="Pension Application"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                }}
+              <ImageWrapper
+                img={
+                  <img
+                    src={pageURL}
+                    alt="Pension Application"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                    }}
+                  />
+                }
+                sourceUrl={naraURL}
               />
             </Box>
-
-            {/* Caption */}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-              <a href={pageURL} target="_blank" rel="noopener noreferrer">
-                <div
-                  style={{
-                    fontSize: '0.8em',
-                    textAlign: 'center',
-                    color: designUtils.textColor,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  source
-                </div>
-              </a>
-              <a href={naraURL} target="_blank" rel="noopener noreferrer">
-                <div
-                  style={{
-                    fontSize: '0.8em',
-                    textAlign: 'center',
-                    color: designUtils.textColor,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  full NAID file
-                </div>
-              </a>
-            </div>
           </Box>
         </Box>
       </Paper>
