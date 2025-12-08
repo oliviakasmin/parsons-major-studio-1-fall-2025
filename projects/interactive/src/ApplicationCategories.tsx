@@ -124,13 +124,9 @@ export const ApplicationCategories: FunctionComponent = () => {
   return (
     <div
       style={{
-        padding: '40px',
-        height: '100vh',
+        padding: '8rem',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
-        marginTop: '32px',
-        marginBottom: '32px',
       }}
     >
       <Box sx={{ textAlign: 'center', marginBottom: 2, flexShrink: 0 }}>
