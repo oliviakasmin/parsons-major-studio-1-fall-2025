@@ -8,20 +8,20 @@
   {
     "category": "Widow",
     "key": "widow",
-    "definition": "Files for widows of Revolutionary War veterans who applied for pensions based on their husband’s service. Various acts were enacted to provide pensions to widows, often with varying requirements and restrictions.",
-    "proof_quote": "\"The widow was required to prove her marriage to the soldier and that she remained his widow.\" (M804 pamphlet, p. 3) || \"A widow had to prove her marriage to the veteran with affidavits or a family Bible record, and she often had to provide testimony that she had not remarried after his death.\" (NPS)"
+    "definition": "Files for widows of Revolutionary War veterans who applied for pensions based on their husband’s service. Various acts were enacted to provide pensions to widows, often with varying requirements and restrictions. The widow's application may be interfiled with the veteran's original application, or may include mention of a second husband if she remarried.",
+    "proof_quote": "\"Incorporated in or attached to some widows' applications is a copy of a marriage record made by a town clerk, a clergyman, or a justice of the peace. Sometimes family-record pages from Bibles and other books were also submitted by a widow as proof of marriage.\" (M804 pamphlet, p. 7)"
   },
   {
     "category": "Rejected",
     "key": "rejected",
-    "definition": "Files of applications denied under pension laws, including those deemed ineligible under service requirements or property tests. Some application files may contain multiple applications for the same veteran, including earlier appeals that were granted. Denials often stemmed from insufficient service, failure to meet marriage-date rules for widows, or results of the 1820 means test.",
+    "definition": "Files of applications by survivors, widows, or an heir that were rejected under pension laws, including those deemed ineligible under service requirements or property tests. Some application files may contain multiple applications for the same veteran, including earlier appeals that were granted. Denials often stemmed from insufficient service, failure to meet marriage-date rules for widows, or results of the 1820 means test.",
     "proof_quote": "\"By the act of May 1, 1820, Congress required that every pensioner file a schedule of his property … those not in need lost their pensions.\" (M804 pamphlet, p. 3)"
   },
   {
     "category": "Bounty land warrant",
     "key": "blwt",
-    "definition": "Files documenting claims for land warrants granted instead of, or in addition to, pensions as a reward for military service. Land warrant claims were often intertwined with pension records and sometimes appear interfiled within the main pension series.",
-    "proof_quote": "\"A resolution of September 16, 1776, provided that the United States grant bounty land to officers and soldiers who served until the end of the war or for at least 3 years.\" (M804 pamphlet, p. 7)"
+    "definition": "Files documenting claims for bounty land warrants (rights to free land in the public domain) granted instead of, or in addition to, pensions as a reward for military service. Land warrant claims were often intertwined with pension records and sometimes appear interfiled within the main pension series.",
+    "proof_quote": "\"The [1776] resolution specified that each noncommissioned officer and soldier should be entitled to 100 acres, an ensign to 150 acres, each lieutenant to 200 acres, and other officers to proportionate amounts of land up to 500 acres for a colonel. By a resolution of August 12, 1780, the provision was extended to include generals, and the grant was to be 850 acres for a brigadier general and 1,100 acres for a major general..\" (M804 pamphlet, p. 5)"
   },
   {
     "category": "Old War",

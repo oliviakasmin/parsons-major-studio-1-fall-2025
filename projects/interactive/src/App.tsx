@@ -163,7 +163,7 @@ const App: FunctionComponent = () => {
       <div
         style={{ height: '5vh', margin: '0.5rem auto', textAlign: 'center' }}
       >
-        footer info here
+        Olivia Kasmin, Parsons School of Design, 2025
       </div>
     </main>
   );

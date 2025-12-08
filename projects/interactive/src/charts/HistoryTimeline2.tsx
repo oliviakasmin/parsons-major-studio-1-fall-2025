@@ -54,7 +54,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
     setHoveredItem(null);
   }, []);
 
-  const handleHover = useCallback((event: MouseEvent, item: TimelineData) => {
+  const handleHover = useCallback((item: TimelineData) => {
     setHoveredItem(item);
   }, []);
 
@@ -176,7 +176,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
       .attr('r', 6)
       .attr('fill', d => (hoveredItem === d ? designUtils.blueColor : '#666'))
       .style('cursor', 'pointer')
-      .on('mouseenter', (event, d) => handleHover(event as MouseEvent, d))
+      .on('mouseenter', (_event, d) => handleHover(d))
       .on('mouseleave', handleHoverLeave)
       .on('click', (event, d) => handleClick(event as MouseEvent, d));
 
@@ -220,7 +220,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
         .attr('stroke-width', 1)
         .attr('opacity', 0.3)
         .style('cursor', 'pointer')
-        .on('mouseenter', event => handleHover(event as MouseEvent, d))
+        .on('mouseenter', _event => handleHover(d))
         .on('mouseleave', handleHoverLeave)
         .on('click', event => handleClick(event as MouseEvent, d));
     });
@@ -238,7 +238,7 @@ export const HistoryTimeline2: FunctionComponent = () => {
           `translate(${xScale(d.parsedDate)}, ${innerHeight + yOffset - 8})`
         )
         .style('cursor', 'pointer')
-        .on('mouseenter', event => handleHover(event as MouseEvent, d))
+        .on('mouseenter', _event => handleHover(d))
         .on('mouseleave', handleHoverLeave)
         .on('click', event => handleClick(event as MouseEvent, d));
 
