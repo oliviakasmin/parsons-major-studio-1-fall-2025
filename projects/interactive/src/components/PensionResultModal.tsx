@@ -1,11 +1,13 @@
 import { FunctionComponent } from 'react';
-import { Modal, Box, Paper, Link } from '@mui/material';
+import { Modal, Box, Paper } from '@mui/material';
 import { designUtils } from '../design_utils';
 import { UnderlinedHeader } from './UnderlinedHeader';
 import { CurlyBraceButton } from './CurlyBraceButton';
 import { AverageAmountByDate } from './average_amount_by_date';
 import { formatActDate, convertDollarsToToday } from '../utils';
 import { averageAmountByDateChartUtils } from '../design_utils';
+import { ImageWrapper } from './ImageWrapper';
+
 interface PensionResultModalProps {
   open: boolean;
   onClose: () => void;
@@ -51,19 +53,19 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
             display: 'flex',
             gap: 3,
             marginTop: 5,
+            height: '80vh',
+            overflow: 'hidden',
           }}
         >
           {/* Left side */}
           <Box
             sx={{
-              // flex: 1,
               display: 'flex',
               flexDirection: 'column',
               gap: 3,
-              // maxWidth: '40%',
-              // minWidth: `${averageAmountByDateChartUtils.width + averageAmountByDateChartUtils.padding.left + averageAmountByDateChartUtils.padding.right}px`,
               padding: '0 2%',
               width: '50%',
+              overflow: 'auto',
             }}
           >
             <UnderlinedHeader text="Pension Allowance" />
@@ -112,52 +114,35 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
               display: 'flex',
               flexDirection: 'column',
               gap: 1,
+              height: '100%',
+              minHeight: 0,
             }}
           >
             {/* Image */}
             <Box
               sx={{
-                height: '80vh',
+                flex: 1,
+                minHeight: 0,
+                overflow: 'hidden',
               }}
             >
-              <img
-                src={imageUrl}
-                alt="Pension Application"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                }}
+              <ImageWrapper
+                img={
+                  <img
+                    src={imageUrl}
+                    alt="Pension Application"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      maxHeight: '100%',
+                      objectFit: 'contain',
+                      display: 'block',
+                    }}
+                  />
+                }
+                sourceUrl={naraURL}
               />
             </Box>
-
-            {/* Caption */}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-              <Link href={imageUrl} target="_blank">
-                <div
-                  style={{
-                    fontSize: '0.8em',
-                    textAlign: 'center',
-                    color: designUtils.textColor,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  source
-                </div>
-              </Link>
-              <Link href={naraURL} target="_blank">
-                <div
-                  style={{
-                    fontSize: '0.8em',
-                    textAlign: 'center',
-                    color: designUtils.textColor,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  full NAID file
-                </div>
-              </Link>
-            </div>
           </Box>
         </Box>
       </Paper>
