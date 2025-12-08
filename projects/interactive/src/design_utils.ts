@@ -2,11 +2,13 @@ const backgroundColor = '#faf9f7';
 const textColor = '#2c1810';
 const iconButtonColor = '#737271';
 const blueColor = '#2453ff';
+const lightBlueColor = '#7a9fff';
 export const designUtils = {
   backgroundColor,
   textColor,
   iconButtonColor,
   blueColor,
+  lightBlueColor,
 };
 
 const AverageAmountByDateChartPadding = {

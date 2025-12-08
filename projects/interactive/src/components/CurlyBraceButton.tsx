@@ -7,7 +7,7 @@ interface CurlyBraceButtonProps {
   line2?: string;
   onClick: () => void;
   color?: boolean;
-  bold?: boolean;
+  // bold?: boolean;
   darkTheme?: boolean;
   hidden?: boolean;
 }
@@ -17,7 +17,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   line2 = undefined,
   onClick,
   color = true,
-  bold = false,
+  // bold = false,
   darkTheme = false,
   hidden = false,
 }) => {
@@ -25,19 +25,20 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
 
   const braceFontSize = `${lineCount * 1.5}em`;
   const textColor = color ? designUtils.blueColor : designUtils.textColor;
-  const finalTextColor = darkTheme ? designUtils.backgroundColor : textColor;
+  const finalTextColor = darkTheme ? designUtils.lightBlueColor : textColor;
   const braceColor = darkTheme ? designUtils.backgroundColor : 'black';
   const finalBraceColor = hidden
     ? darkTheme
       ? designUtils.textColor
       : designUtils.backgroundColor
     : braceColor;
-  const fontWeight = bold ? 'bold' : 'normal';
+  // const fontWeight = bold ? 'bold' : 'normal';
   return (
     <Button
       onClick={onClick}
       sx={{
         textTransform: 'none',
+        fontWeight: 'bold',
         display: 'flex',
         '&:hover': {
           cursor: 'pointer',
@@ -53,7 +54,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
         style={{
           fontSize: braceFontSize,
           color: finalBraceColor,
-          fontWeight: '100',
+          // fontWeight: '100',
           fontFamily: 'Times New Roman',
           marginTop: `-${lineCount * 2}px`,
         }}
@@ -71,7 +72,9 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
           marginRight: '16px',
           marginTop: `${lineCount * 2}px`,
           lineHeight: '1.2',
-          fontWeight: fontWeight,
+          // fontWeight: fontWeight,
+          fontWeight: 'bold',
+          fontSize: '16px',
         }}
       >
         <span>{line1}</span>
@@ -81,7 +84,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
         style={{
           fontSize: braceFontSize,
           color: finalBraceColor,
-          fontWeight: '100',
+          // fontWeight: '100',
           fontFamily: 'Times New Roman',
           marginTop: `-${lineCount * 2}px`,
         }}

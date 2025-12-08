@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import categoryData from '../../data/viz_data/category_count_dict.json';
+import categoryData from '../../data-newest/category_count_dict.json';
 import { CategoryKeyType } from '../utils';
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
@@ -32,13 +32,14 @@ const JSON_KEY_TO_CATEGORY_KEY: Record<string, CategoryKeyType> = {
 };
 
 // Transform imported data - filter and map to CategoryKeyType
+// New structure: { "category": count } where count is directly the value
 const data: CategoryChartData[] = Object.entries(
-  categoryData as Record<string, ImportedCategoryData>
+  categoryData as Record<string, number>
 )
   .filter(([key]) => key in JSON_KEY_TO_CATEGORY_KEY)
-  .map(([key, values]) => ({
+  .map(([key, count]) => ({
     categoryKey: JSON_KEY_TO_CATEGORY_KEY[key],
-    count: values.count,
+    count: count,
   }));
 
 export const CategoryBar: FunctionComponent<CategoryBarProps> = ({

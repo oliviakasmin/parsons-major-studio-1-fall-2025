@@ -9,7 +9,7 @@ const introText = [
   'The Revolutionary War pension and bounty-land-warrant application files preserve claims made by veterans and their families under a series of federal acts passed between 1776 and 1855.',
   'These files include applications from soldiers, widows and heirs seeking pensions or land, along with supporting evidence such as affidavits, property schedules, and testimony.',
   'Many veterans or widows reapplied under later, more generous laws, so the files often span decades and contain multiple layers of documentation. Together, they form one of the richest archival sources for understanding the lives and service of Revolutionary War participants.',
-  'The archive contains the records for roughly 80 thousand applications.',
+  'The archive contains the records for roughly eighty thousand applications.',
 ];
 
 // map through introText and split by period then set each section to a new paragraph
