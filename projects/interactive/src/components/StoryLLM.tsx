@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { Modal, Box, Paper } from '@mui/material';
 import { designUtils } from '../design_utils';
 import { CurlyBraceButton } from './CurlyBraceButton';
-import * as d3 from 'd3';
 import { ImageWrapper } from './ImageWrapper';
+import { useCSVData } from '../contexts/useCSVData';
+import type { CSVRow } from '../contexts/CSVDataContext';
 
 const getStoryLLM = async (
   ocrText: string,
@@ -94,108 +95,85 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
   theme = '',
   selectedWord = '',
 }) => {
+  const { naidIndex } = useCSVData();
   const [story, setStory] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [loadingText, setLoadingText] = useState(false);
   const [pageCount, setPageCount] = useState<number | null>(null);
-  // Remove unused selectedRows state (there's a local variable with the same name)
-  // Remove unused cachedStory state (localStorage is checked directly instead)
 
   // Check localStorage first, then fetch transcription text if needed
   useEffect(() => {
-    if (open) {
+    if (open && naidIndex) {
       // Check localStorage first - if we have a cached story, skip fetching transcription text
       const storageKey = `story_${NAID}_${theme || 'no-theme'}_${selectedWord || 'no-word'}`;
       const cached = localStorage.getItem(storageKey);
 
       if (cached) {
         try {
-          // Try to parse as JSON (new format with story and pageCount)
           const cachedData = JSON.parse(cached);
           if (cachedData.story) {
-            // New format: { story: string, pageCount: number }
-            // Remove setCachedStory call
             setStory(cachedData.story);
             setPageCount(cachedData.pageCount ?? 1);
             setLoading(false);
-            // Still set ocrText to transcriptionText prop for potential future use
             setOcrText(transcriptionText);
-            return; // Skip fetching transcription text
+            return;
           }
         } catch {
-          // Old format: just a string (backward compatibility)
-          // Remove setCachedStory call
           setStory(cached);
           setPageCount(1);
           setLoading(false);
           setOcrText(transcriptionText);
-          return; // Skip fetching transcription text
+          return;
         }
       }
 
-      // No cached story, so we need to fetch transcription text for when user clicks generate
-      const fetchTranscriptionText = async () => {
-        setLoadingText(true);
-        try {
-          const data = await d3.csv(
-            '/data/widow_ungrouped_with_lemmatizedWords.csv'
-          );
-          // Find all rows that match the NAID
-          const matchingRows = data.filter((row: any) => row.NAID === NAID);
+      // No cached story, so we need to get transcription text
+      const fetchTranscriptionText = () => {
+        // O(1) lookup instead of O(n) filter!
+        const matchingRows = naidIndex.byNAID.get(NAID) || [];
 
-          if (matchingRows && matchingRows.length > 0) {
-            // Store the total page count
-            setPageCount(matchingRows.length);
+        if (matchingRows && matchingRows.length > 0) {
+          setPageCount(matchingRows.length);
 
-            // Use transcriptionText as the base
-            let combinedText = transcriptionText;
+          let combinedText = transcriptionText;
 
-            // Filter out the row that matches the provided transcriptionText (if possible)
-            const otherRows = matchingRows.filter((row: any) => {
-              const rowText = row.transcriptionText || row.ocrText || '';
-              return rowText !== transcriptionText;
-            });
+          // Filter out the row that matches the provided transcriptionText
+          const otherRows = matchingRows.filter((row: CSVRow) => {
+            const rowText = row.transcriptionText || '';
+            return rowText !== transcriptionText;
+          });
 
-            // Randomly select up to 3 additional rows
-            const shuffled = otherRows.sort(() => 0.5 - Math.random());
-            const selectedRows = shuffled.slice(0, 3);
+          // Randomly select up to 3 additional rows
+          const shuffled = otherRows.sort(() => 0.5 - Math.random());
+          const selectedRows = shuffled.slice(0, 3);
 
-            // Combine the prop text with randomly selected rows
-            const additionalTexts = selectedRows
-              .map((row: any) => {
-                return row.transcriptionText || row.ocrText || '';
-              })
-              .filter((text: string) => text && text.length > 0);
+          const additionalTexts = selectedRows
+            .map((row: CSVRow) => row.transcriptionText || '')
+            .filter((text: string) => text && text.length > 0);
 
-            if (additionalTexts.length > 0) {
-              combinedText = [transcriptionText, ...additionalTexts].join(
-                '\n\n---\n\n'
-              );
-            }
-
-            setOcrText(combinedText);
-          } else {
-            // If no matching rows, use just the transcriptionText prop
-            setOcrText(transcriptionText);
-            setPageCount(1);
+          if (additionalTexts.length > 0) {
+            combinedText = [transcriptionText, ...additionalTexts].join(
+              '\n\n---\n\n'
+            );
           }
-        } catch (err) {
-          setError(
-            err instanceof Error ? err.message : 'Failed to load document'
-          );
-          setPageCount(null);
-          // Use transcriptionText as fallback
+
+          setOcrText(combinedText);
+        } else {
           setOcrText(transcriptionText);
           setPageCount(1);
-        } finally {
-          setLoadingText(false);
         }
       };
-      fetchTranscriptionText();
+
+      // Use requestIdleCallback for non-blocking
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(fetchTranscriptionText, { timeout: 100 });
+      } else {
+        setTimeout(fetchTranscriptionText, 0);
+      }
     }
-  }, [open, NAID, pageURL, transcriptionText, theme, selectedWord]);
+  }, [open, NAID, transcriptionText, theme, selectedWord, naidIndex]);
 
   // Reset state when modal closes
   useEffect(() => {
@@ -502,46 +480,5 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
         </Box>
       </Paper>
     </Modal>
-  );
-};
-
-// Keep the original component for backward compatibility
-interface StoryLLMProps {
-  ocrText?: string;
-}
-
-const textTest =
-  "Breif in the case of Elizabeth Perry, Widow of Adonijah , Lenoir County and State of North Carolina act 3d Feb. 1853 Claim, (original,' or 'for inerease.) Proof exhibited, (if original) Is it documentary, traditionary, or supported by rolls? If either, state the substance. [sham] Served in the North Carolina Militia & State troops 9 months & 8 days, as appears from the Certificate of the Comptroller of N.C. The Comptroller certifies herein the sum of 24 £ [pounds] & 46 shilling for his services. Recd. his pay in [ ], he also certified that but one Adonijah Perry, was in service & he [was] from Jones Co.; The claimant files an original letter which her husband wrote to his father John Perry, in 1780, which letter shows he had just been in the battle of Camden, had been defeated that, his term of service was out in some month & a half that he resided in 'Jones Co: Near the Court House,' the letter is dated Camp at Ramsey Mill on Deep river, N.C. August 29, 1780";
-
-export const StoryLLM: React.FC<StoryLLMProps> = ({ ocrText = textTest }) => {
-  const [story, setStory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  if (!ocrText || !ocrText.length) {
-    setError('No OCR text provided');
-    return null;
-  }
-
-  const fetchStory = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await getStoryLLM(ocrText);
-      setStory(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate story');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={fetchStory}>Generate New Story</button>
-      {loading && <div>Loading story...</div>}
-      {error && <div>Error: {error}</div>}
-      {story && <div>{story}</div>}
-    </div>
   );
 };

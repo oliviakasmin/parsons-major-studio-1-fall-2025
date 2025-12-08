@@ -6,7 +6,6 @@ import {
   useMemo,
   useCallback,
 } from 'react';
-import * as d3 from 'd3';
 import { List } from '@mui/material';
 import { StoryLLMModal } from './components/StoryLLM';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
@@ -14,18 +13,10 @@ import './Frequency.css';
 import { FrequencySpread } from './components/FrequencySpread.tsx';
 
 import { FrequencyImageRow } from './components/FrequencyImageRow';
+import { useCSVData } from './contexts/useCSVData';
+import type { IndexedData, CSVRow } from './contexts/CSVDataContext';
 
 // Type definitions
-interface CSVRow {
-  NAID: string;
-  naraURL: string;
-  pageURL: string;
-  transcriptionText: string;
-  file_cat: string;
-  frequency_keys: string;
-  frequency_categories: string;
-}
-
 interface WordFrequencyData {
   count: number;
   words: string[];
@@ -37,12 +28,6 @@ interface ThemeData {
 
 interface FrequencyData {
   [theme: string]: ThemeData;
-}
-
-// Add interface for indexed data
-interface IndexedData {
-  byTheme: Map<string, CSVRow[]>;
-  byThemeAndWord: Map<string, Map<string, CSVRow[]>>;
 }
 
 interface WordWithFiles {
@@ -61,13 +46,6 @@ const getFrequencyData = async () => {
   return response.json();
 };
 
-const getData = async (): Promise<CSVRow[]> => {
-  const data = await d3.csv(
-    '/data/df_with_dict_categorized_multi_reduced_sorted.csv'
-  );
-  return data as unknown as CSVRow[];
-};
-
 const maxImagesToShow = 75;
 const minImagesToShow = 5;
 
@@ -81,44 +59,6 @@ const getImagesCount = (
   return Math.round(
     minImagesToShow + ratio * (maxImagesToShow - minImagesToShow)
   );
-};
-
-// Pre-index data by theme and word for O(1) lookups
-const indexDataByTheme = (data: CSVRow[]): IndexedData => {
-  const byTheme = new Map<string, CSVRow[]>();
-  const byThemeAndWord = new Map<string, Map<string, CSVRow[]>>();
-
-  data.forEach(row => {
-    const categories = (row.frequency_categories || '').split('||');
-    const frequencyKeys = (row.frequency_keys || '')
-      .split('||')
-      .map(k => k.toLowerCase());
-
-    categories.forEach(theme => {
-      if (!theme) return;
-
-      // Index by theme
-      if (!byTheme.has(theme)) {
-        byTheme.set(theme, []);
-      }
-      byTheme.get(theme)!.push(row);
-
-      // Index by theme and word
-      if (!byThemeAndWord.has(theme)) {
-        byThemeAndWord.set(theme, new Map());
-      }
-      const themeWordMap = byThemeAndWord.get(theme)!;
-
-      frequencyKeys.forEach(word => {
-        if (!themeWordMap.has(word)) {
-          themeWordMap.set(word, []);
-        }
-        themeWordMap.get(word)!.push(row);
-      });
-    });
-  });
-
-  return { byTheme, byThemeAndWord };
 };
 
 // Optimized version using pre-indexed data
@@ -187,13 +127,11 @@ const mapWordsToFilesOptimized = (
 };
 
 export const Frequency: FunctionComponent = () => {
-  const [data, setData] = useState<CSVRow[] | null>(null);
+  const { indexedData } = useCSVData();
   const [frequencyData, setFrequencyData] = useState<FrequencyData | null>(
     null
   );
-  const [indexedData, setIndexedData] = useState<IndexedData | null>(null);
   const [wordsWithFiles, setWordsWithFiles] = useState<WordWithFiles[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
@@ -215,8 +153,9 @@ export const Frequency: FunctionComponent = () => {
     files: any[];
     frequency: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Memoize themes to avoid recalculation
+  // Get themes from JSON keys
   const themes = useMemo(() => {
     return frequencyData
       ? Object.keys(frequencyData)
@@ -235,31 +174,12 @@ export const Frequency: FunctionComponent = () => {
     };
   }, [wordsWithFiles]);
 
-  // Load data
+  // Load frequency JSON data
   useEffect(() => {
-    Promise.all([getData(), getFrequencyData()]).then(([csvData, jsonData]) => {
-      setData(csvData as unknown as CSVRow[]);
+    getFrequencyData().then(jsonData => {
       setFrequencyData(jsonData);
     });
   }, []);
-
-  // Index data once when it loads
-  useEffect(() => {
-    if (data) {
-      // Use requestIdleCallback to avoid blocking UI
-      const indexData = () => {
-        const indexed = indexDataByTheme(data);
-        setIndexedData(indexed);
-      };
-
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(indexData, { timeout: 2000 });
-      } else {
-        // Fallback: use setTimeout to avoid blocking
-        setTimeout(indexData, 0);
-      }
-    }
-  }, [data]);
 
   // Update words when theme changes - now much faster with indexed data
   useEffect(() => {
