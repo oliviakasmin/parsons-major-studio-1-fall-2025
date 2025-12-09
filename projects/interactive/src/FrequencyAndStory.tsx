@@ -34,23 +34,30 @@ export const FrequencyAndStory = () => {
             theme={currentTheme}
             selectedWord={selectedImage.selectedWord}
           />
-          {/* <div style={{ position: 'absolute', right: '10vw', bottom: '10vh' }}> */}
-          <CurlyBraceButton
-            darkTheme={true}
-            onClick={() => {
-              setSelectedImage(null);
-
-              const frequencyContainer = document.getElementById(
-                'frequency-container'
-              );
-              if (frequencyContainer) {
-                frequencyContainer.scrollIntoView({ behavior: 'smooth' });
-              }
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              marginTop: '40px',
             }}
-            line1="reset"
-            color={true}
-          />
-          {/* </div> */}
+          >
+            <CurlyBraceButton
+              darkTheme={true}
+              onClick={() => {
+                setSelectedImage(null);
+
+                const frequencyContainer = document.getElementById(
+                  'frequency-container'
+                );
+                if (frequencyContainer) {
+                  frequencyContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              line1="reset"
+              color={false}
+            />
+          </div>
         </div>
       )}
     </div>

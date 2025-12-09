@@ -160,7 +160,6 @@ export const Frequency: FunctionComponent<{
     useState<boolean>(false);
   const [selectedWordData, setSelectedWordData] = useState<{
     word: string;
-    files: any[];
     frequency: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -338,8 +337,8 @@ export const Frequency: FunctionComponent<{
 
       {selectedWordData && frequencySpreadOpen && (
         <FrequencySpread
-          images={selectedWordData.files}
-          category={selectedWordData.word}
+          selectedWord={selectedWordData.word}
+          theme={currentTheme}
           open={true}
           onClose={() => setSelectedWordData(null)}
           setSelectedImage={setSelectedImage}

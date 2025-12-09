@@ -24,8 +24,13 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   const lineCount = 1 + (line2 ? 1 : 0);
 
   const braceFontSize = `${lineCount * 1.5}em`;
-  const textColor = color ? designUtils.blueColor : designUtils.textColor;
-  const finalTextColor = darkTheme ? designUtils.lightBlueColor : textColor;
+  const finalTextColor = color
+    ? darkTheme
+      ? designUtils.lightBlueColor
+      : designUtils.blueColor
+    : darkTheme
+      ? designUtils.backgroundColor
+      : designUtils.textColor;
   const braceColor = darkTheme ? designUtils.backgroundColor : 'black';
   const finalBraceColor = hidden
     ? darkTheme
