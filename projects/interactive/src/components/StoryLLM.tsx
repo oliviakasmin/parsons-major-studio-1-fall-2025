@@ -228,6 +228,17 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
     }
   }, [show, pageURL, transcriptionText]);
 
+  // Clear stories when a new image is selected
+  useEffect(() => {
+    if (selectedImage && show) {
+      setStories([]);
+      setError(null);
+      setLoading(false);
+      setCurrentPrompt(null);
+      setShowPrompt(false);
+    }
+  }, [selectedImage?.pageURL, selectedImage?.NAID, show]);
+
   // Generate prompt when component mounts or when relevant data changes
   useEffect(() => {
     if (
@@ -439,10 +450,10 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
           <span
             key={`highlight-${index}`}
             style={{
-              backgroundColor: designUtils.textColor,
-              color: designUtils.backgroundColor,
+              backgroundColor: designUtils.backgroundColor,
+              color: designUtils.textColor,
               padding: '2px 4px',
-              borderRadius: '2px',
+              borderRadius: '0',
             }}
           >
             {matches[index]}
@@ -565,7 +576,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
   return (
     <div id="story-llm" style={{ marginTop: '42px' }}>
       <div style={{ paddingTop: '40px' }}>
-        <UnderlinedHeader text="Story" darkTheme={true} />
+        <UnderlinedHeader text="A closer read" darkTheme={true} />
       </div>
       <Box
         sx={{
@@ -587,50 +598,6 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
           }}
         >
           <div>
-            {/* Navigation arrows - only shown if multiple files */}
-            {canNavigateImages && (
-              <div>
-                <IconButton
-                  onClick={() => navigateImage('prev')}
-                  sx={{
-                    position: 'absolute',
-                    left: 8,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 10,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    },
-                    borderRadius: '0',
-                  }}
-                  aria-label="Previous image"
-                >
-                  <ArrowBack />
-                </IconButton>
-                <IconButton
-                  onClick={() => navigateImage('next')}
-                  sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 10,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    },
-                    borderRadius: '0',
-                  }}
-                  aria-label="Next image"
-                >
-                  <ArrowForward />
-                </IconButton>
-              </div>
-            )}
-
             {/* Image counter - moved to top left */}
             {canNavigateImages && (
               <Box
@@ -654,8 +621,53 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
             <Box
               sx={{
                 height: '80vh',
+                position: 'relative',
               }}
             >
+              {/* Navigation arrows - only shown if multiple files */}
+              {canNavigateImages && (
+                <>
+                  <IconButton
+                    onClick={() => navigateImage('prev')}
+                    sx={{
+                      position: 'absolute',
+                      left: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                      },
+                      borderRadius: '0',
+                    }}
+                    aria-label="Previous image"
+                  >
+                    <ArrowBack />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => navigateImage('next')}
+                    sx={{
+                      position: 'absolute',
+                      right: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                      },
+                      borderRadius: '0',
+                    }}
+                    aria-label="Next image"
+                  >
+                    <ArrowForward />
+                  </IconButton>
+                </>
+              )}
+
               <ImageWrapper
                 img={
                   <img
@@ -687,23 +699,86 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
         >
           <div
             style={{
-              // fontSize: '0.8em',
               color: designUtils.backgroundColor,
+              fontSize: '1.2em',
             }}
           >
-            <span>{theme}</span> ~ <span>{selectedWord}</span>
+            Why does this application file mention the word{' '}
+            <span
+              style={{ color: designUtils.lightBlueColor, fontStyle: 'italic' }}
+            >
+              {selectedWord}
+            </span>{' '}
+            ?
+            {currentPrompt && (
+              <>
+                {' '}
+                <Box
+                  component="span"
+                  onClick={() => setShowPrompt(!showPrompt)}
+                  sx={{
+                    fontSize: '0.6em',
+                    color: designUtils.backgroundColor,
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  {showPrompt ? 'hide' : 'show'} prompt
+                </Box>
+              </>
+            )}
           </div>
+          {/* Display prompt */}
+          {currentPrompt && showPrompt && (
+            <Box
+              sx={{
+                marginTop: 1,
+                width: '100%',
+                minWidth: 0,
+                overflow: 'hidden',
+                border: `1px solid rgba(250, 249, 247, 0.3)`,
+                borderRadius: '0',
+                padding: '12px',
+              }}
+            >
+              <Box
+                sx={{
+                  fontSize: '0.8em',
+                  whiteSpace: 'pre-wrap',
+                  overflow: 'auto',
+                  maxHeight: '400px',
+                  color: designUtils.backgroundColor,
+                  opacity: 0.8,
+                  width: '100%',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {currentPrompt}
+              </Box>
+            </Box>
+          )}
           {/* Display all stories*/}
           {sortedStories.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {sortedStories.map((storyData, idx) => (
+              {sortedStories.map(storyData => (
                 <div key={storyData.fileIndex}>
+                  <hr
+                    style={{
+                      margin: '1.5rem 0',
+                      border: 'none',
+                      borderTop: `1px solid ${designUtils.backgroundColor}`,
+                      opacity: 0.2,
+                    }}
+                  />
                   {/* Page count for each story if multiple files available */}
                   {canNavigateImages && (
                     <Box
                       sx={{
                         fontSize: '0.875rem',
-                        color: designUtils.textColor,
+                        color: designUtils.backgroundColor,
                         opacity: 0.7,
                         marginBottom: '0.5rem',
                       }}
@@ -715,7 +790,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
                     <h3
                       style={{
                         fontSize: '0.9em',
-                        color: designUtils.textColor,
+                        color: designUtils.backgroundColor,
                         opacity: 0.8,
                         marginBottom: '0.5rem',
                       }}
@@ -723,28 +798,33 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
                   )}
                   <div
                     style={{
-                      color: designUtils.textColor,
+                      color: designUtils.backgroundColor,
                       lineHeight: '1.6',
                       whiteSpace: 'pre-wrap',
                     }}
                   >
                     {highlightWord(storyData.story, selectedWord)}
                   </div>
-                  {idx < sortedStories.length - 1 && (
-                    <hr
-                      style={{
-                        margin: '1.5rem 0',
-                        border: 'none',
-                        borderTop: `1px solid ${designUtils.textColor}`,
-                        opacity: 0.2,
-                      }}
-                    />
-                  )}
                 </div>
               ))}
             </div>
           )}
-          {loading && <div>Generating story...</div>}
+          {sortedStories.length > 0 && (
+            <p
+              style={{
+                fontSize: '0.7em',
+                color: designUtils.backgroundColor,
+                opacity: 0.7,
+                marginTop: '-10px',
+                marginBottom: '10px',
+                fontStyle: 'italic',
+              }}
+            >
+              Stories generated by Gemini 2.5 Flash based on the selected
+              document pages.
+            </p>
+          )}
+          {loading && <div>generating story...</div>}
           {error && (
             <div>
               Unfortunately there was an error generating the story. Please try
@@ -759,7 +839,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
                 // Initially: show "Generate Story" button
                 <CurlyBraceButton
                   darkTheme={true}
-                  line1="Generate a story about this page"
+                  line1="generate a story about this page"
                   onClick={() =>
                     fetchStory(currentFileIndex, currentTranscriptionText)
                   }
@@ -768,71 +848,11 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
                 // After story generated: show "Examine another file" if more files exist to analyze
                 <CurlyBraceButton
                   darkTheme={true}
-                  line1="Generate a story about another file in the application"
+                  line1="examine another file in the application"
                   onClick={examineNextFile}
                 />
               ) : null}
             </>
-          )}
-          {sortedStories.length > 0 && (
-            <p
-              style={{
-                fontSize: '0.7em',
-                color: designUtils.textColor,
-                opacity: 0.7,
-                marginTop: '-10px',
-                marginBottom: '10px',
-                fontStyle: 'italic',
-              }}
-            >
-              Stories generated by Gemini 2.5 Flash based on the selected
-              document pages.
-            </p>
-          )}
-          {/* Display prompt */}
-          {currentPrompt && (
-            <Box
-              sx={{
-                marginTop: 1,
-                width: '100%',
-                minWidth: 0,
-                overflow: 'hidden',
-              }}
-            >
-              <button
-                onClick={() => setShowPrompt(!showPrompt)}
-                style={{
-                  fontSize: '0.8em',
-                  color: designUtils.backgroundColor,
-                  // opacity: 0.7,
-                  border: 'none',
-                  cursor: 'pointer',
-                  textDecoration: 'underline',
-                  padding: 0,
-                  marginBottom: '0.5rem',
-                  background: 'none',
-                  borderRadius: '0',
-                }}
-              >
-                {showPrompt ? 'hide' : 'show'} prompt
-              </button>
-              {showPrompt && (
-                <Box
-                  sx={{
-                    fontSize: '0.8em',
-                    whiteSpace: 'pre-wrap',
-                    overflow: 'auto',
-                    maxHeight: '400px',
-                    color: designUtils.backgroundColor,
-                    opacity: 0.8,
-                    width: '100%',
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {currentPrompt}
-                </Box>
-              )}
-            </Box>
           )}
         </Box>
       </Box>
