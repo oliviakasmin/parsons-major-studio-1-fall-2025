@@ -1,20 +1,14 @@
 import { FunctionComponent, useState, useMemo } from 'react';
 import { Modal, Box } from '@mui/material';
 import { UnderlinedHeader } from './UnderlinedHeader';
-// import { designUtils } from '../design_utils';
 import { CurlyBraceButton } from './CurlyBraceButton';
-import { StoryLLMModal } from './StoryLLM';
-// display all images from the prop spread out across the vh and vw like a "lightbox" effect (some scattered, appear to be randomly dropped)
-// display the images as the same size with the same hover effect as in Frequency.tsx
 
 type FrequencySpreadProps = {
   images: any[];
   category: string;
   open: boolean;
   onClose: () => void;
-  currentTheme: string;
   setSelectedImage: (any: any) => void;
-  selectedImage: any;
   frequency: number;
 };
 
@@ -23,9 +17,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
   category,
   open,
   onClose,
-  currentTheme,
   setSelectedImage,
-  selectedImage,
   frequency,
 }) => {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
@@ -37,7 +29,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
       left: Math.random() * 80 + 10, // 10% to 90% of viewport width
       zIndex: index,
     }));
-  }, [images.length]);
+  }, [images]);
 
   const imageSize = 100; // Same size as in Frequency.tsx
 
@@ -129,17 +121,6 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
           })}
         </Box>
       </Modal>
-      {selectedImage && selectedImage.transcriptionText && (
-        <StoryLLMModal
-          open={!!selectedImage}
-          onClose={() => setSelectedImage(null)}
-          NAID={selectedImage.NAID}
-          pageURL={selectedImage.pageURL}
-          transcriptionText={selectedImage.transcriptionText}
-          theme={currentTheme}
-          selectedWord={selectedImage.selectedWord}
-        />
-      )}
     </div>
   );
 };

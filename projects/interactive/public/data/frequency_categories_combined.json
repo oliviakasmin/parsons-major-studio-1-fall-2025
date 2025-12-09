@@ -1,0 +1,198 @@
+{
+  "animals": {
+    "cow": {
+      "count": 3396,
+      "words": [
+        "cow",
+        "cows"
+      ]
+    },
+    "lamb": {
+      "count": 1891,
+      "words": [
+        "lamb",
+        "lambs"
+      ]
+    },
+    "hogs": {
+      "count": 1434,
+      "words": [
+        "hogs",
+        "hog"
+      ]
+    },
+    "pigs": {
+      "count": 811,
+      "words": [
+        "pigs",
+        "pig"
+      ]
+    },
+    "heifer": {
+      "count": 558,
+      "words": [
+        "heifer",
+        "heifers"
+      ]
+    },
+    "bull": {
+      "count": 1609,
+      "words": [
+        "bull"
+      ]
+    },
+    "cattle": {
+      "count": 1488,
+      "words": [
+        "cattle"
+      ]
+    },
+    "sheep": {
+      "count": 1468,
+      "words": [
+        "sheep"
+      ]
+    },
+    "mare": {
+      "count": 813,
+      "words": [
+        "mare"
+      ]
+    },
+    "colt": {
+      "count": 736,
+      "words": [
+        "colt"
+      ]
+    }
+  },
+  "hopelessness": {
+    "afflicted": {
+      "count": 1190,
+      "words": [
+        "afflicted",
+        "affliction"
+      ]
+    },
+    "suffering": {
+      "count": 941,
+      "words": [
+        "suffering",
+        "suffer"
+      ]
+    },
+    "pain": {
+      "count": 706,
+      "words": [
+        "pain",
+        "painful"
+      ]
+    },
+    "hardships": {
+      "count": 718,
+      "words": [
+        "hardships",
+        "hardship"
+      ]
+    },
+    "distress": {
+      "count": 404,
+      "words": [
+        "distress",
+        "distressed"
+      ]
+    },
+    "needy": {
+      "count": 995,
+      "words": [
+        "needy"
+      ]
+    },
+    "poverty": {
+      "count": 906,
+      "words": [
+        "poverty"
+      ]
+    },
+    "destitute": {
+      "count": 1158,
+      "words": [
+        "destitute"
+      ]
+    },
+    "helpless": {
+      "count": 681,
+      "words": [
+        "helpless"
+      ]
+    },
+    "despondent": {
+      "count": 200,
+      "words": [
+        "despondent"
+      ]
+    }
+  },
+  "religion": {
+    "clergyman": {
+      "count": 27455,
+      "words": [
+        "clergyman"
+      ]
+    },
+    "lord": {
+      "count": 22184,
+      "words": [
+        "lord"
+      ]
+    },
+    "church": {
+      "count": 11856,
+      "words": [
+        "church"
+      ]
+    },
+    "bible": {
+      "count": 9277,
+      "words": [
+        "bible"
+      ]
+    },
+    "christian": {
+      "count": 4985,
+      "words": [
+        "christian"
+      ]
+    },
+    "minister": {
+      "count": 3815,
+      "words": [
+        "minister"
+      ]
+    },
+    "god": {
+      "count": 3350,
+      "words": [
+        "god"
+      ]
+    },
+    "bishop": {
+      "count": 2678,
+      "words": [
+        "bishop"
+      ]
+    },
+    "pastor": {
+      "count": 2673,
+      "words": [
+        "pastor"
+      ]
+    },
+    "pope": {
+      "count": 1937,
+      "words": [
+        "pope"
+      ]
+    }
+  }
+}

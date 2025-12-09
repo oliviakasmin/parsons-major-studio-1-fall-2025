@@ -1,72 +1,153 @@
-import { FunctionComponent, useState, useEffect, useRef } from 'react';
-import * as d3 from 'd3';
-import { List, ListItem } from '@mui/material';
-import { StoryLLMModal } from './components/StoryLLM';
+import {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
+import { List } from '@mui/material';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
-import { farmAnimalsLivestock } from '../public/data/frequency/counts.ts';
 import { FrequencySpread } from './components/FrequencySpread.tsx';
-// import { designUtils } from './design_utils.ts';
-//   { word: 'horse', frequency: 9964 }, // removing because could be related to war as well
-//
-import { CurlyBraceButton } from './components/CurlyBraceButton';
 
-const maxFarmAnimals = farmAnimalsLivestock[0].frequency;
-const minFarmAnimals =
-  farmAnimalsLivestock[farmAnimalsLivestock.length - 1].frequency;
+import { FrequencyImageRow } from './components/FrequencyImageRow';
+import { useCSVData } from './contexts/useCSVData';
+import type { IndexedData, CSVRow } from './contexts/CSVDataContext';
 
-const maxImagesToShow = 100;
+// Type definitions
+interface WordFrequencyData {
+  count: number;
+  words: string[];
+}
+
+interface ThemeData {
+  [word: string]: WordFrequencyData;
+}
+
+interface FrequencyData {
+  [theme: string]: ThemeData;
+}
+
+interface WordWithFiles {
+  word: string;
+  frequency: number;
+  files: Array<{
+    NAID: string;
+    pageURL: string;
+    transcriptionText: string;
+  }>;
+}
+
+// Load JSON data for word frequencies
+const getFrequencyData = async () => {
+  const response = await fetch('/data/frequency_categories_combined.json');
+  return response.json();
+};
+
+const maxImagesToShow = 75;
 const minImagesToShow = 5;
 
 // Linear interpolation function to map frequency to number of images
-const getImagesCount = (frequency: number): number => {
-  const ratio =
-    (frequency - minFarmAnimals) / (maxFarmAnimals - minFarmAnimals);
+const getImagesCount = (
+  frequency: number,
+  minFrequency: number,
+  maxFrequency: number
+): number => {
+  const ratio = (frequency - minFrequency) / (maxFrequency - minFrequency);
   return Math.round(
     minImagesToShow + ratio * (maxImagesToShow - minImagesToShow)
   );
 };
 
-const getData = async () => {
-  const data = await d3.csv('/data/filtered_animals_minimal_cols_50pct.csv');
-  return data;
-};
+// Optimized version using pre-indexed data
+const mapWordsToFilesOptimized = (
+  indexedData: IndexedData,
+  frequencyData: FrequencyData,
+  theme: string
+): WordWithFiles[] => {
+  const themeData = frequencyData[theme];
+  if (!themeData) return [];
 
-// const getFarmAnimalsRows = (data: any[]) => {
-//   return data.filter((row: any) => {
-//     const foundAnimal = farmAnimalsLivestock.find((animal: any) =>
-//       row.lemmatizedWords.includes(animal.word)
-//     );
+  const themeWordMap = indexedData.byThemeAndWord.get(theme);
+  if (!themeWordMap) return [];
 
-//     return foundAnimal !== undefined;
-//   });
-// };
+  // Get all words for this theme, sorted by count (descending)
+  const words = Object.entries(themeData)
+    .map(([word, data]: [string, WordFrequencyData]) => ({
+      word,
+      count: data.count,
+      words: data.words || [word],
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
 
-// Map farmAnimalsLivestock to include matching files
-const mapAnimalsToFiles = (data: any[]) => {
-  return farmAnimalsLivestock.map(animal => {
-    const matchingRows = data.filter((row: any) =>
-      row.lemmatizedWords.includes(animal.word)
+  // Get min and max frequencies for this theme
+  const frequencies = words.map(w => w.count);
+  const maxFrequency = Math.max(...frequencies);
+  const minFrequency = Math.min(...frequencies);
+
+  return words.map(wordData => {
+    // Find matching rows - check each word variant
+    const matchingRows: CSVRow[] = [];
+    const seenNAIDs = new Set<string>();
+
+    wordData.words.forEach(word => {
+      const wordKey = word.toLowerCase();
+      const rows = themeWordMap.get(wordKey);
+      if (rows) {
+        rows.forEach(row => {
+          if (!seenNAIDs.has(row.NAID)) {
+            matchingRows.push(row);
+            seenNAIDs.add(row.NAID);
+          }
+        });
+      }
+    });
+
+    // Since CSV is sorted, just slice to get the appropriate number
+    const imageCount = getImagesCount(
+      wordData.count,
+      minFrequency,
+      maxFrequency
     );
-
-    const files = matchingRows.map((row: any) => ({
+    const files = matchingRows.slice(0, imageCount).map((row: CSVRow) => ({
       NAID: row.NAID,
       pageURL: row.pageURL,
-      transcriptionText: row.transcriptionText || row.ocrText || '',
+      transcriptionText: row.transcriptionText || '',
     }));
 
     return {
-      ...animal,
+      word: wordData.word,
+      frequency: wordData.count,
       files,
     };
   });
 };
-const currentTheme = 'animals';
-const themes = ['hopelessness', currentTheme, 'religion'];
 
-export const Frequency: FunctionComponent = () => {
-  const [data, setData] = useState<any>(null);
-  const [animalsWithFiles, setAnimalsWithFiles] = useState<any[]>([]);
+export const Frequency: FunctionComponent<{
+  setSelectedImage: (
+    image: {
+      NAID: string;
+      pageURL: string;
+      selectedWord?: string;
+      transcriptionText?: string;
+    } | null
+  ) => void;
+  selectedImage: {
+    NAID: string;
+    pageURL: string;
+    selectedWord?: string;
+    transcriptionText?: string;
+  } | null;
+  setCurrentTheme: (theme: string) => void;
+  currentTheme: string;
+}> = ({ setSelectedImage, setCurrentTheme, currentTheme }) => {
+  const { indexedData } = useCSVData();
+  const [frequencyData, setFrequencyData] = useState<FrequencyData | null>(
+    null
+  );
+  const [wordsWithFiles, setWordsWithFiles] = useState<WordWithFiles[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
@@ -74,12 +155,7 @@ export const Frequency: FunctionComponent = () => {
     null
   );
   const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<{
-    NAID: string;
-    pageURL: string;
-    selectedWord?: string;
-    transcriptionText?: string;
-  } | null>(null);
+
   const [frequencySpreadOpen, setFrequencySpreadOpen] =
     useState<boolean>(false);
   const [selectedWordData, setSelectedWordData] = useState<{
@@ -87,19 +163,57 @@ export const Frequency: FunctionComponent = () => {
     files: any[];
     frequency: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Get themes from JSON keys
+  const themes = useMemo(() => {
+    return frequencyData
+      ? Object.keys(frequencyData)
+      : ['animals', 'hopelessness', 'religion'];
+  }, [frequencyData]);
+
+  // Memoize min/max frequencies
+  const { minFrequency, maxFrequency } = useMemo(() => {
+    if (wordsWithFiles.length === 0) {
+      return { minFrequency: 0, maxFrequency: 0 };
+    }
+    const frequencies = wordsWithFiles.map(w => w.frequency);
+    return {
+      minFrequency: Math.min(...frequencies),
+      maxFrequency: Math.max(...frequencies),
+    };
+  }, [wordsWithFiles]);
+
+  // Load frequency JSON data
   useEffect(() => {
-    getData().then(data => {
-      setData(data);
+    getFrequencyData().then(jsonData => {
+      setFrequencyData(jsonData);
     });
   }, []);
 
+  // Update words when theme changes - now much faster with indexed data
   useEffect(() => {
-    if (data) {
-      const mapped = mapAnimalsToFiles(data);
-      setAnimalsWithFiles(mapped);
+    if (indexedData && frequencyData && currentTheme) {
+      setIsLoading(true);
+
+      // Use requestIdleCallback or setTimeout to keep UI responsive
+      const updateData = () => {
+        const mapped = mapWordsToFilesOptimized(
+          indexedData,
+          frequencyData,
+          currentTheme
+        );
+        setWordsWithFiles(mapped);
+        setIsLoading(false);
+      };
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(updateData, { timeout: 100 });
+      } else {
+        setTimeout(updateData, 0);
+      }
     }
-  }, [data]);
+  }, [indexedData, frequencyData, currentTheme]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -150,12 +264,16 @@ export const Frequency: FunctionComponent = () => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, []);
 
+  const handleThemeClick = useCallback((theme: string) => {
+    setCurrentTheme(theme);
+  }, []);
+
   return (
     <>
       <div
-        className="frequency-container"
         style={{ padding: '40px', minHeight: '100vh' }}
         ref={containerRef}
+        id="frequency-container"
       >
         {/* Header row with themes */}
         <div
@@ -167,11 +285,12 @@ export const Frequency: FunctionComponent = () => {
           }}
         >
           <UnderlinedHeader text="Top 10" darkTheme={true} underlined={false} />
-          {themes.map((theme, index) => (
+          {themes.map(theme => (
             <div
-              key={index}
+              key={theme}
               onMouseEnter={() => setHoveredTheme(theme)}
               onMouseLeave={() => setHoveredTheme(null)}
+              onClick={() => handleThemeClick(theme)}
               style={{ cursor: 'pointer' }}
             >
               <UnderlinedHeader
@@ -186,181 +305,44 @@ export const Frequency: FunctionComponent = () => {
           ))}
         </div>
 
+        {isLoading && (
+          <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>
+        )}
+
         <List
           sx={{
             padding: 0,
             width: '100%',
           }}
         >
-          {animalsWithFiles.map((animal, index) => {
-            const imageCount = getImagesCount(animal.frequency);
-            const imagesToShow = animal.files.slice(0, imageCount);
-
-            // Calculate image size and overlap based on container width
-            // Reserve space for label (word text + margin) - estimate max 120px for longest word + 20px margin
-            const labelReservedSpace = 140;
-            const availableWidth =
-              containerWidth > 0
-                ? Math.max(containerWidth - labelReservedSpace, 300) // Ensure minimum space for images
-                : 500 - labelReservedSpace;
-
-            // Calculate overlap amount (each image overlaps by 60% of its width)
-            const overlapRatio = 0.8;
-            // Formula: firstImageWidth + (imageCount - 1) * firstImageWidth * (1 - overlapRatio) = availableWidth
-            // Solving for firstImageWidth: availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-            const imageWidth =
-              imageCount > 0
-                ? Math.min(
-                    50,
-                    availableWidth / (1 + (imageCount - 1) * (1 - overlapRatio))
-                  )
-                : 40;
-            const overlapAmount = imageWidth * overlapRatio;
-
-            const handleListItemClick = () => {
-              setFrequencySpreadOpen(true);
-              setSelectedWordData({
-                word: animal.word,
-                files: animal.files.slice(0, 50),
-                frequency: animal.frequency,
-              });
-            };
-
-            // Check if any image in this row is hovered
-            const isRowHovered = hoveredImage?.startsWith(`${index}-`) ?? false;
-
-            return (
-              <ListItem
-                key={index}
-                onMouseEnter={() => setHoveredButtonIndex(index)}
-                onMouseLeave={() => setHoveredButtonIndex(null)}
-                onClick={handleListItemClick}
-                sx={{
-                  marginBottom: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  overflow: 'visible',
-                  padding: 0,
-                  position: 'relative',
-                  zIndex: isRowHovered ? 1000 : 0, // Higher z-index when row has hovered image
-                  cursor: 'pointer',
-                }}
-              >
-                <div
-                  style={{
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    overflow: 'visible',
-                  }}
-                  onClick={e => e.stopPropagation()}
-                >
-                  {imagesToShow.map((file: any, imgIndex: number) => {
-                    const imageKey = `${index}-${imgIndex}`;
-                    const isHovered = hoveredImage === imageKey;
-                    const baseZIndex = imagesToShow.length - imgIndex;
-
-                    return (
-                      <img
-                        // loading="lazy"
-                        key={imgIndex}
-                        src={file.pageURL}
-                        alt={`${animal.word} document ${imgIndex + 1}`}
-                        onMouseEnter={() => setHoveredImage(imageKey)}
-                        onMouseLeave={() => setHoveredImage(null)}
-                        onClick={() => {
-                          setSelectedImage({
-                            NAID: file.NAID,
-                            pageURL: file.pageURL,
-                            selectedWord: animal.word,
-                            transcriptionText: file.transcriptionText,
-                          });
-                        }}
-                        style={{
-                          width: `${imageWidth}px`,
-                          minHeight: `${imageWidth}px`,
-                          height: 'auto',
-                          objectFit: 'cover',
-                          border: '1px solid #ccc',
-                          marginLeft:
-                            imgIndex > 0 ? `-${overlapAmount}px` : '0',
-                          zIndex: isHovered ? 10000 : baseZIndex,
-                          position: 'relative',
-                          flexShrink: 0,
-                          transform: isHovered ? 'scale(3)' : 'scale(1)',
-                          transition: 'transform 0.2s ease-in-out',
-                          cursor: 'pointer',
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-                <div
-                  style={{
-                    marginLeft: '20px',
-                  }}
-                  onMouseEnter={() => setHoveredButtonIndex(index)}
-                  onMouseLeave={() => setHoveredButtonIndex(null)}
-                  onClick={e => {
-                    e.stopPropagation();
-                    handleListItemClick();
-                  }}
-                >
-                  <CurlyBraceButton
-                    darkTheme={true}
-                    hidden={hoveredButtonIndex !== index}
-                    line1={
-                      <div
-                      // style={{ display: 'flex', alignItems: 'baseline' }}
-                      >
-                        <UnderlinedHeader
-                          text={animal.word}
-                          underlined={true}
-                          darkTheme={true}
-                          noTextTransform={true}
-                          size="small"
-                          hoverUnderline={hoveredButtonIndex === index}
-                        />
-                        {/* <span
-                          style={{
-                            fontSize: '12px',
-                            display: `${hoveredButtonIndex === index ? 'inline' : 'none'}`,
-                            marginLeft: '24px',
-                          }}
-                        >
-                          ({animal.frequency})
-                        </span> */}
-                      </div>
-                    }
-                    onClick={handleListItemClick}
-                  />
-                </div>
-              </ListItem>
-            );
-          })}
+          {wordsWithFiles.map((wordData, index) => (
+            <FrequencyImageRow
+              key={wordData.word}
+              wordData={wordData}
+              index={index}
+              containerWidth={containerWidth}
+              minFrequency={minFrequency}
+              maxFrequency={maxFrequency}
+              hoveredImage={hoveredImage}
+              hoveredButtonIndex={hoveredButtonIndex}
+              setHoveredImage={setHoveredImage}
+              setHoveredButtonIndex={setHoveredButtonIndex}
+              setFrequencySpreadOpen={setFrequencySpreadOpen}
+              setSelectedWordData={setSelectedWordData}
+              setSelectedImage={setSelectedImage}
+              getImagesCount={getImagesCount}
+            />
+          ))}
         </List>
       </div>
-      {selectedImage && selectedImage.transcriptionText && (
-        <StoryLLMModal
-          open={!!selectedImage}
-          onClose={() => setSelectedImage(null)}
-          NAID={selectedImage.NAID}
-          pageURL={selectedImage.pageURL}
-          transcriptionText={selectedImage.transcriptionText}
-          theme={currentTheme}
-          selectedWord={selectedImage.selectedWord}
-        />
-      )}
+
       {selectedWordData && frequencySpreadOpen && (
         <FrequencySpread
           images={selectedWordData.files}
           category={selectedWordData.word}
           open={true}
           onClose={() => setSelectedWordData(null)}
-          currentTheme={currentTheme}
           setSelectedImage={setSelectedImage}
-          selectedImage={selectedImage}
           frequency={selectedWordData.frequency}
         />
       )}

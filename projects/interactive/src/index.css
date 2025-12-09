@@ -475,6 +475,12 @@ body {
   margin: 0 auto;
 }
 
+.section-underline-bottom-dark {
+  border-bottom: 2px dotted #faf9f7;
+  width: 80vw;
+  margin: 0 auto;
+}
+
 .section-underline-top {
   border-top: 2px dotted black;
   width: 80vw;

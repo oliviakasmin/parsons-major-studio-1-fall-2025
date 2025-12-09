@@ -5,3 +5,4 @@ export { UnderlinedHeader } from './UnderlinedHeader';
 export { PensionAmountForm } from './PensionAmountForm';
 export { CurlyBraceButton } from './CurlyBraceButton';
 export { StyledSelect } from './StyledSelect';
+export { ImageWrapper } from './ImageWrapper';

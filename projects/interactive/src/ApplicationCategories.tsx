@@ -1,12 +1,12 @@
 import { FunctionComponent, useState } from 'react';
-import { Box, List, ListItem, Link } from '@mui/material';
+import { Box, List, ListItem } from '@mui/material';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import curatedCategoryDefinitions from '../historical_research/curated_category_definitions.json';
 import { designUtils } from './design_utils';
-// import { CurlyBraceButton } from './components/CurlyBraceButton';
 import { FormatProofQuote } from './components/FormatProofQuote';
 import { CategoryBar } from './charts/CategoryBar';
 import { CategoryKeyType } from './utils';
+import { ImageWrapper } from './components/ImageWrapper';
 
 const cardImagePath = 'images/category_card_images/';
 const letterImagePath = 'images/category_letter_images/';
@@ -232,49 +232,51 @@ export const ApplicationCategories: FunctionComponent = () => {
               alignItems: 'center',
             }}
           >
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <img
-                src={selectedCategoryImageUrl}
-                alt={`${selectedCategory.displayName} application card`}
-                style={{
-                  height: '40vh',
-                  display: 'block',
-                }}
-              />
-              {/* Neon green annotation rectangle in upper right corner */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '5%',
-                  right: '2%',
-                  width: '30%',
-                  height: '20%',
-                  border: `1px solid ${designUtils.blueColor}`,
-                  backgroundColor: 'transparent',
-                }}
-              />
-            </div>
-            {/* Caption */}
             <div
               style={{
-                display: 'flex',
-                gap: 10,
-                justifyContent: 'center',
-                marginTop: 8,
-                fontSize: '0.8em',
-                textAlign: 'center',
+                position: 'relative',
+                display: 'inline-block',
+                minHeight: '40vh',
+                width: '100%',
               }}
             >
-              <Link href={selectedCategoryNaraUrl} target="_blank">
-                <div
-                  style={{
-                    textDecoration: 'underline',
-                    color: designUtils.textColor,
-                  }}
-                >
-                  source
-                </div>
-              </Link>
+              <ImageWrapper
+                img={
+                  <div
+                    style={{
+                      position: 'relative',
+                      // width: '100%',
+                      height: '100%',
+                    }}
+                  >
+                    <img
+                      src={selectedCategoryImageUrl}
+                      alt={`${selectedCategory.displayName} application card`}
+                      style={{
+                        height: 'auto',
+                        display: 'block',
+                        maxWidth: '100%',
+                        width: 'auto',
+                      }}
+                    />
+                    {/* annotation rectangle in upper right corner */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '5%',
+                        right: '2%',
+                        width: '30%',
+                        height: '20%',
+                        border: `1px solid ${designUtils.blueColor}`,
+                        backgroundColor: 'transparent',
+                        pointerEvents: 'none',
+                        zIndex: 10,
+                      }}
+                    />
+                  </div>
+                }
+                sourceUrl={selectedCategoryNaraUrl}
+              />
             </div>
           </Box>
 

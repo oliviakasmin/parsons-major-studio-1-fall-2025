@@ -192,8 +192,6 @@ export const PensionAmount: FunctionComponent = () => {
         </div>
         <div className="pension-amount-button">
           <CurlyBraceButton
-            // line1="petition to be placed"
-            // line2="on the pension roll"
             line1="submit petition"
             onClick={handleOpen}
             color={true}
