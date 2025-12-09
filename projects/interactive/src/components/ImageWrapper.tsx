@@ -90,9 +90,11 @@ const ImageZoomControls = () => {
 export const ImageWrapper = ({
   img,
   sourceUrl,
+  darkTheme = false,
 }: {
   img: ReactElement;
   sourceUrl: string;
+  darkTheme?: boolean;
 }) => {
   if (!img) {
     return null;
@@ -114,6 +116,7 @@ export const ImageWrapper = ({
         initialScale={1}
         initialPositionX={200}
         initialPositionY={100}
+        wheel={{ disabled: true }}
       >
         {() => (
           <>
@@ -164,7 +167,9 @@ export const ImageWrapper = ({
                   style={{
                     fontSize: '0.8em',
                     textAlign: 'center',
-                    color: designUtils.textColor,
+                    color: darkTheme
+                      ? designUtils.backgroundColor
+                      : designUtils.textColor,
                     textDecoration: 'underline',
                   }}
                 >

@@ -245,7 +245,7 @@ export const ApplicationCategories: FunctionComponent = () => {
                   <div
                     style={{
                       position: 'relative',
-                      width: '100%',
+                      // width: '100%',
                       height: '100%',
                     }}
                   >
@@ -253,8 +253,10 @@ export const ApplicationCategories: FunctionComponent = () => {
                       src={selectedCategoryImageUrl}
                       alt={`${selectedCategory.displayName} application card`}
                       style={{
-                        height: '40vh',
+                        height: 'auto',
                         display: 'block',
+                        maxWidth: '100%',
+                        width: 'auto',
                       }}
                     />
                     {/* annotation rectangle in upper right corner */}

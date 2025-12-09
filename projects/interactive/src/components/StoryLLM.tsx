@@ -7,20 +7,16 @@ import { ImageWrapper } from './ImageWrapper';
 import { useCSVData } from '../contexts/useCSVData';
 import type { CSVRow } from '../contexts/CSVDataContext';
 import { UnderlinedHeader } from './UnderlinedHeader';
+import { CurlyBraceButton } from './CurlyBraceButton';
 
-const getStoryLLM = async (
+// Extract prompt generation into a separate function
+const generatePrompt = (
   ocrText: string,
   includeTheme: boolean = false,
   theme?: string,
   selectedWord?: string,
   previousStories?: Array<{ fileIndex: number; story: string }>
-) => {
-  if (!ocrText.length) {
-    return;
-  }
-  // @ts-expect-error - Vite env types not configured
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-
+): string => {
   // Only include theme section if includeTheme is true (for original file only)
   const themeSection =
     includeTheme &&
@@ -62,16 +58,16 @@ When writing the current story:
   const prompt = `
 You are a careful historian-archivist. Read the OCR text of a Revolutionary War pension-related document and produce:
 
-1) A concise, human-readable story (50-100 words) in modern English that:
+1) A concise, human-readable story (75-125 words) in modern English that:
    - Names the main person(s) and their role (e.g. soldier or widow); if there are multiple people, list them all.
    - States place(s) of service (state/colony), service details (unit/rank if present), and any certificate/issuance or commencement dates.
    - States place(s) of residence (state/colony).
-   - Includes the recurring pension amount and frequency, and notes if multiple pension amounts were awarded.
+   - The recurring pension amount and frequency (if included in the text), and notes if multiple pension amounts were awarded.
    - Mentions the relevant pension act(s) ONLY if explicitly stated (e.g., "Act of June 7, 1832").
    - Does not guess about uncertainties (e.g., "unclear," "illegible").
    - Outlines any family information included.
    - Outlines the evidence provided by each person in application for pension.
-   - Uses at most two very short quoted phrases (≤12 words each), if helpful.
+   - Uses at most two very short DIRECTLY quoted phrases (≤12 words each), if helpful.
    - Includes any information about the health of the person(s) mentioned, their lifestyle, their religion, their current occupation, their possessions, etc.
 ${themeSection}
 ${previousStoriesSection}
@@ -79,12 +75,11 @@ ${previousStoriesSection}
 Rules:
 - Case-insensitive; OCR may contain typos and archaic spellings—do not "fix" names.
 - Do NOT infer anything not explicit in the text.
-- If a widow is present but the recurring pension amount clearly refers to HIS pension (phrases like "his pension," "he was allowed at the rate of…"), treat the allowance as the veteran's; do not claim it as the widow's.
-- CRITICAL: Avoid repeating information already covered in previous stories. Focus on what is NEW or DIFFERENT in this page.
+- CRITICAL: Avoid repeating information already covered in the previous stories from this application (see IMPORTANT CONTEXT section above). Focus on what is NEW or DIFFERENT in this page.
 
 Return your answer in this exact JSON shape (minified, no extra keys):
 {
-  "story": "<120–180 word narrative as a single string>",
+  "story": "<75-125 word narrative as a single string>",
 }
 
 OCR_TEXT:
@@ -92,6 +87,30 @@ OCR_TEXT:
 ${ocrText}
 <<<END>>>
   `.trim();
+
+  return prompt;
+};
+
+const getStoryLLM = async (
+  ocrText: string,
+  includeTheme: boolean = false,
+  theme?: string,
+  selectedWord?: string,
+  previousStories?: Array<{ fileIndex: number; story: string }>
+) => {
+  if (!ocrText.length) {
+    return;
+  }
+  // @ts-expect-error - Vite env types not configured
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+
+  const prompt = generatePrompt(
+    ocrText,
+    includeTheme,
+    theme,
+    selectedWord,
+    previousStories
+  );
 
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
@@ -138,6 +157,8 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
   >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPrompt, setCurrentPrompt] = useState<string | null>(null);
+  const [showPrompt, setShowPrompt] = useState(false);
   const [, setPageCount] = useState<number | null>(null);
   const [allFiles, setAllFiles] = useState<CSVRow[]>([]);
   const [currentFileIndex, setCurrentFileIndex] = useState<number>(0);
@@ -203,8 +224,45 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
       setInitialFileIndex(0);
       setCurrentPageURL(pageURL);
       setCurrentTranscriptionText(transcriptionText);
+      setCurrentPrompt(null);
     }
   }, [show, pageURL, transcriptionText]);
+
+  // Generate prompt when component mounts or when relevant data changes
+  useEffect(() => {
+    if (
+      !show ||
+      !currentTranscriptionText ||
+      !currentTranscriptionText.length
+    ) {
+      return;
+    }
+
+    // For the current file (index 0 is always the original file after reordering)
+    const isOriginalFile = currentFileIndex === 0;
+
+    // Get previous stories (excluding the current file)
+    const previousStories = stories
+      .filter(s => s.fileIndex !== currentFileIndex)
+      .map(s => ({ fileIndex: s.fileIndex, story: s.story }));
+
+    // Generate and store the prompt
+    const prompt = generatePrompt(
+      currentTranscriptionText,
+      isOriginalFile,
+      isOriginalFile ? theme : undefined,
+      isOriginalFile ? selectedWord : undefined,
+      previousStories.length > 0 ? previousStories : undefined
+    );
+    setCurrentPrompt(prompt);
+  }, [
+    show,
+    currentTranscriptionText,
+    currentFileIndex,
+    theme,
+    selectedWord,
+    stories,
+  ]);
 
   const fetchStory = async (fileIndex: number, textToUse: string) => {
     if (!textToUse || !textToUse.length) {
@@ -268,6 +326,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
     // Include previous stories context for subsequent files
     setLoading(true);
     setError(null);
+
     try {
       const result = await getStoryLLM(
         textToUse,
@@ -504,7 +563,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
   }, [show]);
 
   return (
-    <div id="story-llm" style={{ marginTop: '40px' }}>
+    <div id="story-llm" style={{ marginTop: '42px' }}>
       <div style={{ paddingTop: '40px' }}>
         <UnderlinedHeader text="Story" darkTheme={true} />
       </div>
@@ -523,9 +582,11 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
             flexDirection: 'column',
             gap: 1,
             position: 'relative',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
           }}
         >
-          <div style={{ marginTop: '0' }}>
+          <div>
             {/* Navigation arrows - only shown if multiple files */}
             {canNavigateImages && (
               <div>
@@ -608,6 +669,7 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
                   />
                 }
                 sourceUrl={naraURL}
+                darkTheme={true}
               />
             </Box>
           </div>
@@ -623,6 +685,14 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
             padding: '0 2%',
           }}
         >
+          <div
+            style={{
+              // fontSize: '0.8em',
+              color: designUtils.backgroundColor,
+            }}
+          >
+            <span>{theme}</span> ~ <span>{selectedWord}</span>
+          </div>
           {/* Display all stories*/}
           {sortedStories.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -681,23 +751,26 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
               again later.
             </div>
           )}
+
           {/* Show only one button at a time */}
           {!loading && !error && (
             <>
               {sortedStories.length === 0 ? (
                 // Initially: show "Generate Story" button
-                <button
+                <CurlyBraceButton
+                  darkTheme={true}
+                  line1="Generate a story about this page"
                   onClick={() =>
                     fetchStory(currentFileIndex, currentTranscriptionText)
                   }
-                >
-                  Generate Story
-                </button>
+                />
               ) : hasMoreFilesToAnalyze ? (
                 // After story generated: show "Examine another file" if more files exist to analyze
-                <button onClick={examineNextFile}>
-                  Examine another file in the application
-                </button>
+                <CurlyBraceButton
+                  darkTheme={true}
+                  line1="Generate a story about another file in the application"
+                  onClick={examineNextFile}
+                />
               ) : null}
             </>
           )}
@@ -715,6 +788,51 @@ export const StoryLLM: React.FC<StoryLLMProps> = ({
               Stories generated by Gemini 2.5 Flash based on the selected
               document pages.
             </p>
+          )}
+          {/* Display prompt */}
+          {currentPrompt && (
+            <Box
+              sx={{
+                marginTop: 1,
+                width: '100%',
+                minWidth: 0,
+                overflow: 'hidden',
+              }}
+            >
+              <button
+                onClick={() => setShowPrompt(!showPrompt)}
+                style={{
+                  fontSize: '0.8em',
+                  color: designUtils.backgroundColor,
+                  // opacity: 0.7,
+                  border: 'none',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  padding: 0,
+                  marginBottom: '0.5rem',
+                  background: 'none',
+                  borderRadius: '0',
+                }}
+              >
+                {showPrompt ? 'hide' : 'show'} prompt
+              </button>
+              {showPrompt && (
+                <Box
+                  sx={{
+                    fontSize: '0.8em',
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'auto',
+                    maxHeight: '400px',
+                    color: designUtils.backgroundColor,
+                    opacity: 0.8,
+                    width: '100%',
+                    wordBreak: 'break-word',
+                  }}
+                >
+                  {currentPrompt}
+                </Box>
+              )}
+            </Box>
           )}
         </Box>
       </Box>
