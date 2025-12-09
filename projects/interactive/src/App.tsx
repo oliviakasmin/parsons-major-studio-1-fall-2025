@@ -1,11 +1,10 @@
 import { FunctionComponent } from 'react';
 import { Title } from './Title';
-import { Frequency } from './Frequency';
 import './App.css';
 import { PensionAmount } from './PensionAmount';
 import { Intro, History, ApplicationCategories } from './';
 import { CSVDataProvider } from './contexts/CSVDataContext';
-
+import { FrequencyAndStory } from './FrequencyAndStory';
 const App: FunctionComponent = () => {
   return (
     <CSVDataProvider>
@@ -37,6 +36,7 @@ const App: FunctionComponent = () => {
         >
           <ApplicationCategories />
         </section>
+
         <div className="section-underline-bottom"></div>
 
         <section
@@ -53,7 +53,7 @@ const App: FunctionComponent = () => {
           id="frequency"
           className="component-section frequency-container"
         >
-          <Frequency />
+          <FrequencyAndStory />
         </section>
 
         <div

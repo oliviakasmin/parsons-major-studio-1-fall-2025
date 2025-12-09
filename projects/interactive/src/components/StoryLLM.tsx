@@ -1,16 +1,19 @@
 import { GoogleGenAI } from '@google/genai';
-import { useEffect, useState } from 'react';
-import { Modal, Box, Paper } from '@mui/material';
+import { useEffect, useState, useMemo } from 'react';
+import { Box, IconButton } from '@mui/material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { designUtils } from '../design_utils';
-import { CurlyBraceButton } from './CurlyBraceButton';
 import { ImageWrapper } from './ImageWrapper';
 import { useCSVData } from '../contexts/useCSVData';
 import type { CSVRow } from '../contexts/CSVDataContext';
+import { UnderlinedHeader } from './UnderlinedHeader';
 
 const getStoryLLM = async (
   ocrText: string,
+  includeTheme: boolean = false,
   theme?: string,
-  selectedWord?: string
+  selectedWord?: string,
+  previousStories?: Array<{ fileIndex: number; story: string }>
 ) => {
   if (!ocrText.length) {
     return;
@@ -18,14 +21,42 @@ const getStoryLLM = async (
   // @ts-expect-error - Vite env types not configured
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
+  // Only include theme section if includeTheme is true (for original file only)
   const themeSection =
-    theme && theme?.length > 0 && selectedWord && selectedWord.length > 0
+    includeTheme &&
+    theme &&
+    theme?.length > 0 &&
+    selectedWord &&
+    selectedWord.length > 0
       ? `
 ADDITIONAL CONTEXT:
 - Theme: ${theme}
 - Selected word: ${selectedWord}
 
 When writing the story, specifically comment on how ${selectedWord} (or related terms) appears in the document within the context of ${theme}. Include details about how ${selectedWord} is mentioned, its significance, or any relevant information about it in relation to the document's content.`
+      : '';
+
+  // Format previous stories for context
+  const previousStoriesSection =
+    previousStories && previousStories.length > 0
+      ? `
+IMPORTANT CONTEXT - PREVIOUS STORIES FROM THIS APPLICATION:
+The following stories have already been generated from other pages of this same pension application file. DO NOT repeat information that has already been covered in these stories. Focus on NEW information, different details, or additional context that appears in the current page but was not mentioned in previous stories.
+
+${previousStories
+  .sort((a, b) => a.fileIndex - b.fileIndex)
+  .map(
+    (story, idx) => `Previous Story ${idx + 1} (Page ${story.fileIndex + 1}):
+${story.story}`
+  )
+  .join('\n\n---\n\n')}
+
+When writing the current story:
+- Do NOT repeat basic biographical information already covered (name, role, service dates, residence) unless there are discrepancies or new details
+- Do NOT repeat pension amounts or acts already mentioned unless there are changes or additional information
+- Focus on NEW information, different evidence, additional witnesses, or unique details from this specific page
+- If this page contains similar information, note it briefly but emphasize what is NEW or DIFFERENT
+- If this page is a continuation or provides additional context, mention how it relates to or builds upon previous information`
       : '';
 
   const prompt = `
@@ -43,11 +74,13 @@ You are a careful historian-archivist. Read the OCR text of a Revolutionary War 
    - Uses at most two very short quoted phrases (≤12 words each), if helpful.
    - Includes any information about the health of the person(s) mentioned, their lifestyle, their religion, their current occupation, their possessions, etc.
 ${themeSection}
+${previousStoriesSection}
 
 Rules:
 - Case-insensitive; OCR may contain typos and archaic spellings—do not "fix" names.
 - Do NOT infer anything not explicit in the text.
 - If a widow is present but the recurring pension amount clearly refers to HIS pension (phrases like "his pension," "he was allowed at the rate of…"), treat the allowance as the veteran's; do not claim it as the widow's.
+- CRITICAL: Avoid repeating information already covered in previous stories. Focus on what is NEW or DIFFERENT in this page.
 
 Return your answer in this exact JSON shape (minified, no extra keys):
 {
@@ -76,202 +109,213 @@ ${ocrText}
   return json.story;
 };
 
-interface StoryLLMModalProps {
-  open: boolean;
-  onClose: () => void;
+interface StoryLLMProps {
+  selectedImage: {
+    NAID: string;
+    pageURL: string;
+    selectedWord?: string;
+    transcriptionText?: string;
+  } | null;
   NAID: string;
   pageURL: string;
   transcriptionText: string;
   theme?: string;
   selectedWord?: string;
 }
-
-export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
-  open,
-  onClose,
+export const StoryLLM: React.FC<StoryLLMProps> = ({
+  selectedImage,
   NAID,
   pageURL,
   transcriptionText,
   theme = '',
   selectedWord = '',
 }) => {
+  const show = !!selectedImage;
+
   const { naidIndex } = useCSVData();
-  const [story, setStory] = useState<string | null>(null);
+  const [stories, setStories] = useState<
+    Array<{ fileIndex: number; story: string; pageURL: string }>
+  >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [ocrText, setOcrText] = useState<string | null>(null);
-  const [loadingText, setLoadingText] = useState(false);
-  const [pageCount, setPageCount] = useState<number | null>(null);
+  const [, setPageCount] = useState<number | null>(null);
+  const [allFiles, setAllFiles] = useState<CSVRow[]>([]);
+  const [currentFileIndex, setCurrentFileIndex] = useState<number>(0);
+  const [, setInitialFileIndex] = useState<number>(0); // Track the original file
+  const [currentPageURL, setCurrentPageURL] = useState<string>(pageURL);
+  const [currentTranscriptionText, setCurrentTranscriptionText] =
+    useState<string>(transcriptionText);
+  const [viewingImageIndex, setViewingImageIndex] = useState<number>(0); // Index in allFiles array
 
-  // Check localStorage first, then fetch transcription text if needed
+  // Get all files for this NAID and find the initial file index
   useEffect(() => {
-    if (open && naidIndex) {
-      // Check localStorage first - if we have a cached story, skip fetching transcription text
-      const storageKey = `story_${NAID}_${theme || 'no-theme'}_${selectedWord || 'no-word'}`;
-      const cached = localStorage.getItem(storageKey);
+    if (show && naidIndex) {
+      const matchingRows = naidIndex.byNAID.get(NAID) || [];
 
-      if (cached) {
-        try {
-          const cachedData = JSON.parse(cached);
-          if (cachedData.story) {
-            setStory(cachedData.story);
-            setPageCount(cachedData.pageCount ?? 1);
-            setLoading(false);
-            setOcrText(transcriptionText);
-            return;
-          }
-        } catch {
-          setStory(cached);
-          setPageCount(1);
-          setLoading(false);
-          setOcrText(transcriptionText);
-          return;
-        }
-      }
+      if (matchingRows && matchingRows.length > 0) {
+        setPageCount(matchingRows.length);
 
-      // No cached story, so we need to get transcription text
-      const fetchTranscriptionText = () => {
-        // O(1) lookup instead of O(n) filter!
-        const matchingRows = naidIndex.byNAID.get(NAID) || [];
+        // Find the index of the current file
+        const initialIndex = matchingRows.findIndex(
+          (row: CSVRow) =>
+            row.pageURL === pageURL ||
+            row.transcriptionText === transcriptionText
+        );
 
-        if (matchingRows && matchingRows.length > 0) {
-          setPageCount(matchingRows.length);
-
-          let combinedText = transcriptionText;
-
-          // Filter out the row that matches the provided transcriptionText
-          const otherRows = matchingRows.filter((row: CSVRow) => {
-            const rowText = row.transcriptionText || '';
-            return rowText !== transcriptionText;
-          });
-
-          // Randomly select up to 3 additional rows
-          const shuffled = otherRows.sort(() => 0.5 - Math.random());
-          const selectedRows = shuffled.slice(0, 3);
-
-          const additionalTexts = selectedRows
-            .map((row: CSVRow) => row.transcriptionText || '')
-            .filter((text: string) => text && text.length > 0);
-
-          if (additionalTexts.length > 0) {
-            combinedText = [transcriptionText, ...additionalTexts].join(
-              '\n\n---\n\n'
-            );
-          }
-
-          setOcrText(combinedText);
+        // Reorder array so selected page is at index 0
+        let reorderedFiles: CSVRow[];
+        if (initialIndex !== -1 && initialIndex !== 0) {
+          // Move the selected file to the front
+          reorderedFiles = [
+            matchingRows[initialIndex],
+            ...matchingRows.slice(0, initialIndex),
+            ...matchingRows.slice(initialIndex + 1),
+          ];
         } else {
-          setOcrText(transcriptionText);
-          setPageCount(1);
+          reorderedFiles = matchingRows;
         }
-      };
 
-      // Use requestIdleCallback for non-blocking
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(fetchTranscriptionText, { timeout: 100 });
+        setAllFiles(reorderedFiles);
+        setCurrentFileIndex(0); // Always 0 after reordering
+        setInitialFileIndex(0); // Always 0 after reordering
+        setCurrentPageURL(reorderedFiles[0].pageURL);
+        setCurrentTranscriptionText(reorderedFiles[0].transcriptionText || '');
       } else {
-        setTimeout(fetchTranscriptionText, 0);
+        setPageCount(1);
+        setAllFiles([]);
+        setCurrentFileIndex(0);
+        setInitialFileIndex(0);
+        setCurrentPageURL(pageURL);
+        setCurrentTranscriptionText(transcriptionText);
       }
     }
-  }, [open, NAID, transcriptionText, theme, selectedWord, naidIndex]);
+  }, [show, NAID, pageURL, transcriptionText, naidIndex]);
 
   // Reset state when modal closes
   useEffect(() => {
-    if (!open) {
-      setStory(null);
+    if (!show) {
+      setStories([]);
       setError(null);
-      setOcrText(null);
       setLoading(false);
-      setLoadingText(false);
       setPageCount(null);
-      // Remove setSelectedRows and setCachedStory calls
+      setAllFiles([]);
+      setCurrentFileIndex(0);
+      setInitialFileIndex(0);
+      setCurrentPageURL(pageURL);
+      setCurrentTranscriptionText(transcriptionText);
     }
-  }, [open]);
+  }, [show, pageURL, transcriptionText]);
 
-  const fetchStory = async () => {
-    if (!ocrText || !ocrText.length) {
-      setError('No OCR text available');
+  const fetchStory = async (fileIndex: number, textToUse: string) => {
+    if (!textToUse || !textToUse.length) {
+      setError('No transcription text available');
       return;
     }
 
-    // Double check localStorage before generating (defensive check)
-    const storageKey = `story_${NAID}_${theme || 'no-theme'}_${selectedWord || 'no-word'}`;
+    // Check if story already exists in our stories array
+    const existingStory = stories.find(s => s.fileIndex === fileIndex);
+    if (existingStory) {
+      return; // Story already generated
+    }
+
+    // Determine if this is the original file (for theme/selectedWord inclusion)
+    // After reordering, index 0 is always the original file
+    const isOriginalFile = fileIndex === 0;
+
+    // Get previous stories (excluding the current file)
+    const previousStories = stories
+      .filter(s => s.fileIndex !== fileIndex)
+      .map(s => ({ fileIndex: s.fileIndex, story: s.story }));
+
+    // Use pageURL as part of the key for stability (since fileIndex may change)
+    const file = allFiles[fileIndex];
+    const pageURLKey = file?.pageURL || '';
+
+    // Check localStorage - use different keys for original vs subsequent files
+    const storageKey = isOriginalFile
+      ? `story_${NAID}_${pageURLKey}_${theme || 'no-theme'}_${selectedWord || 'no-word'}`
+      : `story_${NAID}_${pageURLKey}_no-theme_no-word`;
     const cached = localStorage.getItem(storageKey);
+
     if (cached) {
       try {
-        // Try to parse as JSON (new format)
         const cachedData = JSON.parse(cached);
         if (cachedData.story) {
-          // Remove setCachedStory call
-          setStory(cachedData.story);
-          setPageCount(cachedData.pageCount ?? 1);
-          setLoading(false);
+          setStories(prev => [
+            ...prev,
+            {
+              fileIndex,
+              story: cachedData.story,
+              pageURL: file?.pageURL || currentPageURL,
+            },
+          ]);
           return;
         }
       } catch {
-        // Old format: just a string (backward compatibility)
-        // Remove setCachedStory call
-        setStory(cached);
-        setPageCount(1);
-        setLoading(false);
+        setStories(prev => [
+          ...prev,
+          {
+            fileIndex,
+            story: cached,
+            pageURL: file?.pageURL || currentPageURL,
+          },
+        ]);
         return;
       }
     }
 
-    // No cached story found, proceed with generation
+    // Generate new story - only include theme/selectedWord for original file
+    // Include previous stories context for subsequent files
     setLoading(true);
     setError(null);
     try {
-      const result = await getStoryLLM(ocrText, theme, selectedWord);
+      const result = await getStoryLLM(
+        textToUse,
+        isOriginalFile, // Only include theme for original file
+        isOriginalFile ? theme : undefined,
+        isOriginalFile ? selectedWord : undefined,
+        previousStories.length > 0 ? previousStories : undefined // Pass previous stories for context
+      );
       if (result) {
-        setStory(result);
-        // Save to localStorage with both story and pageCount
+        const newStory = {
+          fileIndex,
+          story: result,
+          pageURL: file?.pageURL || currentPageURL,
+        };
+        setStories(prev => [...prev, newStory]);
+
+        // Save to localStorage using pageURL for stability
         const dataToStore = {
           story: result,
-          pageCount: pageCount ?? 1,
+          fileIndex,
         };
         localStorage.setItem(storageKey, JSON.stringify(dataToStore));
-        // Remove setCachedStory call
       }
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to generate story';
       setError(errorMessage);
-
-      // If error includes "overload", retry with only prop transcriptionText
-      if (errorMessage.toLowerCase().includes('overload')) {
-        fetchStoryWithPropOnly();
-      }
+      console.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchStoryWithPropOnly = async () => {
-    if (!transcriptionText || !transcriptionText.length) {
-      setError('No transcription text available');
+  const examineNextFile = () => {
+    if (allFiles.length === 0 || currentFileIndex >= allFiles.length - 1) {
       return;
     }
-    setLoading(true);
+
+    const nextIndex = currentFileIndex + 1;
+    const nextFile = allFiles[nextIndex];
+
+    setCurrentFileIndex(nextIndex);
+    setCurrentPageURL(nextFile.pageURL);
+    setCurrentTranscriptionText(nextFile.transcriptionText || '');
     setError(null);
-    try {
-      const result = await getStoryLLM(transcriptionText, theme, selectedWord);
-      if (result) {
-        setStory(result);
-        // Save to localStorage with a different key to indicate it's prop-only
-        // Include pageCount (will be 1 for prop-only)
-        const storageKey = `story_${NAID}_${theme || 'no-theme'}_${selectedWord || 'no-word'}_prop-only`;
-        const dataToStore = {
-          story: result,
-          pageCount: 1,
-        };
-        localStorage.setItem(storageKey, JSON.stringify(dataToStore));
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate story');
-    } finally {
-      setLoading(false);
-    }
+
+    // Automatically generate story for the next file (without theme/selectedWord)
+    fetchStory(nextIndex, nextFile.transcriptionText || '');
   };
 
   // Helper function to generate regex patterns for word variations (plural, singular, case)
@@ -353,109 +397,199 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
 
   const naraURL = `https://catalog.archives.gov/id/${NAID}`;
 
+  // Check if there are more files to analyze (files that don't have stories yet)
+  const hasMoreFilesToAnalyze = useMemo(() => {
+    if (allFiles.length <= 1) return false;
+
+    // Get all file indices that have stories
+    const analyzedFileIndices = new Set(stories.map(s => s.fileIndex));
+
+    // Check if there are any files that haven't been analyzed yet
+    const unanalyzedFiles = allFiles.filter(
+      (_, index) => !analyzedFileIndices.has(index)
+    );
+
+    return unanalyzedFiles.length > 0;
+  }, [allFiles, stories]);
+
+  const sortedStories = [...stories].sort((a, b) => a.fileIndex - b.fileIndex);
+
+  // Get available image indices (index 0 always, plus any with stories)
+  const availableImageIndices = useMemo(() => {
+    const indices = new Set<number>([0]); // Always include index 0
+    stories.forEach(story => {
+      indices.add(story.fileIndex);
+    });
+    return Array.from(indices).sort((a, b) => a - b);
+  }, [stories]);
+
+  // Update viewingImageIndex when stories change
+  useEffect(() => {
+    if (availableImageIndices.length > 0) {
+      // When a new story is added, view the latest available image
+      const maxIndex = Math.max(...availableImageIndices);
+      setViewingImageIndex(maxIndex);
+    } else {
+      setViewingImageIndex(0);
+    }
+  }, [availableImageIndices]);
+
+  // Update viewingImageIndex when files are loaded
+  useEffect(() => {
+    if (allFiles.length > 0 && availableImageIndices.length > 0) {
+      // Ensure viewingImageIndex is within available indices
+      if (!availableImageIndices.includes(viewingImageIndex)) {
+        setViewingImageIndex(0);
+      }
+    }
+  }, [allFiles.length, availableImageIndices, viewingImageIndex]);
+
+  // Get the currently viewed image URL from allFiles
+  const currentViewedImage = useMemo(() => {
+    if (allFiles.length === 0) {
+      return currentPageURL; // Fallback to currentPageURL if no files loaded yet
+    }
+    // Only show images that are in availableImageIndices
+    if (
+      availableImageIndices.includes(viewingImageIndex) &&
+      viewingImageIndex < allFiles.length
+    ) {
+      return allFiles[viewingImageIndex].pageURL;
+    }
+    // Fallback to first available image
+    if (
+      availableImageIndices.length > 0 &&
+      availableImageIndices[0] < allFiles.length
+    ) {
+      return allFiles[availableImageIndices[0]].pageURL;
+    }
+    return currentPageURL;
+  }, [allFiles, viewingImageIndex, currentPageURL, availableImageIndices]);
+
+  const navigateImage = (direction: 'prev' | 'next') => {
+    if (availableImageIndices.length <= 1) return;
+
+    const currentIndexInAvailable =
+      availableImageIndices.indexOf(viewingImageIndex);
+
+    if (direction === 'prev') {
+      const prevIndex =
+        currentIndexInAvailable > 0
+          ? currentIndexInAvailable - 1
+          : availableImageIndices.length - 1; // Wrap around
+      setViewingImageIndex(availableImageIndices[prevIndex]);
+    } else {
+      const nextIndex =
+        currentIndexInAvailable < availableImageIndices.length - 1
+          ? currentIndexInAvailable + 1
+          : 0; // Wrap around
+      setViewingImageIndex(availableImageIndices[nextIndex]);
+    }
+  };
+
+  // Only show navigation if there are multiple images with stories
+  const canNavigateImages = availableImageIndices.length > 1;
+
+  // Scroll into view when component mounts
+  useEffect(() => {
+    if (show) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        const storyLLM = document.getElementById('story-llm');
+        if (storyLLM) {
+          storyLLM.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  }, [show]);
+
   return (
-    <Modal open={open} onClose={onClose}>
-      <Paper
+    <div id="story-llm" style={{ marginTop: '40px' }}>
+      <div style={{ paddingTop: '40px' }}>
+        <UnderlinedHeader text="Story" darkTheme={true} />
+      </div>
+      <Box
         sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '100%',
-          height: '100%',
-          overflow: 'auto',
-          paddingTop: 6,
-          paddingBottom: 6,
-          backgroundColor: designUtils.backgroundColor,
-          paddingLeft: 12,
-          paddingRight: 12,
+          display: 'flex',
+          gap: 3,
+          marginTop: '60px',
         }}
       >
-        <div style={{ position: 'absolute', right: 12, top: 12 }}>
-          <CurlyBraceButton onClick={onClose} line1="back" color={true} />
-        </div>
+        {/* Left side - Image */}
         <Box
           sx={{
+            width: '60%',
             display: 'flex',
-            gap: 3,
-            marginTop: 5,
+            flexDirection: 'column',
+            gap: 1,
+            position: 'relative',
           }}
         >
-          {/* Left side - Story */}
-          <Box
-            sx={{
-              width: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3,
-              padding: '0 2%',
-            }}
-          >
-            <h2 style={{ margin: 0, color: designUtils.textColor }}>Story</h2>
-
-            {loadingText && <div>Loading document...</div>}
-            {loading && <div>Generating story...</div>}
-            {error && (
-              <div style={{ color: 'red' }}>
-                Error: {error}
-                {error.toLowerCase().includes('overload') && (
-                  <button
-                    onClick={fetchStoryWithPropOnly}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Retry with single page
-                  </button>
-                )}
+          <div style={{ marginTop: '0' }}>
+            {/* Navigation arrows - only shown if multiple files */}
+            {canNavigateImages && (
+              <div>
+                <IconButton
+                  onClick={() => navigateImage('prev')}
+                  sx={{
+                    position: 'absolute',
+                    left: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    },
+                    borderRadius: '0',
+                  }}
+                  aria-label="Previous image"
+                >
+                  <ArrowBack />
+                </IconButton>
+                <IconButton
+                  onClick={() => navigateImage('next')}
+                  sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    },
+                    borderRadius: '0',
+                  }}
+                  aria-label="Next image"
+                >
+                  <ArrowForward />
+                </IconButton>
               </div>
             )}
-            {story && (
-              <div
-                style={{
-                  color: designUtils.textColor,
-                  lineHeight: '1.6',
-                  whiteSpace: 'pre-wrap',
-                }}
-              >
-                {highlightWord(story, selectedWord)}
-              </div>
-            )}
-            {!loading && !loadingText && !error && !story && ocrText && (
-              <button onClick={fetchStory}>Generate Story</button>
-            )}
-            {!loading && !loadingText && !error && !story && !ocrText && (
-              <div>Loading document text...</div>
-            )}
-            {story && (
-              <p
-                style={{
-                  fontSize: '0.7em',
-                  color: designUtils.textColor,
-                  opacity: 0.7,
-                  marginTop: '-10px',
-                  marginBottom: '10px',
-                  fontStyle: 'italic',
-                }}
-              >
-                This story is generated by Gemini 2.5 Flash based on the
-                document selected and a random sample of up to 3 other pages
-                from the application (to avoid overloading the LLM model).
-                {pageCount !== null && pageCount > 1 && (
-                  <> The full application file is {pageCount} pages.</>
-                )}
-              </p>
-            )}
-          </Box>
 
-          {/* Right side - Image */}
-          <Box
-            sx={{
-              width: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            {/* Main image */}
+            {/* Image counter - moved to top left */}
+            {canNavigateImages && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 8,
+                  zIndex: 10,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  color: 'white',
+                  padding: '4px 8px',
+                  borderRadius: '0',
+                  fontSize: '0.875rem',
+                }}
+              >
+                {availableImageIndices.indexOf(viewingImageIndex) + 1} /{' '}
+                {availableImageIndices.length}
+              </Box>
+            )}
+
             <Box
               sx={{
                 height: '80vh',
@@ -464,7 +598,7 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
               <ImageWrapper
                 img={
                   <img
-                    src={pageURL}
+                    src={currentViewedImage}
                     alt="Pension Application"
                     style={{
                       width: '100%',
@@ -476,9 +610,114 @@ export const StoryLLMModal: React.FC<StoryLLMModalProps> = ({
                 sourceUrl={naraURL}
               />
             </Box>
-          </Box>
+          </div>
         </Box>
-      </Paper>
-    </Modal>
+
+        {/* Right side - Story */}
+        <Box
+          sx={{
+            width: '50%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3,
+            padding: '0 2%',
+          }}
+        >
+          {/* Display all stories*/}
+          {sortedStories.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {sortedStories.map((storyData, idx) => (
+                <div key={storyData.fileIndex}>
+                  {/* Page count for each story if multiple files available */}
+                  {canNavigateImages && (
+                    <Box
+                      sx={{
+                        fontSize: '0.875rem',
+                        color: designUtils.textColor,
+                        opacity: 0.7,
+                        marginBottom: '0.5rem',
+                      }}
+                    >
+                      Page {storyData.fileIndex + 1} of {allFiles.length}
+                    </Box>
+                  )}
+                  {sortedStories.length > 1 && (
+                    <h3
+                      style={{
+                        fontSize: '0.9em',
+                        color: designUtils.textColor,
+                        opacity: 0.8,
+                        marginBottom: '0.5rem',
+                      }}
+                    ></h3>
+                  )}
+                  <div
+                    style={{
+                      color: designUtils.textColor,
+                      lineHeight: '1.6',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {highlightWord(storyData.story, selectedWord)}
+                  </div>
+                  {idx < sortedStories.length - 1 && (
+                    <hr
+                      style={{
+                        margin: '1.5rem 0',
+                        border: 'none',
+                        borderTop: `1px solid ${designUtils.textColor}`,
+                        opacity: 0.2,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {loading && <div>Generating story...</div>}
+          {error && (
+            <div>
+              Unfortunately there was an error generating the story. Please try
+              again later.
+            </div>
+          )}
+          {/* Show only one button at a time */}
+          {!loading && !error && (
+            <>
+              {sortedStories.length === 0 ? (
+                // Initially: show "Generate Story" button
+                <button
+                  onClick={() =>
+                    fetchStory(currentFileIndex, currentTranscriptionText)
+                  }
+                >
+                  Generate Story
+                </button>
+              ) : hasMoreFilesToAnalyze ? (
+                // After story generated: show "Examine another file" if more files exist to analyze
+                <button onClick={examineNextFile}>
+                  Examine another file in the application
+                </button>
+              ) : null}
+            </>
+          )}
+          {sortedStories.length > 0 && (
+            <p
+              style={{
+                fontSize: '0.7em',
+                color: designUtils.textColor,
+                opacity: 0.7,
+                marginTop: '-10px',
+                marginBottom: '10px',
+                fontStyle: 'italic',
+              }}
+            >
+              Stories generated by Gemini 2.5 Flash based on the selected
+              document pages.
+            </p>
+          )}
+        </Box>
+      </Box>
+    </div>
   );
 };

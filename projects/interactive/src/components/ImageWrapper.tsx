@@ -41,12 +41,11 @@ const ImageZoomControls = () => {
         onClick={handleZoomIn}
         aria-label="Zoom in"
         sx={{
-          color: designUtils.iconButtonColor,
-          backgroundColor: designUtils.backgroundColor,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          color: 'white',
           borderRadius: 0,
           '&:hover': {
-            color: designUtils.blueColor,
-            backgroundColor: designUtils.backgroundColor,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
           },
         }}
       >
@@ -56,14 +55,13 @@ const ImageZoomControls = () => {
         onClick={() => zoomOut()}
         aria-label="Zoom out"
         sx={{
-          color: designUtils.iconButtonColor,
-          backgroundColor: designUtils.backgroundColor,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          color: 'white',
           borderRadius: 0,
           visibility: hasZoomed ? 'visible' : 'hidden',
           pointerEvents: hasZoomed ? 'auto' : 'none',
           '&:hover': {
-            color: designUtils.blueColor,
-            backgroundColor: designUtils.backgroundColor,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
           },
         }}
       >
@@ -73,14 +71,13 @@ const ImageZoomControls = () => {
         onClick={handleReset}
         aria-label="Reset"
         sx={{
-          color: designUtils.iconButtonColor,
-          backgroundColor: designUtils.backgroundColor,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          color: 'white',
           borderRadius: 0,
           visibility: hasZoomed ? 'visible' : 'hidden',
           pointerEvents: hasZoomed ? 'auto' : 'none',
           '&:hover': {
-            color: designUtils.blueColor,
-            backgroundColor: designUtils.backgroundColor,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
           },
         }}
       >

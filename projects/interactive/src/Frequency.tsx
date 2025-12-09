@@ -7,7 +7,6 @@ import {
   useCallback,
 } from 'react';
 import { List } from '@mui/material';
-import { StoryLLMModal } from './components/StoryLLM';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
 import { FrequencySpread } from './components/FrequencySpread.tsx';
@@ -126,7 +125,24 @@ const mapWordsToFilesOptimized = (
   });
 };
 
-export const Frequency: FunctionComponent = () => {
+export const Frequency: FunctionComponent<{
+  setSelectedImage: (
+    image: {
+      NAID: string;
+      pageURL: string;
+      selectedWord?: string;
+      transcriptionText?: string;
+    } | null
+  ) => void;
+  selectedImage: {
+    NAID: string;
+    pageURL: string;
+    selectedWord?: string;
+    transcriptionText?: string;
+  } | null;
+  setCurrentTheme: (theme: string) => void;
+  currentTheme: string;
+}> = ({ setSelectedImage, setCurrentTheme, currentTheme }) => {
   const { indexedData } = useCSVData();
   const [frequencyData, setFrequencyData] = useState<FrequencyData | null>(
     null
@@ -139,13 +155,7 @@ export const Frequency: FunctionComponent = () => {
     null
   );
   const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
-  const [currentTheme, setCurrentTheme] = useState<string>('animals');
-  const [selectedImage, setSelectedImage] = useState<{
-    NAID: string;
-    pageURL: string;
-    selectedWord?: string;
-    transcriptionText?: string;
-  } | null>(null);
+
   const [frequencySpreadOpen, setFrequencySpreadOpen] =
     useState<boolean>(false);
   const [selectedWordData, setSelectedWordData] = useState<{
@@ -261,9 +271,9 @@ export const Frequency: FunctionComponent = () => {
   return (
     <>
       <div
-        className="frequency-container"
         style={{ padding: '40px', minHeight: '100vh' }}
         ref={containerRef}
+        id="frequency-container"
       >
         {/* Header row with themes */}
         <div
@@ -325,26 +335,14 @@ export const Frequency: FunctionComponent = () => {
           ))}
         </List>
       </div>
-      {selectedImage && selectedImage.transcriptionText && (
-        <StoryLLMModal
-          open={!!selectedImage}
-          onClose={() => setSelectedImage(null)}
-          NAID={selectedImage.NAID}
-          pageURL={selectedImage.pageURL}
-          transcriptionText={selectedImage.transcriptionText}
-          theme={currentTheme}
-          selectedWord={selectedImage.selectedWord}
-        />
-      )}
+
       {selectedWordData && frequencySpreadOpen && (
         <FrequencySpread
           images={selectedWordData.files}
           category={selectedWordData.word}
           open={true}
           onClose={() => setSelectedWordData(null)}
-          currentTheme={currentTheme}
           setSelectedImage={setSelectedImage}
-          selectedImage={selectedImage}
           frequency={selectedWordData.frequency}
         />
       )}

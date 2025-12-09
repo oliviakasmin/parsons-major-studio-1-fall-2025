@@ -91,6 +91,7 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
         minFrequency,
         maxFrequency,
         containerWidth,
+        getImagesCount,
       ]);
 
       const handleListItemClick = useCallback(() => {
@@ -155,6 +156,13 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
                       pageURL: file.pageURL,
                       selectedWord: wordData.word,
                       transcriptionText: file.transcriptionText,
+                    });
+
+                    requestAnimationFrame(() => {
+                      const storyLLM = document.getElementById('story-llm');
+                      if (storyLLM) {
+                        storyLLM.scrollIntoView({ behavior: 'smooth' });
+                      }
                     });
                   }}
                   style={{
