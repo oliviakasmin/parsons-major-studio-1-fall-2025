@@ -6,7 +6,7 @@ import {
   useMemo,
   useCallback,
 } from 'react';
-import { List } from '@mui/material';
+import { List, ListItem } from '@mui/material';
 import { UnderlinedHeader } from './components/UnderlinedHeader';
 import './Frequency.css';
 import { FrequencySpread } from './components/FrequencySpread.tsx';
@@ -40,9 +40,9 @@ interface WordWithFiles {
 }
 
 // Load JSON data for word frequencies
-const getFrequencyData = async () => {
+const getFrequencyData = async (): Promise<FrequencyData> => {
   const response = await fetch('/data/frequency_categories_combined.json');
-  return response.json();
+  return response.json() as Promise<FrequencyData>;
 };
 
 const maxImagesToShow = 75;
@@ -54,6 +54,10 @@ const getImagesCount = (
   minFrequency: number,
   maxFrequency: number
 ): number => {
+  // Handle edge case where all frequencies are the same
+  if (maxFrequency === minFrequency) {
+    return minImagesToShow;
+  }
   const ratio = (frequency - minFrequency) / (maxFrequency - minFrequency);
   return Math.round(
     minImagesToShow + ratio * (maxImagesToShow - minImagesToShow)
@@ -74,16 +78,24 @@ const mapWordsToFilesOptimized = (
 
   // Get all words for this theme, sorted by count (descending)
   const words = Object.entries(themeData)
-    .map(([word, data]: [string, WordFrequencyData]) => ({
-      word,
-      count: data.count,
-      words: data.words || [word],
-    }))
+    .map(([word, data]) => {
+      // Type guard to ensure data has the expected structure
+      const wordData = data as WordFrequencyData;
+      return {
+        word,
+        count: wordData.count,
+        words: wordData.words || [word],
+      };
+    })
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
   // Get min and max frequencies for this theme
   const frequencies = words.map(w => w.count);
+  // Handle empty array case
+  if (frequencies.length === 0) {
+    return [];
+  }
   const maxFrequency = Math.max(...frequencies);
   const minFrequency = Math.min(...frequencies);
 
@@ -148,6 +160,7 @@ export const Frequency: FunctionComponent<{
     null
   );
   const [wordsWithFiles, setWordsWithFiles] = useState<WordWithFiles[]>([]);
+  const [visibleRows, setVisibleRows] = useState<number>(0); // Progressive rendering
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
@@ -177,6 +190,10 @@ export const Frequency: FunctionComponent<{
       return { minFrequency: 0, maxFrequency: 0 };
     }
     const frequencies = wordsWithFiles.map(w => w.frequency);
+    // Additional safety check (though wordsWithFiles.length check should prevent this)
+    if (frequencies.length === 0) {
+      return { minFrequency: 0, maxFrequency: 0 };
+    }
     return {
       minFrequency: Math.min(...frequencies),
       maxFrequency: Math.max(...frequencies),
@@ -185,15 +202,21 @@ export const Frequency: FunctionComponent<{
 
   // Load frequency JSON data
   useEffect(() => {
-    getFrequencyData().then(jsonData => {
-      setFrequencyData(jsonData);
-    });
+    getFrequencyData()
+      .then((jsonData: FrequencyData) => {
+        setFrequencyData(jsonData);
+      })
+      .catch(error => {
+        console.error('Failed to load frequency data:', error);
+        setFrequencyData(null);
+      });
   }, []);
 
   // Update words when theme changes - now much faster with indexed data
   useEffect(() => {
     if (indexedData && frequencyData && currentTheme) {
       setIsLoading(true);
+      setVisibleRows(0); // Reset visible rows when theme changes
 
       // Use requestIdleCallback or setTimeout to keep UI responsive
       const updateData = () => {
@@ -204,6 +227,22 @@ export const Frequency: FunctionComponent<{
         );
         setWordsWithFiles(mapped);
         setIsLoading(false);
+
+        // Progressive rendering: show rows one at a time
+        if (mapped.length > 0) {
+          let currentIndex = 0;
+          const showNextRow = () => {
+            if (currentIndex < mapped.length) {
+              setVisibleRows(currentIndex + 1);
+              currentIndex++;
+              // Small delay between rows for smooth appearance
+              requestAnimationFrame(() => {
+                setTimeout(showNextRow, 30);
+              });
+            }
+          };
+          showNextRow();
+        }
       };
 
       if ('requestIdleCallback' in window) {
@@ -267,10 +306,58 @@ export const Frequency: FunctionComponent<{
     setCurrentTheme(theme);
   }, []);
 
+  // Skeleton row component
+  const SkeletonRow = () => (
+    <ListItem
+      sx={{
+        marginBottom: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        padding: 0,
+        opacity: 0.3,
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '-20px',
+        }}
+      >
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: '#faf9f7',
+              border: '1px solid #ccc',
+              marginLeft: i > 0 ? '-32px' : '0',
+              borderRadius: '2px',
+            }}
+          />
+        ))}
+      </div>
+      <div
+        style={{
+          marginLeft: '20px',
+          width: '100px',
+          height: '20px',
+          backgroundColor: '#faf9f7',
+        }}
+      />
+    </ListItem>
+  );
+
   return (
     <>
       <div
-        style={{ padding: '40px', minHeight: '100vh' }}
+        style={{
+          padding: '40px',
+          minHeight: '100vh',
+          backgroundColor: '#2c1810',
+        }}
         ref={containerRef}
         id="frequency-container"
       >
@@ -304,17 +391,23 @@ export const Frequency: FunctionComponent<{
           ))}
         </div>
 
-        {isLoading && (
-          <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>
-        )}
-
         <List
           sx={{
             padding: 0,
             width: '100%',
           }}
         >
-          {wordsWithFiles.map((wordData, index) => (
+          {/* Show skeleton rows while loading */}
+          {isLoading && wordsWithFiles.length === 0 && (
+            <>
+              {Array.from({ length: 10 }).map((_, i) => (
+                <SkeletonRow key={`skeleton-${i}`} />
+              ))}
+            </>
+          )}
+
+          {/* Show actual rows progressively */}
+          {wordsWithFiles.slice(0, visibleRows).map((wordData, index) => (
             <FrequencyImageRow
               key={wordData.word}
               wordData={wordData}
@@ -345,6 +438,19 @@ export const Frequency: FunctionComponent<{
           frequency={selectedWordData.frequency}
         />
       )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </>
   );
 };

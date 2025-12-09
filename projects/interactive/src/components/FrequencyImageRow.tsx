@@ -125,8 +125,10 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
             overflow: 'visible',
             padding: 0,
             position: 'relative',
-            zIndex: isRowHovered ? 1000 : 0,
+            zIndex: isRowHovered ? 1000 + index : index,
             cursor: 'pointer',
+            opacity: 0,
+            animation: 'fadeIn 0.3s ease-in forwards',
           }}
         >
           <div
@@ -141,7 +143,8 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
             {imagesToShow.map((file: any, imgIndex: number) => {
               const imageKey = `${index}-${imgIndex}`;
               const isHovered = hoveredImage === imageKey;
-              const baseZIndex = imagesToShow.length - imgIndex;
+              // Ensure images in later rows have higher z-index
+              const baseZIndex = index * 100 + (imagesToShow.length - imgIndex);
 
               return (
                 <img
@@ -150,6 +153,10 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
                   alt={`${wordData.word} document ${imgIndex + 1}`}
                   onMouseEnter={() => setHoveredImage(imageKey)}
                   onMouseLeave={() => setHoveredImage(null)}
+                  onLoad={e => {
+                    // Fade in when image loads
+                    (e.target as HTMLImageElement).style.opacity = '1';
+                  }}
                   onClick={() => {
                     setSelectedImage({
                       NAID: file.NAID,
@@ -172,12 +179,15 @@ export const FrequencyImageRow: FunctionComponent<FrequencyImageRowProps> =
                     objectFit: 'cover',
                     border: '1px solid #ccc',
                     marginLeft: imgIndex > 0 ? `-${overlapAmount}px` : '0',
-                    zIndex: isHovered ? 10000 : baseZIndex,
+                    zIndex: isHovered ? 100000 : baseZIndex,
                     position: 'relative',
                     flexShrink: 0,
                     transform: isHovered ? 'scale(3)' : 'scale(1)',
-                    transition: 'transform 0.2s ease-in-out',
+                    transition:
+                      'transform 0.2s ease-in-out, opacity 0.3s ease-in',
                     cursor: 'pointer',
+                    opacity: 0, // Start hidden, fade in on load
+                    backgroundColor: '#2c1810', // Match background to prevent white flash
                   }}
                 />
               );
