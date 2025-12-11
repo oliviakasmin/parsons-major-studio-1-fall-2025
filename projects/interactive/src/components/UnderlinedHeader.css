@@ -63,9 +63,9 @@
 
 /* Lighter blue underline for hover-underline class - dark theme */
 .underlined-header.hover-underline.dark-theme.underlined::before {
-  background-color: #7a9fff;
+  background-color: #2453ff;
 }
 
 .underlined-header.hover-underline.dark-theme.underlined::after {
-  background-color: #7a9fff;
+  background-color: #2453ff;
 }

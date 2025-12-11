@@ -25,13 +25,63 @@ const toTitleCase = (value: string): string =>
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
+// Get the numeric value from normalized_yearly_amount, handling edge cases
+const getNumericAmount = (row: d3.DSVRowString<string>): number | null => {
+  const amountStr = (row['normalized_yearly_amount'] || '').toString().trim();
+  if (!amountStr) return null;
+  const num = Number(amountStr);
+  return Number.isFinite(num) && !Number.isNaN(num) ? num : null;
+};
+
+// Filter out outliers based on yearly amount using IQR method
+const filterOutliers = (
+  data: d3.DSVRowArray<string>
+): d3.DSVRowArray<string> => {
+  // Extract all valid yearly amounts
+  const amounts: number[] = [];
+  data.forEach(row => {
+    const amount = getNumericAmount(row);
+    if (amount !== null) {
+      amounts.push(amount);
+    }
+  });
+
+  if (amounts.length === 0) return data;
+
+  // Sort amounts to calculate quartiles
+  const sorted = [...amounts].sort((a, b) => a - b);
+  const q1Index = Math.floor(sorted.length * 0.25);
+  const q3Index = Math.floor(sorted.length * 0.75);
+  const q1 = sorted[q1Index];
+  const q3 = sorted[q3Index];
+  const iqr = q3 - q1;
+
+  // Define outlier bounds (values outside Q1 - 1.5*IQR and Q3 + 1.5*IQR are outliers)
+  const lowerBound = q1 - 1.5 * iqr;
+  const upperBound = q3 + 1.5 * iqr;
+
+  // Filter out rows with amounts outside the bounds
+  const filteredRows = data.filter(row => {
+    const amount = getNumericAmount(row);
+    if (amount === null) return true; // Keep rows without amounts (they'll be filtered elsewhere)
+    return amount >= lowerBound && amount <= upperBound;
+  });
+
+  // Preserve the DSVRowArray structure with columns property
+  const result: d3.DSVRowArray<string> = Object.assign([], filteredRows, {
+    columns: data.columns,
+  });
+  return result;
+};
+
 export const getPensionAmountData = async (): Promise<
   d3.DSVRowArray<string>
 > => {
   const data = await d3.csv(
     '/data/extracted_amounts_sample_1000_post_normalization.csv'
   );
-  return data;
+  // Filter out outliers before returning
+  return filterOutliers(data);
 };
 
 // filter data to get rows that have act date, yearly amount, and place of residence
@@ -197,14 +247,6 @@ export const findMatchingPensionRows = (
       rowPlace === normalizedPlace
     );
   });
-};
-
-// Get the numeric value from normalized_yearly_amount, handling edge cases
-const getNumericAmount = (row: d3.DSVRowString<string>): number | null => {
-  const amountStr = (row['normalized_yearly_amount'] || '').toString().trim();
-  if (!amountStr) return null;
-  const num = Number(amountStr);
-  return Number.isFinite(num) && !Number.isNaN(num) ? num : null;
 };
 
 // Calculate average by known_act_date

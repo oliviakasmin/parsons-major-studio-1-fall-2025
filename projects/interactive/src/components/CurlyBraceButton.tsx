@@ -10,6 +10,7 @@ interface CurlyBraceButtonProps {
   // bold?: boolean;
   darkTheme?: boolean;
   hidden?: boolean;
+  blackBrackets?: boolean;
 }
 
 export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
@@ -17,9 +18,9 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   line2 = undefined,
   onClick,
   color = true,
-  // bold = false,
   darkTheme = false,
   hidden = false,
+  blackBrackets = false,
 }) => {
   const lineCount = 1 + (line2 ? 1 : 0);
 
@@ -34,7 +35,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
   const braceColor = darkTheme ? designUtils.backgroundColor : 'black';
   const finalBraceColor = hidden
     ? darkTheme
-      ? designUtils.textColor
+      ? 'black'
       : designUtils.backgroundColor
     : braceColor;
   // const fontWeight = bold ? 'bold' : 'normal';
@@ -58,7 +59,7 @@ export const CurlyBraceButton: FunctionComponent<CurlyBraceButtonProps> = ({
       <span
         style={{
           fontSize: braceFontSize,
-          color: finalBraceColor,
+          color: blackBrackets ? 'black' : finalBraceColor,
           // fontWeight: '100',
           fontFamily: 'Times New Roman',
           marginTop: `-${lineCount * 2}px`,

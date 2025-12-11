@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getPensionAmountData } from '../pension_amount_data';
-import { averageAmountByDateChartUtils } from '../design_utils';
+import { averageAmountByDateChartUtils, designUtils } from '../design_utils';
 
 type ExtraPoint = { year: string; amount: number };
 
@@ -9,6 +9,12 @@ export const AverageAmountByDate: React.FC<{ extraPoint?: ExtraPoint }> = ({
 }) => {
   // year -> average amount
   const [yearAverages, setYearAverages] = useState<Record<string, number>>({});
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    amount: number;
+    isExtraPoint?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -64,8 +70,13 @@ export const AverageAmountByDate: React.FC<{ extraPoint?: ExtraPoint }> = ({
   const width = averageAmountByDateChartUtils.width;
   const height = averageAmountByDateChartUtils.height;
   const padding = averageAmountByDateChartUtils.padding;
-  const chartWidth = width - padding.left - padding.right;
-  const chartHeight = height - padding.top - padding.bottom;
+  // Increase left padding to accommodate y-axis labels
+  const adjustedPadding = {
+    ...padding,
+    left: padding.left + 20, // Add extra space for labels
+  };
+  const chartWidth = width - adjustedPadding.left - adjustedPadding.right;
+  const chartHeight = height - adjustedPadding.top - adjustedPadding.bottom;
 
   // Scale functions
   const xScale = (index: number) => {
@@ -88,91 +99,193 @@ export const AverageAmountByDate: React.FC<{ extraPoint?: ExtraPoint }> = ({
     );
   };
 
+  const handleMouseEnter = (
+    e: React.MouseEvent<SVGCircleElement>,
+    _year: string,
+    amount: number,
+    circleX: number,
+    circleY: number,
+    isExtraPoint?: boolean
+  ) => {
+    const svg = e.currentTarget.ownerSVGElement;
+    if (!svg) return;
+
+    // Use the circle's center x, and position y at the top of the invisible circle (radius 9)
+    const x = circleX;
+    const y = circleY - 9; // Top of invisible circle (bottom of tooltip will align here)
+
+    setTooltip({ x, y, amount, isExtraPoint });
+  };
+
   return (
-    <svg
-      width={width}
-      height={height}
-      style={{ fontFamily: 'sans-serif', fontSize: '10px' }}
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        marginLeft: '20px',
+      }}
     >
-      {/* Y-axis line */}
-      <line
-        x1={padding.left}
-        y1={padding.top}
-        x2={padding.left}
-        y2={padding.top + chartHeight}
-        stroke="#333"
-        strokeWidth="1"
-      />
+      <svg
+        width={width}
+        height={height}
+        style={{ fontFamily: 'sans-serif', fontSize: '10px' }}
+      >
+        {/* Y-axis line */}
+        <line
+          x1={adjustedPadding.left}
+          y1={adjustedPadding.top}
+          x2={adjustedPadding.left}
+          y2={adjustedPadding.top + chartHeight}
+          stroke="#333"
+          strokeWidth="1"
+        />
 
-      {/* X-axis line */}
-      <line
-        x1={padding.left}
-        y1={padding.top + chartHeight}
-        x2={padding.left + chartWidth}
-        y2={padding.top + chartHeight}
-        stroke="#333"
-        strokeWidth="1"
-      />
+        {/* X-axis line */}
+        <line
+          x1={adjustedPadding.left}
+          y1={adjustedPadding.top + chartHeight}
+          x2={adjustedPadding.left + chartWidth}
+          y2={adjustedPadding.top + chartHeight}
+          stroke="#333"
+          strokeWidth="1"
+        />
 
-      {/* Plot one black dot per year (overall average for that year) */}
-      {sortedYears.map((year, index) => {
-        const amount = yearAverages[year];
-        const x = padding.left + xScale(index);
-        const y = padding.top + yScale(amount);
-        if (typeof amount !== 'number') return null;
-        return <circle key={year} cx={x} cy={y} r={3} fill="#000" />;
-      })}
-
-      {/* Plot extra data point if provided */}
-      {extraPoint &&
-        (() => {
-          const idx = sortedYears.indexOf(extraPoint.year);
-          if (idx === -1) return null;
-          const x = padding.left + xScale(idx);
-          const y = padding.top + yScale(extraPoint.amount);
+        {/* Plot one black dot per year (overall average for that year) */}
+        {sortedYears.map((year, index) => {
+          const amount = yearAverages[year];
+          const x = adjustedPadding.left + xScale(index);
+          const y = adjustedPadding.top + yScale(amount);
+          if (typeof amount !== 'number') return null;
           return (
-            <circle
-              cx={x}
-              cy={y}
-              r={3}
-              fill="#fff"
-              stroke="#000"
-              strokeWidth={1}
-            />
+            <g key={year}>
+              {/* Invisible hover circle (3x radius) */}
+              <circle
+                cx={x}
+                cy={y}
+                r={9}
+                fill="transparent"
+                onMouseEnter={e => handleMouseEnter(e, year, amount, x, y)}
+                onMouseLeave={() => setTooltip(null)}
+                style={{ cursor: 'pointer' }}
+              />
+              {/* Visible data circle */}
+              <circle
+                cx={x}
+                cy={y}
+                r={3}
+                fill="#000"
+                onMouseEnter={e => handleMouseEnter(e, year, amount, x, y)}
+                onMouseLeave={() => setTooltip(null)}
+                style={{ cursor: 'pointer' }}
+              />
+            </g>
           );
-        })()}
+        })}
 
-      {/* X-axis labels (show every year) */}
-      {sortedYears.map((year, index) => (
+        {/* Plot extra data point if provided */}
+        {extraPoint &&
+          (() => {
+            const idx = sortedYears.indexOf(extraPoint.year);
+            if (idx === -1) return null;
+            const x = adjustedPadding.left + xScale(idx);
+            const y = adjustedPadding.top + yScale(extraPoint.amount);
+            return (
+              <g>
+                {/* Invisible hover circle (3x radius) */}
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={9}
+                  fill="transparent"
+                  onMouseEnter={e =>
+                    handleMouseEnter(
+                      e,
+                      extraPoint.year,
+                      extraPoint.amount,
+                      x,
+                      y,
+                      true
+                    )
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                  style={{ cursor: 'pointer' }}
+                />
+                {/* Visible data circle */}
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={3}
+                  fill={designUtils.blueColor}
+                  onMouseEnter={e =>
+                    handleMouseEnter(
+                      e,
+                      extraPoint.year,
+                      extraPoint.amount,
+                      x,
+                      y,
+                      true
+                    )
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                  style={{ cursor: 'pointer' }}
+                />
+              </g>
+            );
+          })()}
+
+        {/* X-axis labels (show every year) */}
+        {sortedYears.map((year, index) => (
+          <text
+            key={year}
+            x={adjustedPadding.left + xScale(index)}
+            y={height - 5}
+            textAnchor="middle"
+            fill="#333"
+          >
+            {year}
+          </text>
+        ))}
+
+        {/* Y-axis labels */}
         <text
-          key={year}
-          x={padding.left + xScale(index)}
-          y={height - 5}
-          textAnchor="middle"
+          x={adjustedPadding.left - 15}
+          y={adjustedPadding.top + chartHeight + 3}
+          textAnchor="end"
           fill="#333"
         >
-          {year}
+          ${Math.round(minAmount)}
         </text>
-      ))}
+        <text
+          x={adjustedPadding.left - 15}
+          y={adjustedPadding.top + 3}
+          textAnchor="end"
+          fill="#333"
+        >
+          ${Math.round(maxAmount)}
+        </text>
+        {/* No overall line or label */}
+      </svg>
 
-      {/* Y-axis labels */}
-      <text
-        x={padding.left - 5}
-        y={padding.top + chartHeight + 3}
-        textAnchor="end"
-        fill="#333"
-      >
-        ${Math.round(minAmount)}
-      </text>
-      <text
-        x={padding.left - 5}
-        y={padding.top + 3}
-        textAnchor="end"
-        fill="#333"
-      >
-        ${Math.round(maxAmount)}
-      </text>
-      {/* No overall line or label */}
-    </svg>
+      {/* Tooltip - must be outside SVG */}
+      {tooltip && (
+        <div
+          className="tooltip"
+          style={{
+            position: 'absolute',
+            left: tooltip.x,
+            top: tooltip.y,
+            transform: 'translate(-50%, -100%)',
+            marginBottom: '5px',
+            maxWidth: '60px',
+          }}
+        >
+          <div className="tooltip-content">
+            {tooltip.isExtraPoint
+              ? `your pension: $${Math.round(tooltip.amount).toLocaleString()}`
+              : `$${Math.round(tooltip.amount).toLocaleString()}`}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
