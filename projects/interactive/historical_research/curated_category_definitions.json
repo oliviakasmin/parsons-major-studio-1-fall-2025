@@ -3,7 +3,7 @@
     "category": "Survived",
     "key": "survived",
     "definition": "Files created for surviving Revolutionary War veterans who applied for pensions under the various acts, particularly service and invalid pensions. These applications represent veterans’ own claims for pensions.",
-    "proof_quote": "\"Applicants were required to submit proof of service, usually by affidavits from officers or fellow soldiers, and sometimes by producing original discharge papers.\" (NPS)"
+    "proof_quote": "\"The file may also contain affidavits by other veterans or persons testifying to the service or disability claimed; documentary evidence of service submitted by the applicant, such as a commission or a discharge certificate...\" (M804 pamphlet, p. 7)"
   },
   {
     "category": "Widow",
@@ -15,7 +15,7 @@
     "category": "Rejected",
     "key": "rejected",
     "definition": "Files of applications by survivors, widows, or an heir that were rejected under pension laws, including those deemed ineligible under service requirements or property tests. Some application files may contain multiple applications for the same veteran, including earlier appeals that were granted. Denials often stemmed from insufficient service, failure to meet marriage-date rules for widows, or results of the 1820 means test.",
-    "proof_quote": "\"By the act of May 1, 1820, Congress required that every pensioner file a schedule of his property … those not in need lost their pensions.\" (M804 pamphlet, p. 3)"
+    "proof_quote": "\"The new law [of 1820] required every pensioner receiving payments under the 1818 act, and every would-be pensioner, to submit a certified schedule of his estate and income to the Secretary of War. The Secretary was authorized to remove from the pension list the names of those persons who, in his opinion, were not in need of assistance. Within a few years the total of Revolutionary War service pensioners was reduced by several thousand.\" (M804 pamphlet, p. 2)"
   },
   {
     "category": "Bounty land warrant",
@@ -27,12 +27,12 @@
     "category": "Old War",
     "key": "ow",
     "definition": "An archival label applied to certain early pension files, maintained separately but sometimes interfiled with Revolutionary War records. These represent a filing category, not a single legislative act.",
-    "proof_quote": "\"On August 26, 1776, Congress resolved that every commissioned officer, noncommissioned officer, and private soldier or sailor disabled in the line of duty should receive half pay during his disability.\" (M804 pamphlet, p. 1–2)"
+    "proof_quote": "\"Some files, for instance, are labeled \"Not Rev.\" or \"Not Rev. War\" and contain pension or bounty-land-warrant application papers based on post-Revolutionary War service.\" (M804 pamphlet, p. 10)"
   },
   {
     "category": "N A Acc",
     "key": "naacc",
-    "definition": "N A Acc (National Archives Accession [number]) placeholder cards were created when no original pension file survived, often due to the 1800 War Department fire. Because no file survives, the cards preserve references or abstracts of whatever proof was once submitted.",
-    "proof_quote": "\"In lieu of a file, a 10- by 14-inch card, containing cross-reference or abstract information from congressional reports or other sources, was substituted.\" (M804 pamphlet, p. 4) || \"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records.\" (M804 pamphlet, p. 1)"
+    "definition": "N A Acc (National Archives Accession [number]) placeholder cards were sometimes created when no original pension file survived or to refer to another series of pension applications filed separately.",
+    "proof_quote": "\"Some pension application files reproduced in this microcopy have headings that include instructions to \"See N.A. Acc. No. 874 \" followed by a number between 050000 and 050201, the name of the veteran, and the notation \"Half Pay\" or \"Not Half Pay.\" These instructions refer to a separate series of pension application files that are also in Record Group 15. \" (M804 pamphlet, p. 10)"
   }
 ]
