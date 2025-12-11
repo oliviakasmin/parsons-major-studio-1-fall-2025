@@ -84,26 +84,28 @@ export const PensionResultModal: FunctionComponent<PensionResultModalProps> = ({
               </div>
             </div>
             <div>{formatActDate(actDate)}</div>
-            <Box
-              sx={{
-                marginLeft: `-${averageAmountByDateChartUtils.padding.left}px`,
-                display: 'flex',
-                minHeight: `${averageAmountByDateChartUtils.height}px`,
-                minWidth: `${averageAmountByDateChartUtils.width}px`,
-                marginTop: '40px',
-              }}
-            >
-              <AverageAmountByDate
-                extraPoint={{ year: actDate.split('-')[0], amount }}
-              />
-            </Box>
-            <div
-              style={{
-                fontSize: '0.7em',
-                color: designUtils.textColor,
-              }}
-            >
-              {`{ average allowance per year with your allowance highlighted }`}
+            <div style={{ marginTop: '40px' }}>
+              <div
+                style={{
+                  fontSize: '0.7em',
+                  color: designUtils.textColor,
+                }}
+              >
+                {`Average Allowance per Year`}
+              </div>
+              <Box
+                sx={{
+                  marginLeft: `-${averageAmountByDateChartUtils.padding.left}px`,
+                  display: 'flex',
+                  minHeight: `${averageAmountByDateChartUtils.height}px`,
+                  minWidth: `${averageAmountByDateChartUtils.width}px`,
+                  marginTop: '20px',
+                }}
+              >
+                <AverageAmountByDate
+                  extraPoint={{ year: actDate.split('-')[0], amount }}
+                />
+              </Box>
             </div>
           </Box>
 
