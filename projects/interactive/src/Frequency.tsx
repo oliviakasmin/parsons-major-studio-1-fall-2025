@@ -356,7 +356,6 @@ export const Frequency: FunctionComponent<{
         style={{
           padding: '40px',
           minHeight: '100vh',
-          backgroundColor: '#2c1810',
         }}
         ref={containerRef}
         id="frequency-container"

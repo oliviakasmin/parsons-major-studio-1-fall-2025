@@ -143,7 +143,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
           alignItems: 'center',
           justifyContent: 'center',
           color: '#faf9f7',
-          background: '#2c1810',
+          background: 'black',
         }}
       >
         <Box
@@ -154,7 +154,7 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
             overflow: 'hidden',
             padding: '40px',
             color: '#faf9f7',
-            background: '#2c1810',
+            // background: '#2c1810',
           }}
         >
           <Box
@@ -216,6 +216,16 @@ export const FrequencySpread: FunctionComponent<FrequencySpreadProps> = ({
                     transcriptionText: file.transcriptionText,
                   });
                   onClose();
+
+                  // Scroll to StoryLLM component after modal closes
+                  requestAnimationFrame(() => {
+                    setTimeout(() => {
+                      const storyLLM = document.getElementById('story-llm');
+                      if (storyLLM) {
+                        storyLLM.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }, 100); // Small delay to ensure modal is closed
+                  });
                 }}
               />
             );
