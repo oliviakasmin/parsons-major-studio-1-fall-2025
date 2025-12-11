@@ -15,9 +15,7 @@ interface TimelineData {
   date: string;
   historical_context: string;
   relevant_quotes: string;
-  relevant_categories: string;
   main_takeaway: string;
-  category_applicability_note: string;
   highlight: boolean;
 }
 
@@ -192,7 +190,7 @@ export const HistoryTimeline: FunctionComponent = () => {
       const yOffset = -100 - staggerLevel * 140;
 
       // Calculate text height to extend line below full text
-      const takeawayText = d.historical_context;
+      const takeawayText = d.main_takeaway;
       const maxWidth = 200;
       const lineHeight = 16;
       const words = takeawayText.split(' ');
@@ -249,7 +247,7 @@ export const HistoryTimeline: FunctionComponent = () => {
         .on('click', event => handleClick(event as MouseEvent, d));
 
       // Calculate text dimensions for background
-      const takeawayText = d.historical_context;
+      const takeawayText = d.main_takeaway;
       const maxWidth = 200;
       const lineHeight = 16;
       const words = takeawayText.split(' ');

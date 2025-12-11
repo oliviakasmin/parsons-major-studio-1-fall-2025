@@ -8,9 +8,7 @@ type TimelineData = {
   date: string;
   historical_context: string;
   relevant_quotes: string;
-  relevant_categories: string;
   main_takeaway: string;
-  category_applicability_note: string;
   highlight: boolean;
 };
 

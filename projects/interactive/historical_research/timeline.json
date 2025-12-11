@@ -1,173 +1,93 @@
 [
   {
     "date": "1776-08-26",
-    "historical_context": "Congress authorized the first invalid pensions for those disabled in service.",
-    "relevant_quotes": "\"On August 26, 1776, the first pension legislation for the American colonies as a group was enacted. (M804 pamphlet, p. 1–2)\"",
-    "relevant_categories": "Old War||Soldier",
-    "main_takeaway": "Established the earliest disability (invalid) pensions during the Revolution.",
-    "category_applicability_note": "\"Most surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\" || \"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
+    "historical_context": "A Continental Congress resolution created the first pensions for officers and enlisted men disabled in service, granting half pay for as long as their disability continued.",
+    "relevant_quotes": "\"On August 26, 1776, the first pension legislation for the American colonies as a group was enacted. A resolution of the Continental Congress provided half pay for officers and enlisted men, including those on warships and armed vessels, who were disabled in the service of the United States and who were incapable of earning a living. The half pay was to continue for the duration of the disability.\" (M804 pamphlet, p. 1)\"",
+    "main_takeaway": "Established disability pensions for servicemen unable to earn a living.",
     "highlight": true
   },
   {
-    "date": "1780-08-24",
-    "historical_context": "First pension provision for widows and orphans of officers who died in service.",
-    "relevant_quotes": "\"On August 24, 1780, Congress resolved that the widows and orphans of officers who had died in the service should be entitled to half pay for 7 years. (M804 pamphlet, p. 2)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Earliest recognition of widows and orphans, though limited in duration.",
-    "category_applicability_note": "\"Most of the surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\" || \"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
+    "date": "1778-05-15",
+    "historical_context": "Congress guaranteed half pay for seven years to officers serving through the war, and an $80 postwar gratuity to enlisted men serving for the duration.",
+    "relevant_quotes": "\"On May 15, 1778, another resolution provided half pay for 7 years after the conclusion of the war to all military officers who remained in the Continental service to the end of the war. Enlisted men who continued to serve for the duration of the conflict were each to receive a gratuity of $80 after the war under the terms of the same enactment.\" (M804 pamphlet, p. 1)\"",
+    "main_takeaway": "Guaranteed postwar benefits to long-serving officers and enlisted men.",
     "highlight": false
   },
   {
-    "date": "1778-05-15",
-    "historical_context": "Half pay for 7 years to officers serving to the end of the war; $80 gratuity to enlisted men who served to the end.",
-    "relevant_quotes": "\"On May 15, 1778, Congress resolved that officers who should continue in the service to the end of the war should receive half pay for 7 years. (M804 pamphlet, p. 2)\" || \"On the same day Congress resolved that every enlisted man who served to the end of the war should receive a gratuity of $80. (M804 pamphlet, p. 2)\"",
-    "relevant_categories": "Old War||Soldier",
-    "main_takeaway": "Expanded benefits beyond disability to officers (half pay) and enlisted (gratuity).",
-    "category_applicability_note": "\"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
-    "highlight": false
+    "date": "1780-08-24",
+    "historical_context": "Congress created a national pension provision for widows and orphans of officers eligible under the 1778 resolution, granting seven years of half pay.",
+    "relevant_quotes": "\"The first national pension legislation for widows was a Continental Congress resolution of August 24, 1780, which offered the prospect of half pay for 7 years to widows and orphans of officers who met the requirements included in the terms of the resolution of May 15, 1778.\" (M804 pamphlet, p. 1)\"",
+    "main_takeaway": "Introduced national pension benefits for widows and orphans of officers.",
+    "highlight": true
   },
   {
     "date": "1780-10-21",
-    "historical_context": "Half pay for life granted to officers serving to the end of the war.",
-    "relevant_quotes": "\"On October 21, 1780, Congress resolved that the half pay for officers should be for life. (M804 pamphlet, p. 2)\"",
-    "relevant_categories": "Old War||Soldier",
-    "main_takeaway": "Created lifetime pension rights for officers.",
-    "category_applicability_note": "\"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records. (M804 pamphlet, p. 1)\" || \"Most of the surviving applications in this series were submitted after 1800. (M804 pamphlet, p. 1–2)\"",
+    "historical_context": "Congress amended the 1778 resolution so that officers would receive half pay for life after the war.",
+    "relevant_quotes": "\"On October 21, 1780, the Continental Congress resolution of May 15, 1778, was amended to provide half pay for life to officers after the war.\" (M804 pamphlet, p. 1)\"",
+    "main_takeaway": "Extended officers’ entitlement to lifetime half-pay pensions.",
     "highlight": false
   },
   {
-    "date": "1788-09-16",
-    "historical_context": "Early federal bounty-land framework carried into effect; land grants tied to service length or duration.",
-    "relevant_quotes": "\"A resolution of September 16, 1776, provided that the United States grant bounty land to officers and soldiers who served until the end of the war or for at least 3 years. (M804 pamphlet, p. 7)\" || \"Congress passed acts from 1788 to 1855 to carry this into effect. (M804 pamphlet, p. 7)\"",
-    "relevant_categories": "Bounty land warrant||Soldier",
-    "main_takeaway": "Established bounty land as a parallel compensation system to pensions.",
-    "category_applicability_note": "\"Some bounty-land-warrant applications and some 'Old War' pension files were also interfiled. (M804 pamphlet, p. 4)\"",
+    "date": "1788-07-09",
+    "historical_context": "A supplement to the 1785 land ordinance allowed the Secretary at War to issue bounty-land warrants to eligible veterans or their legal representatives.",
+    "relevant_quotes": "\"On July 9, 1788, a supplement to a Continental Congress land ordinance of May 20, 1785, authorized the Secretary at War to issue bounty-land warrants to eligible veterans of the Revolutionary War or to their assigns or legal representatives.\" (M804 pamphlet, p. 5)\"",
+    "main_takeaway": "Permitted federal issuance of bounty-land warrants to eligible veterans.",
     "highlight": false
   },
   {
     "date": "1792-03-23",
-    "historical_context": "Invalid pensions continued under the Federal Government after the Constitution.",
-    "relevant_quotes": "\"In 1792 Congress enacted legislation continuing invalid pensions under the authority of the Federal Government. (M804 pamphlet, p. 2)\"",
-    "relevant_categories": "Old War||Soldier",
-    "main_takeaway": "Maintained disability pensions during the early federal period.",
-    "category_applicability_note": "\"Some 'Old War' pension files were also interfiled. (M804 pamphlet, p. 4)\"",
+    "historical_context": "Congress allowed veterans not already receiving invalid pensions under earlier resolutions to apply directly to the Federal Government.",
+    "relevant_quotes": "\"An act of Congress approved March 23, 1792 (1 Stat. 243), permitted veterans not already receiving invalid pensions under resolutions of the Continental Congress to apply for them directly to the Federal Government.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Opened a federal application process for invalid pensions.",
     "highlight": false
   },
   {
-    "date": "1806-04-06",
-    "historical_context": "Congress passed another bounty-land act, reorganizing administration of claims.",
-    "relevant_quotes": "\"On April 6, 1806, Congress passed another bounty-land act … jurisdiction was transferred to the Secretary of War. (M804 pamphlet, p. 7–8)\"",
-    "relevant_categories": "Bounty land warrant",
-    "main_takeaway": "Adjusted how Revolutionary War bounty-land claims were handled.",
-    "category_applicability_note": "\"Some bounty-land-warrant applications were also interfiled. (M804 pamphlet, p. 4)\"",
+    "date": "1806-04-10",
+    "historical_context": "Congress extended invalid-pension eligibility to veterans of State troops and militia service and replaced all earlier invalid-pension laws.",
+    "relevant_quotes": "\"On April 10, 1806 (2 Stat. 376), the scope of earlier invalid-pension laws pertaining to Revolutionary War servicemen was extended to make veterans of State troops and militia service eligible for Federal pensions. The act superseded all previous Revolutionary War invalid-pension legislation.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Broadened invalid-pension coverage and replaced prior laws.",
     "highlight": false
   },
   {
     "date": "1818-03-18",
-    "historical_context": "Act of 1818. The act of March 18, 1818, granted pensions to every officer, noncommissioned officer, musician, and private soldier who had served in the Continental Line for 9 months or more.",
-    "relevant_quotes": "\"The act of March 18, 1818, granted pensions to every officer, noncommissioned officer, musician, and private soldier who had served in the Continental Line for 9 months or more. (M804 pamphlet, p. 2)\"",
-    "relevant_categories": "Soldier||Rejected",
-    "main_takeaway": "This law is one of the Four Acts that defined Revolutionary War pensions. Opened pensions to many veterans based on length of service rather than disability.",
-    "category_applicability_note": "\"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
+    "historical_context": "The Act of 1818 allowed Continental Line soldiers—Revolutionary War soldiers in the U.S. Army under George Washington—to apply for federal pensions based on nine months or more of service. By this date, a soldier who had been 20 in 1776 was about 62 years old.",
+    "relevant_quotes": "\"Not until March 18, 1818 (3 Stat. 410), did the U.S. Congress grant pensions to Revolutionary War veterans for service from which no disabilities resulted. Officers and enlisted men in need of assistance were eligible under the terms of the 1818 act if they had served in a Continental military organization or in the U.S. naval service (including the Marines) for 9 months or until the end of the war. Pensions granted under this act were to continue for life.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Opened federal pensions to aging Continental Line soldiers based on length of service rather than disability.",
     "highlight": true
   },
   {
     "date": "1820-05-01",
-    "historical_context": "Act of 1820. By the act of May 1, 1820, Congress required that every pensioner file a schedule of his property … those not in need lost their pensions.",
-    "relevant_quotes": "\"By the act of May 1, 1820, Congress required that every pensioner file a schedule of his property … those not in need lost their pensions. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Soldier||Rejected",
-    "main_takeaway": "This law is one of the Four Acts that defined Revolutionary War pensions. Imposed a means test that led to many reclassifications and terminations.",
-    "category_applicability_note": "\"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
+    "historical_context": "The Act of 1820 continued pension eligibility for Continental Line veterans but added a strict requirement to prove financial need. Pensioners had to submit a schedule of their property and describe the condition of the household; many older veterans lost pensions unless they could demonstrate poverty.",
+    "relevant_quotes": "\"The service-pension act of 1818 resulted in a great number of applications, many of which were approved. Congress had to appropriate greater sums than ever before for Revolutionary War pension payments. Financial difficulties and charges that applicants were feigning poverty to obtain benefits under the terms of the act caused Congress to enact remedial legislation on May 1, 1820 (3 Stat. 569). The new law required every pensioner receiving payments under the 1818 act, and every would-be pensioner, to submit a certified schedule of his estate and income to the Secretary of War. The Secretary was authorized to remove from the pension list the names of those persons who, in his opinion, were not in need of assistance. Within a few years the total of Revolutionary War service pensioners was reduced by several thousand. An act of Congress approved March 1, 1823 (3 Stat. 782), resulted in the restoration of pensions to many whose names had been removed under the terms of the 1820 legislation, but who subsequently proved their need for aid.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Required veterans to prove poverty, leading many older Continental Line pensioners to lose benefits unless they documented need.",
     "highlight": true
   },
   {
-    "date": "1823-03-18",
-    "historical_context": "First general provision specifically for certain widows of officers (married before end of war).",
-    "relevant_quotes": "\"The act of March 18, 1823, applied specifically to widows of Revolutionary War officers who had married before the end of the war. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Introduced a widow category into federal pension eligibility.",
-    "category_applicability_note": "\"From 1910 to 1912 the files were flat-filed and arranged alphabetically by the veteran’s surname. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
     "date": "1828-05-15",
-    "historical_context": "Act of 1828. The act of May 15, 1828, granted pensions to surviving officers and enlisted men of the Revolutionary Army who had served to the end of the war.",
-    "relevant_quotes": "\"The act of May 15, 1828, granted pensions to surviving officers and enlisted men of the Revolutionary Army who had served to the end of the war. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Soldier",
-    "main_takeaway": "This law is one of the Four Acts that defined Revolutionary War pensions. Expanded survivor eligibility by removing need requirements for full-term veterans.",
-    "category_applicability_note": "\"Files appear in the survivor/soldier series under the pre-1910 arrangement. (M804 pamphlet, p. 4)\"",
+    "historical_context": "Congress granted full pay for life to surviving officers and enlisted men eligible under the 1778 resolution, without requiring proof of need.",
+    "relevant_quotes": "\"Congress passed another service-pension act on May 15, 1828 (4 Stat. 269), which granted full pay for life to surviving officers and enlisted men of the Revolutionary War who were eligible for benefits under the terms of the Continental Congress resolution of May 15, 1778, as amended.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Provided lifetime full-pay pensions to surviving eligible veterans.",
     "highlight": false
   },
   {
     "date": "1832-06-07",
-    "historical_context": "Act of 1832. The last and most liberal of the service-pension acts; covered nearly all surviving veterans with at least 6 months’ service (partial) or 2 years (full).",
-    "relevant_quotes": "\"The last and most liberal of the service-pension acts was passed on June 7, 1832. (M804 pamphlet, p. 3)\" || \"Every officer or enlisted man who had served at least 2 years was eligible for a pension of full pay for life. (M804 pamphlet, p. 3)\" || \"Persons who had served at least 6 months but less than 2 years were eligible for partial pay. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Soldier",
-    "main_takeaway": "This law is one of the Four Acts that defined Revolutionary War pensions. Dramatically increased the number of survivor applications and, for the first time, allowed state militia veterans with at least 6 months’ service to qualify. (NPS)",
-    "category_applicability_note": "\"Prior to 1910 the applications were arranged in separate series: survivors, widows, and rejected. (M804 pamphlet, p. 4)\"",
+    "historical_context": "The Act of 1832 broadened eligibility to veterans with at least six months of service, including state militia members. Because militia records were incomplete and many veterans lacked formal discharges, applicants had to appear before a Court of Record, provide oral testimony, and present a credible witness. Many elderly veterans offered extensive personal accounts as part of this testimony.",
+    "relevant_quotes": "\"The last and most liberal of the service-pension acts benefiting Revolutionary War veterans was passed on June 7, 1832 (4 Stat. 529), and extended to more persons the provisions of the law of May 15, 1828. The act provided that every officer or enlisted man who had served at least 2 years in the Continental Line or State troops, volunteers or militia, was eligible for a pension of full pay for life. Naval and marine officers and enlisted men were also included. Veterans who had served less than 2 years, but not less than 6 months, were eligible for pensions of less than full pay. Neither the act of 1832 nor the one of 1828 required applicants to demonstrate need. Under the act of 1832 money due from the last payment until the date of death of a pensioner could be collected by his widow or by his children.\" (M804 pamphlet, p. 2-3)\"",
+    "main_takeaway": "Lowered service requirements and brought militia veterans into eligibility, prompting extensive sworn testimony from elderly applicants.",
     "highlight": true
   },
   {
     "date": "1836-07-04",
-    "historical_context": "Pensions extended to widows married before January 1, 1794.",
-    "relevant_quotes": "\"The act of July 4, 1836, extended the provisions of the pension laws to widows of Revolutionary War veterans who had married before January 1, 1794. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Marked the first broad general law for widows; later acts extended the cutoff. Widows of veterans married before the end of the Revolutionary War in 1783 were eligible to apply under this general provision. (NPS)",
-    "category_applicability_note": "\"These appear in the widows series prior to 1910; later consolidated under flat-filing by veteran. (M804 pamphlet, p. 4)\"",
+    "historical_context": "The Act of 1836 allowed widows to receive the pension their husbands would have received under the 1832 act if they had married before the end of the veteran's service, meaning widows had to prove a marriage before 1783. Widows testified before a Court of Record, described wartime experiences, and provided witnesses and documentation.",
+    "relevant_quotes": "\"The time limit for making claims under the Continental Congress resolution of August 24, 1780, which promised half-pay pensions to widows and orphans of some officers, expired in 1794. For many years thereafter, unless a private act of Congress was introduced on her behalf, a widow of a veteran was limited to receiving only that part of a pension that remained unpaid at the time of her husband's death. By an act of Congress approved July 4, 1836 (5 Stat. 128), some widows of Revolutionary War veterans were again permitted, as a class under public law, to apply for pensions. The act provided that the widow of any veteran who had performed service as specified in the pension act of June 7, 1832, was eligible to receive the pension that might have been allowed the veteran under the terms of that act, if the widow had married the veteran before the expiration of his last period of service.\" (M804 pamphlet, p. 3)\"",
+    "main_takeaway": "Allowed widows married before 1783 to claim pensions, requiring sworn testimony, proof of marriage, and witness corroboration.",
     "highlight": true
   },
   {
     "date": "1838-07-07",
-    "historical_context": "Extended widow eligibility to marriages before January 2, 1800.",
-    "relevant_quotes": "\"By the act of July 7, 1838, widows who had married before January 2, 1800, were made eligible. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Further enlarged the widow claimant pool.",
-    "category_applicability_note": "\"Filed in the widows series pre-1910; post-1910 filing is alphabetical by veteran. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
-    "date": "1843-03-03",
-    "historical_context": "Extended provisions to widows who married before January 1, 1800 and were living with the veteran at his death.",
-    "relevant_quotes": "\"The act of March 3, 1843, extended the provisions to widows who had married before January 1, 1800, and who were living with the veteran at the time of his death. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Added cohabitation requirement to broadened marriage-date eligibility.",
-    "category_applicability_note": "\"Placed in the widows series under the pre-1910 arrangement. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
-    "date": "1844-03-03",
-    "historical_context": "Further liberalization of widow eligibility; marriage-date restrictions eased (also acts in 1848 and 1853).",
-    "relevant_quotes": "\"Subsequent acts of 1844, 1848, and 1853 gradually removed the marriage date restrictions. (M804 pamphlet, p. 3)\"",
-    "relevant_categories": "Widow",
-    "main_takeaway": "Progressively expanded widow eligibility across the 1840s–1850s.",
-    "category_applicability_note": "\"Filed as widows’ applications pre-1910; merged by veteran in the 1910–1912 flat-filing. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
-    "date": "1855-03-03",
-    "historical_context": "Major expansion of bounty-land eligibility to short-service veterans and to widows and minor children.",
-    "relevant_quotes": "\"By the act of March 3, 1855, Congress authorized bounty land to all officers and enlisted men who had served at least 14 days in any war before 1855, and to their widows and minor children. (M804 pamphlet, p. 8)\"",
-    "relevant_categories": "Bounty land warrant||Widow",
-    "main_takeaway": "Bounty-land benefits extended widely, including to family members.",
-    "category_applicability_note": "\"Some bounty-land-warrant applications were also interfiled. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
-    "date": "archival-category",
-    "historical_context": "“Old War” is an archival label for certain early pension files; some were interfiled with other applications.",
-    "relevant_quotes": "\"Some bounty-land-warrant applications and some 'Old War' pension files were also interfiled. (M804 pamphlet, p. 4)\"",
-    "relevant_categories": "Old War",
-    "main_takeaway": "Identifies a subset of early pension files within the overall collection.",
-    "category_applicability_note": "\"This is a filing/category concept within the records, not tied to a single enactment date; applies across relevant early claims. (M804 pamphlet, p. 4)\"",
-    "highlight": false
-  },
-  {
-    "date": "archival-category",
-    "historical_context": "\"N A Acc (National Archives Accession [number])\" represents a National Archives accession placeholder card used when no file survives.",
-    "relevant_quotes": "\"In lieu of a file, a 10- by 14-inch card, containing cross-reference or abstract information from congressional reports or other sources, was substituted. (M804 pamphlet, p. 4)\" || \"A fire in the War Department on November 8, 1800, destroyed Revolutionary War records. (M804 pamphlet, p. 1)\"",
-    "relevant_categories": "N A Acc (National Archives Accession [number])",
-    "main_takeaway": "Signals that no pension file was found; a card with references was created instead.",
-    "category_applicability_note": "\"From 1910 to 1912 the files were flat-filed and arranged alphabetically by the veteran’s surname. (M804 pamphlet, p. 4)\"",
+    "historical_context": "Congress granted five-year pensions to widows whose marriages took place before January 1, 1794.",
+    "relevant_quotes": "\"An act of July 7, 1838 (5 Stat. 303), granted 5-year pensions to widows whose marriages had taken place before January 1, 1794.\" (M804 pamphlet, p. 2)\"",
+    "main_takeaway": "Extended pension eligibility to additional widows based on marriage date.",
     "highlight": false
   }
 ]
