@@ -101,7 +101,7 @@ export const AverageAmountByDate: React.FC<{ extraPoint?: ExtraPoint }> = ({
 
   const handleMouseEnter = (
     e: React.MouseEvent<SVGCircleElement>,
-    year: string,
+    _year: string,
     amount: number,
     circleX: number,
     circleY: number,
